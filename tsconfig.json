@@ -17,5 +17,11 @@
     "typeRoots": ["./node_modules/@types"],
     "lib": ["dom", "es2015", "es2016"]
   },
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "*.config.js"]
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "*.config.js",
+    "coverage/*"
+  ]
 }
