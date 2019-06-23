@@ -1,8 +1,15 @@
 {
+  "plugins": [
+    ["emotion"]
+  ],
   "env": {
     "development": {
       "presets": [
-        ["next/babel", { "transform-runtime": { "useESModules": false } }],
+        ["next/babel", {
+          "transform-runtime": {
+            "useESModules": false
+          }
+        }],
         "@zeit/next-typescript/babel"
       ]
     },
