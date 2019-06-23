@@ -1,10 +1,9 @@
 /** @jsx jsx */
 import React, { Fragment } from 'react';
-import { css } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 
 const base = css`
   cursor: crosshair;
-  image-rendering: optimizeSpeed;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -o-crisp-edges;

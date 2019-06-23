@@ -5,6 +5,7 @@ import { Layout, Container } from 'react-dynamic-layout';
 import Tool from '../src/components/Tool';
 import Editor from '../src/components/Editor';
 import Menu from '../src/components/Menu';
+import Canvas from '../src/components/Canvas';
 
 const IndexPage = () => (
   <Editor>
@@ -29,10 +30,12 @@ const IndexPage = () => (
                         <label>Tabs</label>
                       </Container>
                       <Container>
-                        <canvas className="background" />
-                        <canvas className="main" />
-                        <canvas className="preview" />
-                        <canvas className="mask" />
+                        {({ dimensions }) => (
+                          <Canvas
+                            width={dimensions.width}
+                            height={dimensions.height}
+                          />
+                        )}
                       </Container>
                     </Layout>
                   </Container>
