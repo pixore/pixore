@@ -2,13 +2,15 @@ import 'react-dynamic-layout/dist/style/base/index.css';
 import 'react-dynamic-layout/dist/style/dark/index.css';
 
 import { Layout, Container } from 'react-dynamic-layout';
+import Tool from '../src/components/Tool';
+import Menu from '../src/components/Menu';
 
 const IndexPage = () => (
   <Layout type={Layout.COLUMN}>
     <Container isFixedSize={true} initialSize={25}>
-      <button>save</button>
-      <button>new</button>
-      <button>open</button>
+      <Menu name="save" />
+      <Menu name="new" />
+      <Menu name="open" />
     </Container>
     <Container>
       <Layout type={Layout.ROW}>
@@ -33,12 +35,12 @@ const IndexPage = () => (
                   </Layout>
                 </Container>
                 <Container initialSize={60}>
-                  <button>pencil</button>
-                  <button>eraser</button>
-                  <button>pick</button>
-                  <button>bucket</button>
-                  <button>line</button>
-                  <button>rect</button>
+                  <Tool name="pencil" />
+                  <Tool name="eraser" />
+                  <Tool name="pick" />
+                  <Tool name="bucket" />
+                  <Tool name="line" />
+                  <Tool name="rect" />
                 </Container>
               </Layout>
             </Container>
