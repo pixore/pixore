@@ -49,14 +49,15 @@ const IndexPage = () => (
                   </Container>
                 </Layout>
               </Container>
-              <Container initialSize="30%">
+              <Container initialSize={200}>
                 {({ dimensions }) => (
                   <Layout type={Layout.ROW}>
                     <Container isFixedSize={true}>
                       <label>Frames and Layers</label>
                     </Container>
                     <Container initialSize={dimensions.height}>
-                      <canvas className="preview" />
+                      {dimensions.height}
+                      {/* <canvas className="preview" /> */}
                     </Container>
                   </Layout>
                 )}

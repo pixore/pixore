@@ -24,8 +24,28 @@ interface CanvasProps {
   height: number;
 }
 
+const useCanvas2DContext = (width, height) => {
+  const [canvas, setCanvas] = React.useState();
+  const [context, setContext] = React.useState();
+  const onRef = React.useCallback((ref) => {
+    ref.width = width;
+    ref.height = height;
+    setCanvas(ref);
+
+    const context = ref.getContext('2d');
+    setContext(context);
+  }, []);
+
+  return { context, onRef, canvas };
+};
+
 const Canvas: React.FC<CanvasProps> = (props) => {
   const { width, height } = props;
+  const { onRef: backgroundRef } = useCanvas2DContext(width, height);
+  const { onRef: mainRef } = useCanvas2DContext(width, height);
+  const { onRef: previewRef } = useCanvas2DContext(width, height);
+  const { onRef: maskRef } = useCanvas2DContext(width, height);
+
   const style = {
     width,
     height,
@@ -33,10 +53,10 @@ const Canvas: React.FC<CanvasProps> = (props) => {
 
   return (
     <Fragment>
-      <canvas style={style} css={base} />
-      <canvas style={style} css={base} />
-      <canvas style={style} css={base} />
-      <canvas style={style} css={mask} />
+      <canvas ref={backgroundRef} style={style} css={base} />
+      <canvas ref={mainRef} style={style} css={base} />
+      <canvas ref={previewRef} style={style} css={base} />
+      <canvas ref={maskRef} style={style} css={mask} />
     </Fragment>
   );
 };
