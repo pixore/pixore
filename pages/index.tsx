@@ -1,5 +1,6 @@
 import 'react-dynamic-layout/dist/style/base/index.css';
 import 'react-dynamic-layout/dist/style/dark/index.css';
+import '../src/styles.css';
 
 import { Layout, Container } from 'react-dynamic-layout';
 import Tool from '../src/components/Tool';
@@ -30,12 +31,7 @@ const IndexPage = () => (
                         <label>Tabs</label>
                       </Container>
                       <Container>
-                        {({ dimensions }) => (
-                          <Canvas
-                            width={dimensions.width}
-                            height={dimensions.height}
-                          />
-                        )}
+                        <Canvas />
                       </Container>
                     </Layout>
                   </Container>

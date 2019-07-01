@@ -11,10 +11,7 @@ interface Action {
   payload: Payload;
 }
 
-export const reducer = (
-  state: SpritesContext,
-  action: Action,
-): SpritesContext => {
+const reducer = (state: SpritesContext, action: Action): SpritesContext => {
   const { type, payload } = action;
   switch (type) {
     case actionType.CREATE_SPRITE:
@@ -26,7 +23,7 @@ export const reducer = (
   }
 };
 
-export const actions = {
+const actions = {
   createSprite(payload: Sprite): Action {
     return {
       type: actionType.CREATE_SPRITE,
@@ -34,3 +31,5 @@ export const actions = {
     };
   },
 };
+
+export { reducer, actions };

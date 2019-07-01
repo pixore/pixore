@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useEditorContext } from '../contexts/EditorContext';
+
 interface Frame {
   id: string;
 }
@@ -17,6 +19,8 @@ interface Layer {
 export interface Sprite {
   id: string;
   name: string;
+  width: number;
+  height: number;
   layers: Layer[];
   frames: Frame[];
   palette?: Palette;
@@ -44,3 +48,13 @@ const SpriteContext = React.createContext<SpritesContext>(defaultState);
 export const { Provider } = SpriteContext;
 
 export const useSpritesContext = () => React.useContext(SpriteContext);
+export const useSprite = (id?: string): Sprite | undefined => {
+  const { sprite } = useEditorContext();
+  const sprites = useSpritesContext();
+
+  if (id) {
+    return sprites[id];
+  }
+
+  return sprites[sprite];
+};

@@ -11,10 +11,7 @@ interface Action {
   payload: Payload;
 }
 
-export const reducer = (
-  state: EditorContext,
-  action: Action,
-): EditorContext => {
+const reducer = (state: EditorContext, action: Action): EditorContext => {
   const { type, payload } = action;
   switch (type) {
     case actionType.SELECT_SPRITE:
@@ -25,7 +22,7 @@ export const reducer = (
   }
 };
 
-export const actions = {
+const actions = {
   selectSpr(payload: string): Action {
     return {
       type: actionType.SELECT_SPRITE,
@@ -33,3 +30,5 @@ export const actions = {
     };
   },
 };
+
+export { reducer, actions };
