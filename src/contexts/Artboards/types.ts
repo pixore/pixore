@@ -1,59 +1,22 @@
-import { Sprite } from '../SpritesContext';
+import { Artboard } from '../Artboard/types';
 
 enum actionType {
-  CENTER,
-  CHANGE_SCALE,
+  ADD_ARTBOARD,
 }
 
-interface ArtboardsState {
-  [key: string]: Artboard;
-}
-
-type Stats = {
-  width: number;
-  height: number;
-  top: number;
-  left: number;
-};
-
-interface ArtboardsActions {
-  center: (stats: Stats, sprite: Sprite) => void;
-  changeScale: (id: string, scale: number) => void;
-}
-
-type CenterPayload = {
-  id: string;
-  scale: number;
-  x: number;
-  y: number;
-};
-
-type ChangeScalePayload = {
-  id: string;
-  scale: number;
-};
-
-type Payload = CenterPayload | ChangeScalePayload;
+type Payload = Artboard;
 
 interface Action {
   type: actionType;
   payload: Payload;
 }
 
-interface Artboard {
-  id: string;
-  color?: string;
-  scale: number;
-  x: number;
-  y: number;
+interface ArtboardsState {
+  [key: string]: Artboard;
 }
 
-export {
-  Stats,
-  Artboard,
-  ArtboardsState,
-  CenterPayload,
-  ArtboardsActions,
-  Action,
-  actionType,
-};
+interface ArtboardsActions {
+  addArtboard: (artboard: Artboard) => void;
+}
+
+export { ArtboardsState, Action, actionType, ArtboardsActions, Artboard };
