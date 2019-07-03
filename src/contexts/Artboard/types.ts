@@ -5,11 +5,6 @@ enum actionType {
   CHANGE_POSITION,
   CHANGE_ARTBOARD,
 }
-
-interface Artboards {
-  [key: string]: Artboard;
-}
-
 type Stats = {
   width: number;
   height: number;
@@ -26,7 +21,7 @@ type ChangePositionPayload = {
 interface ArtboardsActions {
   center: (stats: Stats, sprite: Sprite) => void;
   changePosition: (payload: ChangePositionPayload) => void;
-  changeArtboard: (id: string) => void;
+  changeArtboard: (artboard: Artboard) => void;
 }
 
 interface Artboard {
@@ -44,4 +39,4 @@ interface Action {
   payload: Payload;
 }
 
-export { Stats, Artboard, Artboards, ArtboardsActions, Action, actionType };
+export { Stats, Artboard, ArtboardsActions, Action, actionType };

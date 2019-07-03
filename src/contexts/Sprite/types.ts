@@ -30,7 +30,6 @@ interface Sprite {
   layers: Layer[];
   frames: Frame[];
   palette?: Palette;
-  color: string;
 }
 
 interface SpriteActions {

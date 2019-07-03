@@ -1,13 +1,5 @@
-import invariant from 'invariant';
-import { Sprite } from '../SpritesContext';
-import {
-  Artboard,
-  Artboards,
-  ArtboardsActions,
-  actionType,
-  Action,
-  Stats,
-} from './types';
+import { Sprite } from '../Sprite';
+import { Artboard, ArtboardsActions, actionType, Action, Stats } from './types';
 
 const { floor } = Math;
 
@@ -47,7 +39,6 @@ export function getPreviewSize(maxSize: Size, size: Size) {
 
 const reducer = (state: Artboard, action: Action): Artboard => {
   const { type, payload } = action;
-  const { id } = state;
 
   switch (type) {
     case actionType.CHANGE_POSITION:
@@ -55,7 +46,6 @@ const reducer = (state: Artboard, action: Action): Artboard => {
       return {
         ...state,
         ...payload,
-        id,
       };
     case actionType.CHANGE_ARTBOARD:
       return payload as Artboard;
@@ -66,17 +56,9 @@ const reducer = (state: Artboard, action: Action): Artboard => {
 
 type Dispatch = (action: Action) => void;
 
-const createActions = (
-  dispatch: Dispatch,
-  artboardsRef: React.MutableRefObject<Artboards>,
-): ArtboardsActions => {
+const createActions = (dispatch: Dispatch): ArtboardsActions => {
   return {
-    changeArtboard(id: string) {
-      const { current: artboards } = artboardsRef;
-      const artboard = artboards[id];
-
-      invariant(!artboard, `Unknown '${id}' artboard `);
-
+    changeArtboard(artboard: Artboard) {
       dispatch({
         type: actionType.CHANGE_ARTBOARD,
         payload: artboard,

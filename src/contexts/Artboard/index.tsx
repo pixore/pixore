@@ -1,7 +1,8 @@
 import React from 'react';
 import invariant from 'invariant';
-import { Artboard, ArtboardsActions, Artboards } from './types';
+import { Artboard, ArtboardsActions } from './types';
 import { reducer, createActions } from './reducer';
+import { useArtboards } from '../Artboards';
 
 const defaultValueState = undefined;
 
@@ -12,7 +13,7 @@ const defaultValueActions = {
   changePosition(payload) {
     invariant(false, 'Context not implemented');
   },
-  changeArtboard(id: string) {
+  changeArtboard(artboard) {
     invariant(false, 'Context not implemented');
   },
 };
@@ -22,22 +23,25 @@ const ArtboardActionsContext = React.createContext<ArtboardsActions>(
   defaultValueActions,
 );
 
-const useArtboardsActions = () => React.useContext(ArtboardActionsContext);
-const useArtboard = (id: string) => {
-  const artboards = React.useContext(ArtboardStateContext);
-  return artboards[id];
-};
+const useArtboardActions = () => React.useContext(ArtboardActionsContext);
+const useArtboard = () => React.useContext(ArtboardStateContext);
 
 interface ProviderProps {
   children: React.ReactNode;
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
-  const artboardsRef = React.useRef<Artboards>({});
+  const artboards = useArtboards();
   const [state, dispatch] = React.useReducer(reducer, defaultValueState);
-  const actions = React.useMemo(() => createActions(dispatch, artboardsRef), [
-    dispatch,
-  ]);
+  const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
+  const { changeArtboard } = actions;
+
+  const artboardIds = React.useMemo(() => Object.keys(artboards), [artboards]);
+  if (!state && artboardIds.length !== 0) {
+    const artboard = artboards[artboardIds[0]];
+    changeArtboard(artboard);
+  }
+
   const { children } = props;
   return (
     <ArtboardActionsContext.Provider value={actions}>
@@ -49,4 +53,4 @@ const Provider: React.FC<ProviderProps> = (props) => {
 };
 
 export * from './types';
-export { Provider, useArtboard, useArtboardsActions };
+export { Provider, useArtboard, useArtboardActions };

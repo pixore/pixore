@@ -14,12 +14,15 @@ const ArtboardsActionsContext = React.createContext<ArtboardsActions>(
   defaultActions,
 );
 
+const useArtboardsActions = () => React.useContext(ArtboardsActionsContext);
+const useArtboards = () => React.useContext(ArtboardsContext);
+
 interface ProviderProps {
   children: React.ReactNode;
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
-  const [artboards, dispatch] = React.useReducer(reducer, undefined);
+  const [artboards, dispatch] = React.useReducer(reducer, defaultState);
   const { children } = props;
   const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
 
@@ -32,4 +35,4 @@ const Provider: React.FC<ProviderProps> = (props) => {
   );
 };
 
-export { Provider };
+export { Provider, useArtboards, useArtboardsActions };

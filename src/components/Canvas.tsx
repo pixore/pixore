@@ -3,12 +3,14 @@ import React from 'react';
 import { css, jsx } from '@emotion/core';
 
 import { getTransparentPattern, clean } from '../utils';
-import { Sprite, useSprite } from '../contexts/SpritesContext';
+import { Sprite, useSprite } from '../contexts/Sprite';
+import { useSpritesActions, useSprites } from '../contexts/Sprites';
+import { useArtboards, useArtboardsActions } from '../contexts/Artboards';
 import {
   useArtboard,
+  useArtboardActions,
   Artboard,
-  useArtboardsActions,
-} from '../contexts/Artboards';
+} from '../contexts/Artboard';
 
 const base = css`
   cursor: crosshair;
@@ -61,8 +63,8 @@ let out;
 const Canvas: React.FC = () => {
   const sprite = useSprite();
   const [stats, setStats] = React.useState<ClientRect>();
-  const artboard = useArtboard(sprite.id);
-  const { center, changeScale } = useArtboardsActions();
+  const artboard = useArtboard();
+  const { center, changePosition } = useArtboardActions();
   const elementRef = React.useRef<HTMLDivElement>();
   const { onRef: backgroundRef, context: background } = useCanvas2DContext();
   const { onRef: mainRef } = useCanvas2DContext();
@@ -70,7 +72,6 @@ const Canvas: React.FC = () => {
   const { onRef: maskRef } = useCanvas2DContext();
   const { current: element } = elementRef;
   const { innerWidth: width, innerHeight: height } = window;
-  const { id } = sprite;
 
   React.useEffect(() => {
     if (background && sprite && artboard) {
@@ -104,6 +105,7 @@ const Canvas: React.FC = () => {
       ref={elementRef}
       style={style}
       onWheel={(event) => {
+        const { y, x } = artboard;
         const deltaY = event.deltaY;
         if (out) {
           return;
@@ -119,7 +121,12 @@ const Canvas: React.FC = () => {
             diff = 1.1;
             method = 'ceil';
           }
-          changeScale(id, Math[method](artboard.scale * diff));
+          const scale = Math[method](artboard.scale * diff);
+          changePosition({
+            scale,
+            y,
+            x,
+          });
         }, 40);
       }}
     >
@@ -155,4 +162,47 @@ const Canvas: React.FC = () => {
   );
 };
 
-export default Canvas;
+const CanvasLoader = () => {
+  const { addSprite } = useSpritesActions();
+  const { addArtboard } = useArtboardsActions();
+
+  const sprite = useSprite();
+  const sprites = useSprites();
+  const artboards = useArtboards();
+  const artboard = useArtboard();
+
+  if (!sprite) {
+    const spriteIds = Object.keys(sprites);
+    if (spriteIds.length === 0) {
+      addSprite({
+        id: '1',
+        name: 'New Sprite',
+        width: 50,
+        height: 50,
+        layers: [],
+        frames: [],
+      });
+    }
+
+    return 'Loading...';
+  }
+
+  if (!artboard) {
+    const { id } = sprite;
+    const artboardIds = Object.keys(artboards);
+    if (artboardIds.length === 0) {
+      addArtboard({
+        id,
+        scale: 1,
+        y: 0,
+        x: 0,
+      });
+    }
+
+    return 'Loading...';
+  }
+
+  return <Canvas />;
+};
+
+export default CanvasLoader;

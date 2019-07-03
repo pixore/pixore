@@ -2,11 +2,11 @@ import { SpriteActions, Sprite, Action, actionType } from './types';
 
 const reducer = (state: Sprite, action: Action): Sprite => {
   const { type, payload } = action;
-  const { id } = state;
   switch (type) {
     case actionType.CHANGE_SPRITE:
       return payload as Sprite;
     case actionType.CHANGE_NAME:
+      const { id } = state;
       return {
         ...state,
         name: payload as string,

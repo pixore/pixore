@@ -1,16 +1,9 @@
 import React from 'react';
 
+import * as Sprites from '../contexts/Sprites';
+import * as Sprite from '../contexts/Sprite';
 import * as Artboards from '../contexts/Artboards';
-import {
-  defaultState as editorDefaultState,
-  Provider as EditorContextProvider,
-} from '../contexts/EditorContext';
-import {
-  defaultState as spritesDefaultState,
-  Provider as SpritesContextProvider,
-} from '../contexts/SpritesContext';
-import { reducer as editorReducer } from '../reducers/editorReducer';
-import { reducer as spritesReducer } from '../reducers/spritesReducer';
+import * as Artboard from '../contexts/Artboard';
 
 interface EditorProps {
   children: React.ReactNode;
@@ -18,17 +11,15 @@ interface EditorProps {
 
 const Editor: React.FC<EditorProps> = (props) => {
   const { children } = props;
-  const [spritesState] = React.useReducer(spritesReducer, spritesDefaultState);
-  const [editorState] = React.useReducer(editorReducer, editorDefaultState);
 
   return (
-    <Artboards.Provider>
-      <SpritesContextProvider value={spritesState}>
-        <EditorContextProvider value={editorState}>
-          {children}
-        </EditorContextProvider>
-      </SpritesContextProvider>
-    </Artboards.Provider>
+    <Sprites.Provider>
+      <Sprite.Provider>
+        <Artboards.Provider>
+          <Artboard.Provider>{children}</Artboard.Provider>
+        </Artboards.Provider>
+      </Sprite.Provider>
+    </Sprites.Provider>
   );
 };
 
