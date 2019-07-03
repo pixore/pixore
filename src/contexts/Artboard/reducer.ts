@@ -8,32 +8,24 @@ type Size = {
   height: number;
 };
 
-export function getPreviewSize(maxSize: Size, size: Size) {
-  let width: number;
-  let height: number;
-  let scale: number;
-  let marginTop = 0;
-  let marginLeft = 0;
+export function getScaleAndPosition(stats: DOMRect, size: Size) {
+  const { top, left } = stats;
 
-  if (maxSize.height > maxSize.width) {
-    width = maxSize.width;
-    scale = maxSize.width / size.width;
-    height = size.height * scale;
-    marginTop = (maxSize.height - height) / 2;
-  } else {
-    height = maxSize.height;
-    scale = maxSize.height / size.height;
-    width = size.width * scale;
-    marginLeft = (maxSize.width - width) / 2;
-  }
+  const scale =
+    stats.height > stats.width
+      ? floor(stats.width / size.width)
+      : floor(stats.height / size.height);
+
+  const width = size.width * scale;
+  const height = size.height * scale;
+
+  const marginTop = (stats.height - height) / 2;
+  const marginLeft = (stats.width - width) / 2;
+
   return {
-    maxWidth: maxSize.width,
-    maxHeight: maxSize.height,
-    width,
-    height,
-    marginTop,
-    marginLeft,
     scale,
+    x: left + marginLeft,
+    y: top + marginTop,
   };
 }
 
@@ -70,14 +62,13 @@ const createActions = (dispatch: Dispatch): ArtboardsActions => {
         payload,
       });
     },
-    center(stats: Stats, sprite: Sprite) {
-      const { top, left } = stats;
-      const { scale, marginLeft, marginTop } = getPreviewSize(stats, sprite);
+    center(stats: DOMRect, sprite: Sprite) {
+      const { scale, x, y } = getScaleAndPosition(stats, sprite);
 
       const payload = {
-        scale: floor(scale),
-        x: Number.parseInt(`${left + marginLeft}`),
-        y: floor(top + marginTop),
+        scale,
+        x,
+        y,
       };
 
       dispatch({

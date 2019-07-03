@@ -74,7 +74,7 @@ const Canvas: React.FC = () => {
   const { innerWidth: width, innerHeight: height } = window;
 
   React.useEffect(() => {
-    if (background && sprite && artboard) {
+    if (background) {
       console.log(artboard);
 
       paintBackground(background, artboard, sprite);
@@ -84,7 +84,8 @@ const Canvas: React.FC = () => {
   React.useEffect(() => {
     if (element) {
       const { current: element } = elementRef;
-      const stats = element.getBoundingClientRect();
+      const stats = element.parentElement.getBoundingClientRect();
+
       center(stats, sprite);
       setStats(stats);
     }
