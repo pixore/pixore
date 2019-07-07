@@ -59,7 +59,6 @@ export const paintBackground = (
   );
 };
 
-let out;
 const Canvas: React.FC = () => {
   const sprite = useSprite();
   const [stats, setStats] = React.useState<ClientRect>();
@@ -75,8 +74,6 @@ const Canvas: React.FC = () => {
 
   React.useEffect(() => {
     if (background) {
-      console.log(artboard);
-
       paintBackground(background, artboard, sprite);
     }
   }, [background, sprite, artboard]);
@@ -89,7 +86,7 @@ const Canvas: React.FC = () => {
       center(stats, sprite);
       setStats(stats);
     }
-  }, [element]);
+  }, [element, sprite, center]);
 
   const style: React.CSSProperties = {
     width,
@@ -101,36 +98,27 @@ const Canvas: React.FC = () => {
     style.marginLeft = -stats.left;
   }
 
+  const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    const { y, x } = artboard;
+    const deltaY = event.deltaY;
+    const scale = artboard.scale * (deltaY / 120);
+
+    if (scale < 1) {
+      return;
+    }
+
+    const diffX = sprite.width * scale - artboard.scale * sprite.width;
+    const diffY = sprite.height * scale - artboard.scale * sprite.height;
+
+    changePosition({
+      scale,
+      y: y - Math.round(diffY / 2),
+      x: x - Math.round(diffX / 2),
+    });
+  };
+
   return (
-    <div
-      ref={elementRef}
-      style={style}
-      onWheel={(event) => {
-        const { y, x } = artboard;
-        const deltaY = event.deltaY;
-        if (out) {
-          return;
-        }
-        out = setTimeout(() => {
-          let diff = 1.06;
-          let method = 'floor';
-          out = undefined;
-          if (deltaY > 0) {
-            diff = 0.9;
-            method = 'floor';
-          } else if (deltaY < 0) {
-            diff = 1.1;
-            method = 'ceil';
-          }
-          const scale = Math[method](artboard.scale * diff);
-          changePosition({
-            scale,
-            y,
-            x,
-          });
-        }, 40);
-      }}
-    >
+    <div ref={elementRef} style={style} onWheel={onWheel}>
       <canvas
         width={width}
         height={height}
