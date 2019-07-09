@@ -12,6 +12,12 @@ const reducer = (state: Sprite, action: Action): Sprite => {
         name: payload as string,
         id,
       };
+    case actionType.ADD_LAYER:
+      const { layers } = state;
+      return {
+        ...state,
+        layers: layers.concat(payload as string),
+      };
     default:
       return state;
   }
@@ -29,6 +35,12 @@ const createActions = (dispatch: Dispatch): SpriteActions => ({
     dispatch({
       type: actionType.CHANGE_SPRITE,
       payload: sprite,
+    });
+  },
+  addLayerInSprite(id: string) {
+    dispatch({
+      type: actionType.ADD_LAYER,
+      payload: id,
     });
   },
 });

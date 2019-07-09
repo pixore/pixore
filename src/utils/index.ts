@@ -60,6 +60,12 @@ const getIdByReference = (obj: object): string => {
   return id;
 };
 
+const getNewId = (): string => {
+  const id = counter.toString();
+  counter++;
+  return id;
+};
+
 const contexts: Contexts = {};
 
 const getContext = (id: string) => contexts[id];
@@ -103,4 +109,5 @@ export {
   addContext,
   getNewContext,
   getIdByReference,
+  getNewId,
 };

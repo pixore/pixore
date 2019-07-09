@@ -13,6 +13,9 @@ const defaultValueActions = {
   changeSprite(sprite) {
     invariant(false, 'Context not implemented');
   },
+  addLayerInSprite(id) {
+    invariant(false, 'Context not implemented');
+  },
 };
 
 const SpriteStateContext = React.createContext<Sprite>(defaultValueState);

@@ -2,9 +2,11 @@
 import React from 'react';
 import { css, jsx } from '@emotion/core';
 
-import { getTransparentPattern, clean } from '../utils';
+import { getTransparentPattern, clean, getNewId } from '../utils';
 import { Sprite, useSprite } from '../contexts/Sprite';
 import { useSpritesActions, useSprites } from '../contexts/Sprites';
+import { useSpriteActions } from '../contexts/Sprite';
+import { useLayersActions } from '../contexts/Layers';
 import { useArtboards, useArtboardsActions } from '../contexts/Artboards';
 import {
   useArtboard,
@@ -152,6 +154,8 @@ const Canvas: React.FC = () => {
 };
 
 const CanvasLoader = () => {
+  const { addLayerInSprite } = useSpriteActions();
+  const { addLayer } = useLayersActions();
   const { addSprite } = useSpritesActions();
   const { addArtboard } = useArtboardsActions();
 
@@ -172,6 +176,18 @@ const CanvasLoader = () => {
         frames: [],
       });
     }
+
+    return 'Loading...';
+  }
+
+  if (sprite.layers.length === 0) {
+    const id = getNewId();
+    addLayer({
+      id,
+      name: 'First Layer',
+    });
+
+    addLayerInSprite(id);
 
     return 'Loading...';
   }
