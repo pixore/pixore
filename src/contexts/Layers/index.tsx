@@ -11,13 +11,13 @@ const defaultValueActions = {
   },
 };
 
-const SpriteStateContext = React.createContext<LayersState>(defaultValueState);
-const SpriteActionsContext = React.createContext<LayersActions>(
+const LayersContext = React.createContext<LayersState>(defaultValueState);
+const LayersActionsContext = React.createContext<LayersActions>(
   defaultValueActions,
 );
 
-const useLayersActions = () => React.useContext(SpriteActionsContext);
-const useLayers = () => React.useContext(SpriteStateContext);
+const useLayersActions = () => React.useContext(LayersActionsContext);
+const useLayers = () => React.useContext(LayersContext);
 const useLayer = (id: string) => {
   const layers = useLayers();
   return layers[id];
@@ -33,11 +33,9 @@ const Provider: React.FC<ProviderProps> = (props) => {
   const { children } = props;
 
   return (
-    <SpriteActionsContext.Provider value={actions}>
-      <SpriteStateContext.Provider value={state}>
-        {children}
-      </SpriteStateContext.Provider>
-    </SpriteActionsContext.Provider>
+    <LayersActionsContext.Provider value={actions}>
+      <LayersContext.Provider value={state}>{children}</LayersContext.Provider>
+    </LayersActionsContext.Provider>
   );
 };
 

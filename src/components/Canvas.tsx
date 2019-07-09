@@ -7,6 +7,7 @@ import { Sprite, useSprite } from '../contexts/Sprite';
 import { useSpritesActions, useSprites } from '../contexts/Sprites';
 import { useSpriteActions } from '../contexts/Sprite';
 import { useLayersActions } from '../contexts/Layers';
+import { useFramesActions } from '../contexts/Frames';
 import { useArtboards, useArtboardsActions } from '../contexts/Artboards';
 import {
   useArtboard,
@@ -103,7 +104,7 @@ const Canvas: React.FC = () => {
   const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     const { y, x } = artboard;
     const deltaY = event.deltaY;
-    const scale = artboard.scale * (deltaY / 120);
+    const scale = artboard.scale - deltaY / 120;
 
     if (scale < 1) {
       return;
@@ -154,8 +155,9 @@ const Canvas: React.FC = () => {
 };
 
 const CanvasLoader = () => {
-  const { addLayerInSprite } = useSpriteActions();
+  const { addLayerToSprite, addFrameToSprite } = useSpriteActions();
   const { addLayer } = useLayersActions();
+  const { addFrame } = useFramesActions();
   const { addSprite } = useSpritesActions();
   const { addArtboard } = useArtboardsActions();
 
@@ -187,7 +189,18 @@ const CanvasLoader = () => {
       name: 'First Layer',
     });
 
-    addLayerInSprite(id);
+    addLayerToSprite(id);
+
+    return 'Loading...';
+  }
+
+  if (sprite.frames.length === 0) {
+    const id = getNewId();
+    addFrame({
+      id,
+    });
+
+    addFrameToSprite(id);
 
     return 'Loading...';
   }

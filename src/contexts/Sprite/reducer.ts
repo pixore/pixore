@@ -18,6 +18,12 @@ const reducer = (state: Sprite, action: Action): Sprite => {
         ...state,
         layers: layers.concat(payload as string),
       };
+    case actionType.ADD_FRAME:
+      const { frames } = state;
+      return {
+        ...state,
+        frames: frames.concat(payload as string),
+      };
     default:
       return state;
   }
@@ -37,9 +43,15 @@ const createActions = (dispatch: Dispatch): SpriteActions => ({
       payload: sprite,
     });
   },
-  addLayerInSprite(id: string) {
+  addLayerToSprite(id: string) {
     dispatch({
       type: actionType.ADD_LAYER,
+      payload: id,
+    });
+  },
+  addFrameToSprite(id: string) {
+    dispatch({
+      type: actionType.ADD_FRAME,
       payload: id,
     });
   },

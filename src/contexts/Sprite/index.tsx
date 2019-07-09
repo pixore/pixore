@@ -13,7 +13,10 @@ const defaultValueActions = {
   changeSprite(sprite) {
     invariant(false, 'Context not implemented');
   },
-  addLayerInSprite(id) {
+  addLayerToSprite(id) {
+    invariant(false, 'Context not implemented');
+  },
+  addFrameToSprite(id) {
     invariant(false, 'Context not implemented');
   },
 };

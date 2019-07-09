@@ -1,12 +1,11 @@
-import { Layer } from '../Layers/types';
+import { Layer } from '../Layers';
+import { Frame } from '../Frames';
 
-interface Frame {
-  id: string;
-}
 enum actionType {
   CHANGE_NAME,
   CHANGE_SPRITE,
   ADD_LAYER,
+  ADD_FRAME,
 }
 
 type Payload = Sprite | string;
@@ -34,7 +33,8 @@ interface Sprite {
 interface SpriteActions {
   changeName: (name: string) => void;
   changeSprite: (sprite: Sprite) => void;
-  addLayerInSprite: (id: string) => void;
+  addLayerToSprite: (id: string) => void;
+  addFrameToSprite: (id: string) => void;
 }
 
 export {
