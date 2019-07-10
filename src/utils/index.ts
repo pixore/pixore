@@ -1,3 +1,5 @@
+import { Sprite } from '../contexts/Sprite';
+import { Artboard } from '../contexts/Artboard';
 let transparentPattern: HTMLCanvasElement;
 
 declare global {
@@ -44,10 +46,6 @@ const clean = (canvas: HTMLCanvasElement) => {
   return canvas;
 };
 
-interface Contexts {
-  [key: string]: CanvasRenderingContext2D;
-}
-
 let counter = 0;
 const mapReferences = new WeakMap<object, string>();
 const getIdByReference = (obj: object): string => {
@@ -66,38 +64,40 @@ const getNewId = (): string => {
   return id;
 };
 
+interface Contexts {
+  [key: string]: {
+    [key: string]: CanvasRenderingContext2D;
+  };
+}
+
 const contexts: Contexts = {};
 
-const getContext = (id: string) => contexts[id];
-const addContext = (context: CanvasRenderingContext2D): string => {
-  const id = getIdByReference(context);
-  if (contexts[id]) {
-    throw new Error('`' + id + '` context already exists');
-  }
-  if (context.canvas.width === 0) {
-    throw new Error('Width cannot be 0 of a canvas');
-  }
-  if (context.canvas.height === 0) {
-    throw new Error('Height cannot be 0 of a canvas');
-  }
-  contexts[id] = context;
+const getContext = (
+  sprite: Sprite,
+  artboard: Artboard,
+): CanvasRenderingContext2D => {
+  const { frame, layer } = artboard;
 
-  return id;
-};
-
-type NewContext = {
-  context: CanvasRenderingContext2D;
-  width: number;
-  height: number;
-};
-
-const getNewContext = ({ context, width, height }: NewContext) => {
-  var newContext = context || document.createElement('canvas').getContext('2d');
-  if (!context) {
-    newContext.canvas.width = width;
-    newContext.canvas.height = height;
+  if (!contexts[frame]) {
+    contexts[frame] = {};
   }
-  return newContext;
+
+  let context = contexts[frame][layer];
+
+  if (context) {
+    return context;
+  }
+
+  const { width, height } = sprite;
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+
+  context = canvas.getContext('2d');
+
+  contexts[frame][layer] = context;
+
+  return context;
 };
 
 export {
@@ -106,8 +106,6 @@ export {
   imageSmoothing,
   imageSmoothingDisabled,
   getContext,
-  addContext,
-  getNewContext,
   getIdByReference,
   getNewId,
 };

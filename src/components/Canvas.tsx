@@ -2,7 +2,13 @@
 import React from 'react';
 import { css, jsx } from '@emotion/core';
 
-import { getTransparentPattern, clean, getNewId } from '../utils';
+import {
+  getTransparentPattern,
+  clean,
+  getNewId,
+  getContext,
+  imageSmoothingDisabled,
+} from '../utils';
 import { Sprite, useSprite } from '../contexts/Sprite';
 import { useSpritesActions, useSprites } from '../contexts/Sprites';
 import { useSpriteActions } from '../contexts/Sprite';
@@ -46,11 +52,13 @@ const useCanvas2DContext = () => {
   return { context, onRef, canvas };
 };
 
-export const paintBackground = (
-  context: CanvasRenderingContext2D,
-  artboard: Artboard,
+type PaintFunction = (
+  mainContext: CanvasRenderingContext2D,
   sprite: Sprite,
-) => {
+  artboard: Artboard,
+) => void;
+
+const paintBackground: PaintFunction = (context, sprite, artboard) => {
   const pattern = context.createPattern(getTransparentPattern(), 'repeat');
   clean(context.canvas);
   context.fillStyle = pattern;
@@ -62,24 +70,70 @@ export const paintBackground = (
   );
 };
 
+const paintMain: PaintFunction = (mainContext, sprite, artboard) => {
+  const width = sprite.width * artboard.scale;
+  const height = sprite.height * artboard.scale;
+  clean(mainContext.canvas);
+  imageSmoothingDisabled(mainContext);
+  mainContext.drawImage(
+    getContext(sprite, artboard).canvas,
+    0,
+    0,
+    sprite.width,
+    sprite.height,
+    artboard.x,
+    artboard.y,
+    width,
+    height,
+  );
+};
+
+const paintMask: PaintFunction = (maskContext, sprite, artboard) => {
+  let width = sprite.width * artboard.scale;
+  let height = sprite.height * artboard.scale;
+  maskContext.fillStyle = '#494949';
+  maskContext.fillRect(
+    0,
+    0,
+    maskContext.canvas.width,
+    maskContext.canvas.width,
+  );
+  maskContext.clearRect(artboard.x, artboard.y, width, height);
+};
+
 const Canvas: React.FC = () => {
   const sprite = useSprite();
   const [stats, setStats] = React.useState<ClientRect>();
   const artboard = useArtboard();
   const { center, changePosition } = useArtboardActions();
   const elementRef = React.useRef<HTMLDivElement>();
-  const { onRef: backgroundRef, context: background } = useCanvas2DContext();
-  const { onRef: mainRef } = useCanvas2DContext();
+  const {
+    onRef: backgroundRef,
+    context: backgroundContext,
+  } = useCanvas2DContext();
+  const { onRef: mainRef, context: mainContext } = useCanvas2DContext();
   const { onRef: previewRef } = useCanvas2DContext();
-  const { onRef: maskRef } = useCanvas2DContext();
+  const { onRef: maskRef, context: maskContext } = useCanvas2DContext();
   const { current: element } = elementRef;
   const { innerWidth: width, innerHeight: height } = window;
 
   React.useEffect(() => {
-    if (background) {
-      paintBackground(background, artboard, sprite);
+    if (backgroundContext) {
+      paintBackground(backgroundContext, sprite, artboard);
     }
-  }, [background, sprite, artboard]);
+  }, [backgroundContext, sprite, artboard]);
+
+  React.useEffect(() => {
+    if (mainContext) {
+      paintMain(mainContext, sprite, artboard);
+    }
+  }, [mainContext, sprite, artboard]);
+
+  React.useEffect(() => {
+    if (maskContext) {
+      paintMask(maskContext, sprite, artboard);
+    }
+  }, [maskContext, sprite, artboard]);
 
   React.useEffect(() => {
     if (element) {
@@ -206,12 +260,14 @@ const CanvasLoader = () => {
   }
 
   if (!artboard) {
-    const { id } = sprite;
+    const { id, frames, layers } = sprite;
     const artboardIds = Object.keys(artboards);
     if (artboardIds.length === 0) {
       addArtboard({
         id,
         scale: 1,
+        frame: frames[0],
+        layer: layers[0],
         y: 0,
         x: 0,
       });

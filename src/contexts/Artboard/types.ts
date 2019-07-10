@@ -28,6 +28,8 @@ interface Artboard {
   id: string;
   color?: string;
   scale: number;
+  layer: string;
+  frame: string;
   x: number;
   y: number;
 }
