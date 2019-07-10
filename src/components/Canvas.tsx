@@ -2,26 +2,18 @@
 import React from 'react';
 import { css, jsx } from '@emotion/core';
 
-import {
-  getTransparentPattern,
-  clean,
-  getNewId,
-  getContext,
-  imageSmoothingDisabled,
-} from '../utils';
-import { Sprite, useSprite } from '../contexts/Sprite';
+import { getNewId } from '../utils';
+import { useSprite } from '../contexts/Sprite';
 import { useSpritesActions, useSprites } from '../contexts/Sprites';
 import { useSpriteActions } from '../contexts/Sprite';
 import { useLayersActions } from '../contexts/Layers';
 import { useFramesActions } from '../contexts/Frames';
 import { useArtboards, useArtboardsActions } from '../contexts/Artboards';
-import {
-  useArtboard,
-  useArtboardActions,
-  Artboard,
-} from '../contexts/Artboard';
+import { useArtboard, useArtboardActions } from '../contexts/Artboard';
+import useCanvas from '../hooks/useCanvas';
+import usePaintCanvas from '../hooks/usePaintCanvas';
 
-const base = css`
+const baseStyles = css`
   cursor: crosshair;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
@@ -33,73 +25,10 @@ const base = css`
   left: 0;
 `;
 
-const mask = css`
-  ${base}
+const maskStyles = css`
+  ${baseStyles}
   pointer-events: none;
 `;
-
-const useCanvas2DContext = () => {
-  const [canvas, setCanvas] = React.useState<HTMLCanvasElement>();
-  const [context, setContext] = React.useState<CanvasRenderingContext2D>();
-
-  const onRef = React.useCallback((ref) => {
-    setCanvas(ref);
-
-    const context = ref.getContext('2d');
-    setContext(context);
-  }, []);
-
-  return { context, onRef, canvas };
-};
-
-type PaintFunction = (
-  mainContext: CanvasRenderingContext2D,
-  sprite: Sprite,
-  artboard: Artboard,
-) => void;
-
-const paintBackground: PaintFunction = (context, sprite, artboard) => {
-  const pattern = context.createPattern(getTransparentPattern(), 'repeat');
-  clean(context.canvas);
-  context.fillStyle = pattern;
-  context.fillRect(
-    artboard.x,
-    artboard.y,
-    sprite.width * artboard.scale,
-    sprite.height * artboard.scale,
-  );
-};
-
-const paintMain: PaintFunction = (mainContext, sprite, artboard) => {
-  const width = sprite.width * artboard.scale;
-  const height = sprite.height * artboard.scale;
-  clean(mainContext.canvas);
-  imageSmoothingDisabled(mainContext);
-  mainContext.drawImage(
-    getContext(sprite, artboard).canvas,
-    0,
-    0,
-    sprite.width,
-    sprite.height,
-    artboard.x,
-    artboard.y,
-    width,
-    height,
-  );
-};
-
-const paintMask: PaintFunction = (maskContext, sprite, artboard) => {
-  let width = sprite.width * artboard.scale;
-  let height = sprite.height * artboard.scale;
-  maskContext.fillStyle = '#494949';
-  maskContext.fillRect(
-    0,
-    0,
-    maskContext.canvas.width,
-    maskContext.canvas.width,
-  );
-  maskContext.clearRect(artboard.x, artboard.y, width, height);
-};
 
 const Canvas: React.FC = () => {
   const sprite = useSprite();
@@ -107,33 +36,17 @@ const Canvas: React.FC = () => {
   const artboard = useArtboard();
   const { center, changePosition } = useArtboardActions();
   const elementRef = React.useRef<HTMLDivElement>();
-  const {
-    onRef: backgroundRef,
-    context: backgroundContext,
-  } = useCanvas2DContext();
-  const { onRef: mainRef, context: mainContext } = useCanvas2DContext();
-  const { onRef: previewRef } = useCanvas2DContext();
-  const { onRef: maskRef, context: maskContext } = useCanvas2DContext();
+  const { main, background, mask, preview } = useCanvas();
   const { current: element } = elementRef;
   const { innerWidth: width, innerHeight: height } = window;
 
-  React.useEffect(() => {
-    if (backgroundContext) {
-      paintBackground(backgroundContext, sprite, artboard);
-    }
-  }, [backgroundContext, sprite, artboard]);
-
-  React.useEffect(() => {
-    if (mainContext) {
-      paintMain(mainContext, sprite, artboard);
-    }
-  }, [mainContext, sprite, artboard]);
-
-  React.useEffect(() => {
-    if (maskContext) {
-      paintMask(maskContext, sprite, artboard);
-    }
-  }, [maskContext, sprite, artboard]);
+  usePaintCanvas({
+    main,
+    background,
+    mask,
+    sprite,
+    artboard,
+  });
 
   React.useEffect(() => {
     if (element) {
@@ -179,30 +92,30 @@ const Canvas: React.FC = () => {
       <canvas
         width={width}
         height={height}
-        ref={backgroundRef}
+        ref={background.onRef}
         style={style}
-        css={base}
+        css={baseStyles}
       />
       <canvas
         width={width}
         height={height}
-        ref={mainRef}
+        ref={main.onRef}
         style={style}
-        css={base}
+        css={baseStyles}
       />
       <canvas
         width={width}
         height={height}
-        ref={previewRef}
+        ref={preview.onRef}
         style={style}
-        css={base}
+        css={baseStyles}
       />
       <canvas
         width={width}
         height={height}
-        ref={maskRef}
+        ref={mask.onRef}
         style={style}
-        css={mask}
+        css={maskStyles}
       />
     </div>
   );
