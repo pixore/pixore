@@ -2,11 +2,13 @@ import 'react-dynamic-layout/dist/style/base/index.css';
 import 'react-dynamic-layout/dist/style/dark/index.css';
 import '../src/styles.css';
 
+import React from 'react';
 import { Layout, Container } from 'react-dynamic-layout';
 import Tool from '../src/components/Tool';
 import Editor from '../src/components/Editor';
 import Menu from '../src/components/Menu';
 import Canvas from '../src/components/Canvas';
+import FramesAndLayers from '../src/components/FramesAndLayers';
 
 const IndexPage = () => (
   <Editor>
@@ -49,7 +51,7 @@ const IndexPage = () => (
                 {({ dimensions }) => (
                   <Layout type={Layout.ROW}>
                     <Container isFixedSize={true}>
-                      <label>Frames and Layers</label>
+                      <FramesAndLayers />
                     </Container>
                     <Container initialSize={dimensions.height}>
                       {dimensions.height}
