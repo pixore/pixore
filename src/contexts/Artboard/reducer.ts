@@ -3,10 +3,10 @@ import { Artboard, ArtboardsActions, actionType, Action, Stats } from './types';
 
 const { floor } = Math;
 
-type Size = {
+interface Size {
   width: number;
   height: number;
-};
+}
 
 export function getScaleAndPosition(stats: DOMRect, size: Size) {
   const { top, left } = stats;
@@ -37,10 +37,20 @@ const reducer = (state: Artboard, action: Action): Artboard => {
     case actionType.CENTER:
       return {
         ...state,
-        ...payload,
+        ...(payload as Artboard),
       };
     case actionType.CHANGE_ARTBOARD:
       return payload as Artboard;
+    case actionType.CHANGE_LAYER:
+      return {
+        ...state,
+        layer: payload as string,
+      };
+    case actionType.CHANGE_FRAME:
+      return {
+        ...state,
+        frame: payload as string,
+      };
     default:
       return state;
   }
@@ -74,6 +84,18 @@ const createActions = (dispatch: Dispatch): ArtboardsActions => {
       dispatch({
         type: actionType.CENTER,
         payload,
+      });
+    },
+    changeLayer(layer) {
+      dispatch({
+        type: actionType.CHANGE_LAYER,
+        payload: layer,
+      });
+    },
+    changeFrame(frame) {
+      dispatch({
+        type: actionType.CHANGE_FRAME,
+        payload: frame,
       });
     },
   };

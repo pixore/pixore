@@ -4,24 +4,28 @@ enum actionType {
   CENTER,
   CHANGE_POSITION,
   CHANGE_ARTBOARD,
+  CHANGE_FRAME,
+  CHANGE_LAYER,
 }
-type Stats = {
+interface Stats {
   width: number;
   height: number;
   top: number;
   left: number;
-};
+}
 
-type ChangePositionPayload = {
+interface ChangePositionPayload {
   scale: number;
   x: number;
   y: number;
-};
+}
 
 interface ArtboardsActions {
   center: (stats: Stats, sprite: Sprite) => void;
   changePosition: (payload: ChangePositionPayload) => void;
   changeArtboard: (artboard: Artboard) => void;
+  changeLayer: (layer: string) => void;
+  changeFrame: (frame: string) => void;
 }
 
 interface Artboard {
@@ -34,7 +38,7 @@ interface Artboard {
   y: number;
 }
 
-type Payload = Artboard | ChangePositionPayload;
+type Payload = Artboard | ChangePositionPayload | string;
 
 interface Action {
   type: actionType;
