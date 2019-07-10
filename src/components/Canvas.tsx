@@ -2,12 +2,9 @@
 import React from 'react';
 import { css, jsx } from '@emotion/core';
 
-import { getNewId } from '../utils';
 import { useSprite } from '../contexts/Sprite';
 import { useSpritesActions, useSprites } from '../contexts/Sprites';
 import { useSpriteActions } from '../contexts/Sprite';
-import { useLayersActions } from '../contexts/Layers';
-import { useFramesActions } from '../contexts/Frames';
 import { useArtboards, useArtboardsActions } from '../contexts/Artboards';
 import { useArtboard, useArtboardActions } from '../contexts/Artboard';
 import useCanvas from '../hooks/useCanvas';
@@ -122,9 +119,7 @@ const Canvas: React.FC = () => {
 };
 
 const CanvasLoader = () => {
-  const { addLayerToSprite, addFrameToSprite } = useSpriteActions();
-  const { addLayer } = useLayersActions();
-  const { addFrame } = useFramesActions();
+  const { addNewLayerToSprite, addNewFrameToSprite } = useSpriteActions();
   const { addSprite } = useSpritesActions();
   const { addArtboard } = useArtboardsActions();
 
@@ -150,24 +145,15 @@ const CanvasLoader = () => {
   }
 
   if (sprite.layers.length === 0) {
-    const id = getNewId();
-    addLayer({
-      id,
+    addNewLayerToSprite({
       name: 'First Layer',
     });
-
-    addLayerToSprite(id);
 
     return 'Loading...';
   }
 
   if (sprite.frames.length === 0) {
-    const id = getNewId();
-    addFrame({
-      id,
-    });
-
-    addFrameToSprite(id);
+    addNewFrameToSprite();
 
     return 'Loading...';
   }

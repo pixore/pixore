@@ -33,8 +33,8 @@ interface Sprite {
 interface SpriteActions {
   changeName: (name: string) => void;
   changeSprite: (sprite: Sprite) => void;
-  addLayerToSprite: (id: string) => void;
-  addFrameToSprite: (id: string) => void;
+  addNewLayerToSprite: (newLayer: { name: string }) => string;
+  addNewFrameToSprite: () => string;
 }
 
 export {

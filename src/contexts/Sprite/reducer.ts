@@ -1,4 +1,7 @@
 import { SpriteActions, Sprite, Action, actionType } from './types';
+import { getNewId } from '../../utils';
+import { LayersActions } from '../Layers';
+import { FramesActions } from '../Frames';
 
 const reducer = (state: Sprite, action: Action): Sprite => {
   const { type, payload } = action;
@@ -30,7 +33,14 @@ const reducer = (state: Sprite, action: Action): Sprite => {
 };
 
 type Dispatch = (action: Action) => void;
-const createActions = (dispatch: Dispatch): SpriteActions => ({
+interface Deps {
+  layersActions: LayersActions;
+  framesActions: FramesActions;
+}
+const createActions = (
+  dispatch: Dispatch,
+  { layersActions, framesActions }: Deps,
+): SpriteActions => ({
   changeName(name: string) {
     dispatch({
       type: actionType.CHANGE_NAME,
@@ -43,17 +53,33 @@ const createActions = (dispatch: Dispatch): SpriteActions => ({
       payload: sprite,
     });
   },
-  addLayerToSprite(id: string) {
+  addNewLayerToSprite({ name }) {
+    const { addLayer } = layersActions;
+    const id = getNewId();
+    addLayer({
+      id,
+      name,
+    });
+
     dispatch({
       type: actionType.ADD_LAYER,
       payload: id,
     });
+
+    return id;
   },
-  addFrameToSprite(id: string) {
+  addNewFrameToSprite() {
+    const { addFrame } = framesActions;
+    const id = getNewId();
+    addFrame({
+      id,
+    });
     dispatch({
       type: actionType.ADD_FRAME,
       payload: id,
     });
+
+    return id;
   },
 });
 

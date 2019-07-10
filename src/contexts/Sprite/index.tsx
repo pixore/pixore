@@ -3,6 +3,8 @@ import invariant from 'invariant';
 import { Sprite, SpriteActions } from './types';
 import { reducer, createActions } from './reducer';
 import { useSprites } from '../Sprites';
+import { useLayersActions } from '../Layers';
+import { useFramesActions } from '../Frames';
 
 const defaultValueState = undefined;
 
@@ -13,11 +15,13 @@ const defaultValueActions = {
   changeSprite(sprite) {
     invariant(false, 'Context not implemented');
   },
-  addLayerToSprite(id) {
+  addNewLayerToSprite(newLayer) {
     invariant(false, 'Context not implemented');
+    return '';
   },
-  addFrameToSprite(id) {
+  addNewFrameToSprite() {
     invariant(false, 'Context not implemented');
+    return '';
   },
 };
 
@@ -34,9 +38,14 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
+  const layersActions = useLayersActions();
+  const framesActions = useFramesActions();
   const sprites = useSprites();
   const [state, dispatch] = React.useReducer(reducer, defaultValueState);
-  const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
+  const actions = React.useMemo(
+    () => createActions(dispatch, { layersActions, framesActions }),
+    [dispatch, layersActions, framesActions],
+  );
   const { children } = props;
   const { changeSprite } = actions;
 
