@@ -54,31 +54,42 @@ const FramesAndLayers = () => {
             />
           ))}
         </colgroup>
-        {sprite.layers.map((layer) => (
-          <tr
-            key={layer}
-            style={{
-              background: layer === artboard.layer ? 'darkgray' : 'transparent',
-            }}
-          >
-            <td css={baseStyle}>{layers[layer].name}</td>
-            {sprite.frames.map((frame) => (
-              <td
-                key={frame}
-                css={baseStyle}
-                onClick={() => onSelectFrameAndLayer(frame, layer)}
-                style={{
-                  background:
-                    frame === artboard.frame && layer === artboard.layer
-                      ? 'gray'
-                      : 'transparent',
-                }}
-              >
-                {frames[frame].id}
+        <tbody>
+          <tr>
+            <td css={baseStyle} />
+            {sprite.frames.map((frame, index) => (
+              <td css={baseStyle} key={frame}>
+                {index + 1}
               </td>
             ))}
           </tr>
-        ))}
+          {sprite.layers.map((layer) => (
+            <tr
+              key={layer}
+              style={{
+                background:
+                  layer === artboard.layer ? 'darkgray' : 'transparent',
+              }}
+            >
+              <td css={baseStyle}>{layers[layer].name}</td>
+              {sprite.frames.map((frame) => (
+                <td
+                  key={frame}
+                  css={baseStyle}
+                  onClick={() => onSelectFrameAndLayer(frame, layer)}
+                  style={{
+                    background:
+                      frame === artboard.frame && layer === artboard.layer
+                        ? 'gray'
+                        : 'transparent',
+                  }}
+                >
+                  {frames[frame].id}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );
