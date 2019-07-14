@@ -41,6 +41,7 @@ const Canvas: React.FC = () => {
     main,
     background,
     mask,
+    preview,
     sprite,
     artboard,
   });

@@ -6,6 +6,7 @@ import {
   imageSmoothingDisabled,
   getContext,
 } from './';
+import { Cord } from './canvas';
 
 type PaintFunction = (
   mainContext: CanvasRenderingContext2D,
@@ -56,4 +57,26 @@ const paintMask: PaintFunction = (maskContext, sprite, artboard) => {
   maskContext.clearRect(artboard.x, artboard.y, width, height);
 };
 
-export { paintBackground, paintMain, paintMask };
+const paintPreview = function(
+  cord: Cord,
+  context: CanvasRenderingContext2D,
+  artboard: Artboard,
+) {
+  clean(context.canvas);
+
+  let realCord = {
+    x: cord.x * artboard.scale + artboard.x,
+    y: cord.y * artboard.scale + artboard.y,
+  };
+  context.strokeStyle = 'rgba(255, 255, 255, 0.6)'; // COLOR_POINTER_PREW_DEF
+  context.fillStyle = 'rgba(0, 0, 0, 1)';
+  context.strokeRect(
+    realCord.x - 1,
+    realCord.y - 1,
+    artboard.scale + 2,
+    artboard.scale + 2,
+  );
+  context.fillRect(realCord.x, realCord.y, artboard.scale, artboard.scale);
+};
+
+export { paintBackground, paintMain, paintMask, paintPreview };
