@@ -22,6 +22,9 @@ const defaultValueActions = {
   changeFrame(frame) {
     invariant(false, 'Context not implemented');
   },
+  changeColor(color) {
+    invariant(false, 'Context not implemented');
+  },
 };
 
 const ArtboardStateContext = React.createContext<Artboard>(defaultValueState);

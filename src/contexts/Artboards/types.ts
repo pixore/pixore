@@ -1,4 +1,4 @@
-import { Artboard } from '../Artboard/types';
+import { Artboard } from '../Artboard';
 
 enum actionType {
   ADD_ARTBOARD,

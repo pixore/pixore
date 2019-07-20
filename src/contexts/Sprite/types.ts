@@ -1,6 +1,3 @@
-import { Layer } from '../Layers';
-import { Frame } from '../Frames';
-
 enum actionType {
   CHANGE_NAME,
   CHANGE_SPRITE,
@@ -37,13 +34,4 @@ interface SpriteActions {
   addNewFrameToSprite: () => string;
 }
 
-export {
-  Layer,
-  Sprite,
-  Palette,
-  Frame,
-  SpriteActions,
-  Action,
-  Payload,
-  actionType,
-};
+export { Sprite, Palette, SpriteActions, Action, Payload, actionType };

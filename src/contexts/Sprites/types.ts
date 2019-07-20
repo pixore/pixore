@@ -1,4 +1,4 @@
-import { Sprite } from '../Sprite/types';
+import { Sprite } from '../Sprite';
 
 enum actionType {
   ADD_SPRITE,
@@ -19,4 +19,4 @@ interface SpritesState {
   [key: string]: Sprite;
 }
 
-export { SpritesState, Sprite, SpritesActions, actionType, Action };
+export { SpritesState, SpritesActions, actionType, Action };

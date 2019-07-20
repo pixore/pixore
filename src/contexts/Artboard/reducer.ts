@@ -1,5 +1,5 @@
 import { Sprite } from '../Sprite';
-import { Artboard, ArtboardsActions, actionType, Action, Stats } from './types';
+import { Artboard, ArtboardsActions, actionType, Action } from './types';
 
 const { floor } = Math;
 
@@ -51,6 +51,11 @@ const reducer = (state: Artboard, action: Action): Artboard => {
         ...state,
         frame: payload as string,
       };
+    case actionType.CHANGE_COLOR:
+      return {
+        ...state,
+        color: payload as string,
+      };
     default:
       return state;
   }
@@ -58,47 +63,51 @@ const reducer = (state: Artboard, action: Action): Artboard => {
 
 type Dispatch = (action: Action) => void;
 
-const createActions = (dispatch: Dispatch): ArtboardsActions => {
-  return {
-    changeArtboard(artboard: Artboard) {
-      dispatch({
-        type: actionType.CHANGE_ARTBOARD,
-        payload: artboard,
-      });
-    },
-    changePosition(payload) {
-      dispatch({
-        type: actionType.CHANGE_POSITION,
-        payload,
-      });
-    },
-    center(stats: DOMRect, sprite: Sprite) {
-      const { scale, x, y } = getScaleAndPosition(stats, sprite);
+const createActions = (dispatch: Dispatch): ArtboardsActions => ({
+  changeArtboard(artboard: Artboard) {
+    dispatch({
+      type: actionType.CHANGE_ARTBOARD,
+      payload: artboard,
+    });
+  },
+  changePosition(payload) {
+    dispatch({
+      type: actionType.CHANGE_POSITION,
+      payload,
+    });
+  },
+  center(stats: DOMRect, sprite: Sprite) {
+    const { scale, x, y } = getScaleAndPosition(stats, sprite);
 
-      const payload = {
-        scale,
-        x,
-        y,
-      };
+    const payload = {
+      scale,
+      x,
+      y,
+    };
 
-      dispatch({
-        type: actionType.CENTER,
-        payload,
-      });
-    },
-    changeLayer(layer) {
-      dispatch({
-        type: actionType.CHANGE_LAYER,
-        payload: layer,
-      });
-    },
-    changeFrame(frame) {
-      dispatch({
-        type: actionType.CHANGE_FRAME,
-        payload: frame,
-      });
-    },
-  };
-};
+    dispatch({
+      type: actionType.CENTER,
+      payload,
+    });
+  },
+  changeLayer(layer) {
+    dispatch({
+      type: actionType.CHANGE_LAYER,
+      payload: layer,
+    });
+  },
+  changeFrame(frame) {
+    dispatch({
+      type: actionType.CHANGE_FRAME,
+      payload: frame,
+    });
+  },
+  changeColor(color) {
+    dispatch({
+      type: actionType.CHANGE_COLOR,
+      payload: color,
+    });
+  },
+});
 
 export { reducer, createActions };

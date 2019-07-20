@@ -1,14 +1,44 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { css } from '@emotion/core';
+
+import { useArtboardActions, useArtboard } from '../contexts/Artboard';
 
 interface ButtonPropTypes {
   size: number;
+  value: string;
+  isHover: boolean;
+  isSelected: boolean;
 }
 
 const getSize = ({ size }: ButtonPropTypes) => `${size}px`;
+const getBackground = ({ value }: ButtonPropTypes) => value;
+const getDecoration = ({ isSelected, size }: ButtonPropTypes) =>
+  isSelected
+    ? css`
+        &::after {
+          content: '';
+          position: absolute;
+          border: 15px solid transparent;
+          border-left-color: white;
+          transform: rotate(45deg);
+          left: ${size / 2};
+          top: ${size / 2};
+        }
+      `
+    : '';
+const getTransform = ({ isHover }: ButtonPropTypes) =>
+  isHover
+    ? css`
+        transform: scale(1.1);
+        z-index: 2;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+        transform-origin: 50%;
+      `
+    : '';
 
 const Button = styled.button`
-  border: 0px;
+  font-size: 0;
   display: inline-block;
   height: ${getSize};
   width: ${getSize};
@@ -16,7 +46,10 @@ const Button = styled.button`
   margin: 0;
   padding: 0;
   border: 0px;
-  background: transparent;
+  outline: 1px solid black;
+  background: ${getBackground};
+  ${getTransform};
+  ${getDecoration};
 `;
 
 interface PropTypes {
@@ -24,44 +57,23 @@ interface PropTypes {
   size?: number;
 }
 
-interface ContentColorPropTypes {
-  value: string;
-  isHover: boolean;
-}
-
-const getTransform = ({ isHover }: ContentColorPropTypes) =>
-  isHover
-    ? `transform: scale(1.1);
-    box-shadow: 0 0 5px rgba(0,0,0,0.7);
-    transform-origin: 50%;`
-    : '';
-
-const getBackground = ({ value }: ContentColorPropTypes) => value;
-
-const ContentColor = styled.span`
-  font-size: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: ${getBackground};
-  ${getTransform};
-`;
-
 const Color: React.FC<PropTypes> = (props) => {
+  const { changeColor } = useArtboardActions();
+  const { color } = useArtboard();
   const [isHover, setIsHover] = React.useState(false);
-  const { value, size = 20 } = props;
+  const { value, size = 30 } = props;
 
   return (
     <Button
       size={size}
+      value={value}
+      isSelected={color === value}
+      isHover={isHover}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
+      onClick={() => changeColor(value)}
     >
-      <ContentColor value={value} isHover={isHover}>
-        {value}
-      </ContentColor>
+      {value}
     </Button>
   );
 };
