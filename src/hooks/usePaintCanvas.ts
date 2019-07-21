@@ -11,6 +11,7 @@ import { Sprite } from 'src/contexts/Sprite';
 import { Artboard } from '../contexts/Artboard';
 import { manageEvents as $ } from '../utils/dom/events';
 import { calculatePosition, validCord } from '../utils/canvas';
+import { useArtboard } from '../contexts/Artboard';
 
 type UsePaintCanvas = ({
   background,
@@ -36,6 +37,7 @@ const usePaintCanvas: UsePaintCanvas = ({
   sprite,
   artboard,
 }) => {
+  const { primaryColor } = useArtboard();
   React.useEffect(() => {
     if (background.context) {
       paintBackground(background.context, sprite, artboard);
@@ -75,7 +77,7 @@ const usePaintCanvas: UsePaintCanvas = ({
             const cord = calculatePosition(artboard, clientX, clientY);
 
             if (validCord(sprite, cord)) {
-              paintPreview(cord, preview.context, artboard);
+              paintPreview(cord, preview.context, artboard, primaryColor);
             } else {
               clean(preview.canvas);
             }
