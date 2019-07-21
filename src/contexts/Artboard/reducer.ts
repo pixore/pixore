@@ -51,10 +51,15 @@ const reducer = (state: Artboard, action: Action): Artboard => {
         ...state,
         frame: payload as string,
       };
-    case actionType.CHANGE_COLOR:
+    case actionType.CHANGE_PRIMARY_COLOR:
       return {
         ...state,
-        color: payload as string,
+        primaryColor: payload as string,
+      };
+    case actionType.CHANGE_SECONDARY_COLOR:
+      return {
+        ...state,
+        secondaryColor: payload as string,
       };
     default:
       return state;
@@ -102,9 +107,15 @@ const createActions = (dispatch: Dispatch): ArtboardsActions => ({
       payload: frame,
     });
   },
-  changeColor(color) {
+  changePrimaryColor(color) {
     dispatch({
-      type: actionType.CHANGE_COLOR,
+      type: actionType.CHANGE_PRIMARY_COLOR,
+      payload: color,
+    });
+  },
+  changeSecondaryColor(color) {
+    dispatch({
+      type: actionType.CHANGE_SECONDARY_COLOR,
       payload: color,
     });
   },

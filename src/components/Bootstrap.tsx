@@ -58,6 +58,8 @@ const Bootstrap: React.FC<PropTypes> = (props) => {
       addArtboard({
         id,
         scale: 1,
+        primaryColor: '#000000',
+        secondaryColor: 'transparent',
         frame: frames[0],
         layer: layers[0],
         y: 0,

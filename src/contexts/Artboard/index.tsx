@@ -22,7 +22,10 @@ const defaultValueActions = {
   changeFrame(frame) {
     invariant(false, 'Context not implemented');
   },
-  changeColor(color) {
+  changePrimaryColor(color) {
+    invariant(false, 'Context not implemented');
+  },
+  changeSecondaryColor(color) {
     invariant(false, 'Context not implemented');
   },
 };

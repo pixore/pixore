@@ -58,8 +58,8 @@ interface PropTypes {
 }
 
 const Color: React.FC<PropTypes> = (props) => {
-  const { changeColor } = useArtboardActions();
-  const { color } = useArtboard();
+  const { changePrimaryColor, changeSecondaryColor } = useArtboardActions();
+  const { primaryColor } = useArtboard();
   const [isHover, setIsHover] = React.useState(false);
   const { value, size = 30 } = props;
 
@@ -67,11 +67,15 @@ const Color: React.FC<PropTypes> = (props) => {
     <Button
       size={size}
       value={value}
-      isSelected={color === value}
+      isSelected={primaryColor === value}
       isHover={isHover}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
-      onClick={() => changeColor(value)}
+      onClick={() => changePrimaryColor(value)}
+      onContextMenu={(event) => {
+        event.preventDefault();
+        changeSecondaryColor(value);
+      }}
     >
       {value}
     </Button>

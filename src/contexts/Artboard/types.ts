@@ -6,7 +6,8 @@ enum actionType {
   CHANGE_ARTBOARD,
   CHANGE_FRAME,
   CHANGE_LAYER,
-  CHANGE_COLOR,
+  CHANGE_PRIMARY_COLOR,
+  CHANGE_SECONDARY_COLOR,
 }
 interface Stats {
   width: number;
@@ -27,12 +28,14 @@ interface ArtboardsActions {
   changeArtboard: (artboard: Artboard) => void;
   changeLayer: (layer: string) => void;
   changeFrame: (frame: string) => void;
-  changeColor: (color: string) => void;
+  changePrimaryColor: (color: string) => void;
+  changeSecondaryColor: (color: string) => void;
 }
 
 interface Artboard {
   id: string;
-  color?: string;
+  primaryColor: string;
+  secondaryColor: string;
   scale: number;
   layer: string;
   frame: string;
