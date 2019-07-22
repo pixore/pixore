@@ -117,10 +117,12 @@ const offHandler = (
   }
 };
 
-interface OffOptions {
-  handler?: EventListener;
-  nameSpace?: string;
-}
+type OffOptions =
+  | EventListener
+  | {
+      handler?: EventListener;
+      nameSpace?: string;
+    };
 
 type Off = (eventType: string, options?: OffOptions) => ManageEvents;
 type On = (
@@ -141,10 +143,21 @@ interface ManageEvents {
   offOn: OffOn;
 }
 
+const extraOffOptions = (offOptions: OffOptions) => {
+  if (typeof offOptions === 'function') {
+    return {
+      handler: offOptions,
+    };
+  }
+
+  return offOptions;
+};
+
 const offFactory = (element: HTMLElement, manageEvents: ManageEvents): Off => (
   eventType: string,
-  { handler, nameSpace } = {},
+  offOptions: OffOptions,
 ) => {
+  const { handler, nameSpace } = extraOffOptions(offOptions);
   if (!handler && !nameSpace) {
     offAllHandlers(element, eventType);
   }

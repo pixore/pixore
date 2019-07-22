@@ -1,4 +1,4 @@
-const enum Key {
+enum Key {
   Spacebar = ' ',
 }
 

@@ -1,17 +1,9 @@
 import React from 'react';
 import { Canvas2DContext } from './useCanvas';
-import {
-  paintBackground,
-  paintMain,
-  paintMask,
-  paintPreview,
-} from '../utils/paint';
-import { clean } from '../utils';
+import { paintBackground, paintMain, paintMask } from '../utils/paint';
 import { Sprite } from 'src/contexts/Sprite';
 import { Artboard } from '../contexts/Artboard';
-import { manageEvents as $ } from '../utils/dom/events';
-import { calculatePosition, validCord } from '../utils/canvas';
-import { useArtboard } from '../contexts/Artboard';
+import usePaintPreview from './usePaintPreview';
 
 type UsePaintCanvas = ({
   background,
@@ -37,7 +29,6 @@ const usePaintCanvas: UsePaintCanvas = ({
   sprite,
   artboard,
 }) => {
-  const { primaryColor } = useArtboard();
   React.useEffect(() => {
     if (background.context) {
       paintBackground(background.context, sprite, artboard);
@@ -56,41 +47,7 @@ const usePaintCanvas: UsePaintCanvas = ({
     }
   }, [mask.context, sprite, artboard]);
 
-  React.useEffect(() => {
-    if (preview.canvas) {
-      $(preview.canvas)
-        .on(
-          'mousedown',
-          () => {
-            console.log('mousedown');
-          },
-          'preview',
-        )
-        // this will get removed by the mousedown event
-        // and added back again by the mouseup event
-        .on(
-          'mousemove',
-          (event: MouseEvent) => {
-            const { clientX, clientY } = event;
-            event.preventDefault();
-            clean(preview.canvas);
-            const cord = calculatePosition(artboard, clientX, clientY);
-
-            if (validCord(sprite, cord)) {
-              paintPreview(cord, preview.context, artboard, primaryColor);
-            } else {
-              clean(preview.canvas);
-            }
-          },
-          'preview',
-        );
-
-      return () =>
-        $(preview.canvas)
-          .off('mousedown', { nameSpace: 'preview' })
-          .off('mousemove', { nameSpace: 'preview' });
-    }
-  }, [preview.canvas, artboard, preview.context, sprite]);
+  usePaintPreview(preview, artboard, sprite);
 };
 
 export default usePaintCanvas;
