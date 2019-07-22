@@ -61,7 +61,6 @@ const paintPreview = function(
   cord: Cord,
   context: CanvasRenderingContext2D,
   artboard: Artboard,
-  color: string,
 ) {
   clean(context.canvas);
 
@@ -70,7 +69,7 @@ const paintPreview = function(
     y: cord.y * artboard.scale + artboard.y,
   };
   context.strokeStyle = 'rgba(255, 255, 255, 0.6)'; // border
-  context.fillStyle = color;
+  context.fillStyle = artboard.primaryColor;
   context.strokeRect(
     realCord.x - 1,
     realCord.y - 1,

@@ -26,11 +26,10 @@ const useCanvas = () => {
   return {
     background: useCanvas2DContext(),
     main: useCanvas2DContext(),
-    preview: useCanvas2DContext(),
     mask: useCanvas2DContext(),
   };
 };
 
-export { Canvas2DContext };
+export { Canvas2DContext, useCanvas2DContext };
 
 export default useCanvas;

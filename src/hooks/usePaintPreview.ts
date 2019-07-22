@@ -81,7 +81,7 @@ const usePaintPreview = (
       const cord = calculatePosition(artboard, clientX, clientY);
 
       if (validCord(sprite, cord)) {
-        paintPreview(cord, preview.context, artboard, primaryColor);
+        paintPreview(cord, preview.context, artboard);
       } else {
         clean(preview.canvas);
       }

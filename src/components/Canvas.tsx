@@ -6,21 +6,10 @@ import { useSprite } from '../contexts/Sprite';
 import { useArtboard, useArtboardActions } from '../contexts/Artboard';
 import useCanvas from '../hooks/useCanvas';
 import usePaintCanvas from '../hooks/usePaintCanvas';
-
-const baseStyles = css`
-  cursor: crosshair;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: -o-crisp-edges;
-  image-rendering: pixelated;
-  -ms-interpolation-mode: nearest-neighbor;
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
+import CanvasLayer from './CanvasLayer';
+import Preview from './Preview';
 
 const maskStyles = css`
-  ${baseStyles}
   pointer-events: none;
 `;
 
@@ -30,7 +19,7 @@ const Canvas: React.FC = () => {
   const artboard = useArtboard();
   const { center, changePosition } = useArtboardActions();
   const elementRef = React.useRef<HTMLDivElement>();
-  const { main, background, mask, preview } = useCanvas();
+  const { main, background, mask } = useCanvas();
   const { current: element } = elementRef;
   const { innerWidth: width, innerHeight: height } = window;
 
@@ -38,7 +27,6 @@ const Canvas: React.FC = () => {
     main,
     background,
     mask,
-    preview,
     sprite,
     artboard,
   });
@@ -84,28 +72,20 @@ const Canvas: React.FC = () => {
 
   return (
     <div ref={elementRef} style={style} onWheel={onWheel}>
-      <canvas
+      <CanvasLayer
         width={width}
         height={height}
         ref={background.onRef}
         style={style}
-        css={baseStyles}
       />
-      <canvas
+      <CanvasLayer
         width={width}
         height={height}
         ref={main.onRef}
         style={style}
-        css={baseStyles}
       />
-      <canvas
-        width={width}
-        height={height}
-        ref={preview.onRef}
-        style={style}
-        css={baseStyles}
-      />
-      <canvas
+      <Preview width={width} height={height} style={style} />
+      <CanvasLayer
         width={width}
         height={height}
         ref={mask.onRef}
