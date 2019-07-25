@@ -11,6 +11,9 @@ import { useModifier, Key } from '../contexts/Modifiers';
 const noop = () => {
   console.log('noop');
 };
+
+const preventDefault = (event: React.MouseEvent) => event.preventDefault();
+
 interface PropTypes {
   width: number;
   height: number;
@@ -123,6 +126,7 @@ const Preview: React.FC<PropTypes> = (props) => {
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
+      onContextMenu={preventDefault}
       ref={setRef}
       width={width}
       height={height}
