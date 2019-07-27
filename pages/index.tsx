@@ -55,7 +55,7 @@ const IndexPage = () => (
                       </Layout>
                     </Container>
                     <Container initialSize={60}>
-                      <Tool name="pencil" />
+                      <Tool name="pen" />
                       <Tool name="eraser" />
                       <Tool name="pick" />
                       <Tool name="bucket" />

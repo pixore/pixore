@@ -1,19 +1,33 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
+import { useArtboard, useArtboardActions } from '../contexts/Artboard';
+
+interface ButtonPropTypes {
+  isSelected: boolean;
+}
+
 const Button = styled.button`
-  background: black;
   border: 0px;
   color: white;
+  background: ${({ isSelected }: ButtonPropTypes) =>
+    isSelected ? 'black' : 'gray'};
 `;
 
-interface ToolProps {
+interface PropTypes {
   name: string;
 }
 
-const Tool: React.FC<ToolProps> = (props) => {
+const Tool: React.FC<PropTypes> = (props) => {
   const { name } = props;
-  return <Button>{name}</Button>;
+  const artboard = useArtboard();
+  const { changeTool } = useArtboardActions();
+  const isSelected = artboard.tool === name;
+  return (
+    <Button isSelected={isSelected} onClick={() => changeTool(name)}>
+      {name}
+    </Button>
+  );
 };
 
 export default Tool;
