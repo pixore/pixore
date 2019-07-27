@@ -13,9 +13,12 @@ interface Events {
   [key: string]: Event;
 }
 
-const events = new WeakMap<HTMLElement, Events>();
+const events = new WeakMap<HTMLElement | Window, Events>();
 
-const getHandlersByType = (element: HTMLElement, eventType: string): Event => {
+const getHandlersByType = (
+  element: HTMLElement | Window,
+  eventType: string,
+): Event => {
   if (!events.has(element)) {
     return undefined;
   }
@@ -26,7 +29,7 @@ const getHandlersByType = (element: HTMLElement, eventType: string): Event => {
 };
 
 const getHandlersByNameSpace = (
-  element: HTMLElement,
+  element: HTMLElement | Window,
   eventType: string,
   nameSpace: string,
 ): NameSpace => {
@@ -40,7 +43,7 @@ const getHandlersByNameSpace = (
 };
 
 const offNameSpace = (
-  element: HTMLElement,
+  element: HTMLElement | Window,
   eventType: string,
   nameSpace?: string,
 ) => {
@@ -56,9 +59,8 @@ const offNameSpace = (
   handlersByType.nameSpaces[nameSpace] = [];
 };
 
-const offAllHandlers = (element: HTMLElement, eventType: string) => {
+const offAllHandlers = (element: HTMLElement | Window, eventType: string) => {
   const handlersByType = getHandlersByType(element, eventType);
-
   if (!handlersByType) {
     return;
   }
@@ -73,7 +75,7 @@ const offAllHandlers = (element: HTMLElement, eventType: string) => {
 };
 
 const offHandlerInNameSpace = (
-  element: HTMLElement,
+  element: HTMLElement | Window,
   eventType: string,
   handler?: EventListener,
   nameSpace?: string,
@@ -97,7 +99,7 @@ const offHandlerInNameSpace = (
 };
 
 const offHandler = (
-  element: HTMLElement,
+  element: HTMLElement | Window,
   eventType: string,
   handler?: EventListener,
 ) => {
@@ -153,11 +155,12 @@ const extraOffOptions = (offOptions: OffOptions) => {
   return offOptions;
 };
 
-const offFactory = (element: HTMLElement, manageEvents: ManageEvents): Off => (
-  eventType: string,
-  offOptions: OffOptions,
-) => {
+const offFactory = (
+  element: HTMLElement | Window,
+  manageEvents: ManageEvents,
+): Off => (eventType: string, offOptions: OffOptions = {}) => {
   const { handler, nameSpace } = extraOffOptions(offOptions);
+
   if (!handler && !nameSpace) {
     offAllHandlers(element, eventType);
   }
@@ -177,11 +180,10 @@ const offFactory = (element: HTMLElement, manageEvents: ManageEvents): Off => (
   return manageEvents;
 };
 
-const onFactory = (element: HTMLElement, manageEvents: ManageEvents): On => (
-  eventType: string,
-  handler: EventListener,
-  nameSpace?: string,
-) => {
+const onFactory = (
+  element: HTMLElement | Window,
+  manageEvents: ManageEvents,
+): On => (eventType: string, handler: EventListener, nameSpace?: string) => {
   const eventsByElement = events.get(element) || {};
   if (!eventsByElement[eventType]) {
     eventsByElement[eventType] = {
@@ -217,7 +219,7 @@ const offOnFactory = (on: On, off: Off, manageEvents: ManageEvents): OffOn => (
   return manageEvents;
 };
 
-const manageEvents = (element: HTMLElement): ManageEvents => {
+const manageEvents = (element: HTMLElement | Window): ManageEvents => {
   const manageEvents: {
     offOn?: OffOn;
     on?: On;
