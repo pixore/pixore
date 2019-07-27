@@ -28,6 +28,9 @@ const defaultValueActions = {
   changeSecondaryColor(color) {
     invariant(false, 'Context not implemented');
   },
+  changeTool(tool) {
+    invariant(false, 'Context not implemented');
+  },
 };
 
 const ArtboardStateContext = React.createContext<Artboard>(defaultValueState);

@@ -8,6 +8,7 @@ enum actionType {
   CHANGE_LAYER,
   CHANGE_PRIMARY_COLOR,
   CHANGE_SECONDARY_COLOR,
+  CHANGE_TOOL,
 }
 interface Stats {
   width: number;
@@ -30,6 +31,7 @@ interface ArtboardsActions {
   changeFrame: (frame: string) => void;
   changePrimaryColor: (color: string) => void;
   changeSecondaryColor: (color: string) => void;
+  changeTool: (tool: string) => void;
 }
 
 interface Artboard {
@@ -39,6 +41,7 @@ interface Artboard {
   scale: number;
   layer: string;
   frame: string;
+  tool: string;
   x: number;
   y: number;
 }

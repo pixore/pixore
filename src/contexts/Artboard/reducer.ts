@@ -61,6 +61,11 @@ const reducer = (state: Artboard, action: Action): Artboard => {
         ...state,
         secondaryColor: payload as string,
       };
+    case actionType.CHANGE_TOOL:
+      return {
+        ...state,
+        tool: payload as string,
+      };
     default:
       return state;
   }
@@ -117,6 +122,12 @@ const createActions = (dispatch: Dispatch): ArtboardsActions => ({
     dispatch({
       type: actionType.CHANGE_SECONDARY_COLOR,
       payload: color,
+    });
+  },
+  changeTool(tool) {
+    dispatch({
+      type: actionType.CHANGE_TOOL,
+      payload: tool,
     });
   },
 });
