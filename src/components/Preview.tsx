@@ -3,15 +3,9 @@ import CanvasLayer from './CanvasLayer';
 import { useCanvas2DContext } from '../hooks/useCanvas';
 import { useArtboard, useArtboardActions } from '../contexts/Artboard';
 import { useSprite } from '../contexts/Sprite';
-import { addEventListener, ListenerContext } from '../tools';
+import { getTool, ListenerContext } from '../tools';
 
 const preventDefault = (event: React.MouseEvent) => event.preventDefault();
-
-interface PropTypes {
-  width: number;
-  height: number;
-  style: React.CSSProperties;
-}
 
 const usePreview = () => {
   const { onRef: setRef, context, canvas } = useCanvas2DContext();
@@ -25,6 +19,7 @@ const usePreview = () => {
     artboard,
     changePosition,
   });
+  const { tool: toolName } = artboard;
 
   listenerContextRef.current = {
     context,
@@ -39,13 +34,23 @@ const usePreview = () => {
       return;
     }
 
-    addEventListener(listenerContextRef);
-  }, [canvas]);
+    const addEventListener = getTool(toolName);
+
+    if (addEventListener) {
+      return addEventListener(listenerContextRef);
+    }
+  }, [canvas, toolName]);
 
   return {
     setRef,
   };
 };
+
+interface PropTypes {
+  width: number;
+  height: number;
+  style: React.CSSProperties;
+}
 
 const Preview: React.FC<PropTypes> = (props) => {
   const { width, height, style } = props;
