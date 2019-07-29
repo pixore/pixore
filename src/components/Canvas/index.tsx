@@ -2,11 +2,11 @@
 import React from 'react';
 import { css, jsx } from '@emotion/core';
 
-import { useSprite } from '../contexts/Sprite';
-import { useArtboard, useArtboardActions } from '../contexts/Artboard';
-import useCanvas from '../hooks/useCanvas';
-import usePaintCanvas from '../hooks/usePaintCanvas';
-import CanvasLayer from './CanvasLayer';
+import { useSprite } from '../../contexts/Sprite';
+import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
+import useCanvas from '../../hooks/useCanvas';
+import usePaintCanvas from '../../hooks/usePaintCanvas';
+import CanvasLayer from '../CanvasLayer';
 import Preview from './Preview';
 
 const maskStyles = css`

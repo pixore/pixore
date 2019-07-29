@@ -1,9 +1,9 @@
 import React from 'react';
-import CanvasLayer from './CanvasLayer';
-import { useCanvas2DContext } from '../hooks/useCanvas';
-import { useArtboard, useArtboardActions } from '../contexts/Artboard';
-import { useSprite } from '../contexts/Sprite';
-import { getTool, ListenerContext } from '../tools';
+import CanvasLayer from '../CanvasLayer';
+import { useCanvas2DContext } from '../../hooks/useCanvas';
+import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
+import { useSprite } from '../../contexts/Sprite';
+import { getTool, ListenerContext } from '../../tools';
 
 const preventDefault = (event: React.MouseEvent) => event.preventDefault();
 
