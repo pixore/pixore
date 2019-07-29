@@ -1,11 +1,6 @@
 import { Sprite } from '../contexts/Sprite';
 import { Artboard } from '../contexts/Artboard';
-import {
-  clean,
-  getTransparentPattern,
-  imageSmoothingDisabled,
-  getContext,
-} from './';
+import { clean, getTransparentPattern } from './';
 import { Cord } from './canvas';
 
 type PaintFunction = (
@@ -23,24 +18,6 @@ const paintBackground: PaintFunction = (context, sprite, artboard) => {
     artboard.y,
     sprite.width * artboard.scale,
     sprite.height * artboard.scale,
-  );
-};
-
-const paintMain: PaintFunction = (mainContext, sprite, artboard) => {
-  const width = sprite.width * artboard.scale;
-  const height = sprite.height * artboard.scale;
-  clean(mainContext.canvas);
-  imageSmoothingDisabled(mainContext);
-  mainContext.drawImage(
-    getContext(sprite, artboard).canvas,
-    0,
-    0,
-    sprite.width,
-    sprite.height,
-    artboard.x,
-    artboard.y,
-    width,
-    height,
   );
 };
 
@@ -79,4 +56,4 @@ const paintPreview = function(
   context.fillRect(realCord.x, realCord.y, artboard.scale, artboard.scale);
 };
 
-export { paintBackground, paintMain, paintMask, paintPreview };
+export { paintBackground, paintMask, paintPreview, PaintFunction };

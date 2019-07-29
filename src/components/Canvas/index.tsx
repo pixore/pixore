@@ -8,6 +8,7 @@ import useCanvas from '../../hooks/useCanvas';
 import usePaintCanvas from '../../hooks/usePaintCanvas';
 import CanvasLayer from '../CanvasLayer';
 import Preview from './Preview';
+import Main from './Main';
 
 const maskStyles = css`
   pointer-events: none;
@@ -19,12 +20,11 @@ const Canvas: React.FC = () => {
   const artboard = useArtboard();
   const { center, changePosition } = useArtboardActions();
   const elementRef = React.useRef<HTMLDivElement>();
-  const { main, background, mask } = useCanvas();
+  const { background, mask } = useCanvas();
   const { current: element } = elementRef;
   const { innerWidth: width, innerHeight: height } = window;
 
   usePaintCanvas({
-    main,
     background,
     mask,
     sprite,
@@ -78,12 +78,7 @@ const Canvas: React.FC = () => {
         ref={background.onRef}
         style={style}
       />
-      <CanvasLayer
-        width={width}
-        height={height}
-        ref={main.onRef}
-        style={style}
-      />
+      <Main width={width} height={height} style={style} />
       <Preview width={width} height={height} style={style} />
       <CanvasLayer
         width={width}

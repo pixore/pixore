@@ -5,8 +5,6 @@ import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
 import { useSprite } from '../../contexts/Sprite';
 import { getTool, ListenerContext } from '../../tools';
 
-const preventDefault = (event: React.MouseEvent) => event.preventDefault();
-
 const usePreview = () => {
   const { onRef: setRef, context, canvas } = useCanvas2DContext();
   const { changePosition } = useArtboardActions();
@@ -53,17 +51,8 @@ interface PropTypes {
 }
 
 const Preview: React.FC<PropTypes> = (props) => {
-  const { width, height, style } = props;
   const { setRef } = usePreview();
-  return (
-    <CanvasLayer
-      style={style}
-      onContextMenu={preventDefault}
-      ref={setRef}
-      width={width}
-      height={height}
-    />
-  );
+  return <CanvasLayer ref={setRef} {...props} />;
 };
 
 export default Preview;

@@ -25,7 +25,6 @@ const useCanvas2DContext = (): Canvas2DContext => {
 const useCanvas = () => {
   return {
     background: useCanvas2DContext(),
-    main: useCanvas2DContext(),
     mask: useCanvas2DContext(),
   };
 };
