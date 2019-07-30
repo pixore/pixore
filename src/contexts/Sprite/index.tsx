@@ -23,6 +23,9 @@ const defaultValueActions = {
     invariant(false, 'Context not implemented');
     return '';
   },
+  createNewVersion() {
+    invariant(false, 'Context not implemented');
+  },
 };
 
 const SpriteStateContext = React.createContext<Sprite>(defaultValueState);

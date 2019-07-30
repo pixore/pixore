@@ -3,13 +3,14 @@ enum actionType {
   CHANGE_SPRITE,
   ADD_LAYER,
   ADD_FRAME,
+  CREATE_NEW_VERSION,
 }
 
 type Payload = Sprite | string;
 
 interface Action {
   type: actionType;
-  payload: Payload;
+  payload?: Payload;
 }
 
 interface Palette {
@@ -24,6 +25,7 @@ interface Sprite {
   height: number;
   layers: string[];
   frames: string[];
+  version?: number;
   palette?: Palette;
 }
 
@@ -32,6 +34,7 @@ interface SpriteActions {
   changeSprite: (sprite: Sprite) => void;
   addNewLayerToSprite: (newLayer: { name: string }) => string;
   addNewFrameToSprite: () => string;
+  createNewVersion: () => void;
 }
 
 export { Sprite, Palette, SpriteActions, Action, Payload, actionType };
