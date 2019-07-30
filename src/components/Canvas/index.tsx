@@ -2,12 +2,13 @@
 import React from 'react';
 import { css, jsx } from '@emotion/core';
 
-import { useSprite } from '../contexts/Sprite';
-import { useArtboard, useArtboardActions } from '../contexts/Artboard';
-import useCanvas from '../hooks/useCanvas';
-import usePaintCanvas from '../hooks/usePaintCanvas';
-import CanvasLayer from './CanvasLayer';
+import { useSprite } from '../../contexts/Sprite';
+import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
+import useCanvas from '../../hooks/useCanvas';
+import usePaintCanvas from '../../hooks/usePaintCanvas';
+import CanvasLayer from '../CanvasLayer';
 import Preview from './Preview';
+import Main from './Main';
 
 const maskStyles = css`
   pointer-events: none;
@@ -19,12 +20,11 @@ const Canvas: React.FC = () => {
   const artboard = useArtboard();
   const { center, changePosition } = useArtboardActions();
   const elementRef = React.useRef<HTMLDivElement>();
-  const { main, background, mask } = useCanvas();
+  const { background, mask } = useCanvas();
   const { current: element } = elementRef;
   const { innerWidth: width, innerHeight: height } = window;
 
   usePaintCanvas({
-    main,
     background,
     mask,
     sprite,
@@ -39,7 +39,10 @@ const Canvas: React.FC = () => {
       center(stats, sprite);
       setStats(stats);
     }
-  }, [element, sprite, center]);
+    // NOTE: this effect should be execute only once,
+    // when the component is mounted an the element is available
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [element]);
 
   const style: React.CSSProperties = {
     width,
@@ -70,6 +73,7 @@ const Canvas: React.FC = () => {
     });
   };
 
+  // TODO Move brackground and mask layers to its own components
   return (
     <div ref={elementRef} style={style} onWheel={onWheel}>
       <CanvasLayer
@@ -78,12 +82,7 @@ const Canvas: React.FC = () => {
         ref={background.onRef}
         style={style}
       />
-      <CanvasLayer
-        width={width}
-        height={height}
-        ref={main.onRef}
-        style={style}
-      />
+      <Main width={width} height={height} style={style} />
       <Preview width={width} height={height} style={style} />
       <CanvasLayer
         width={width}

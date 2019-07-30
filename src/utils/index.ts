@@ -1,5 +1,5 @@
 import { Sprite } from '../contexts/Sprite';
-import { Artboard } from '../contexts/Artboard';
+
 let transparentPattern: HTMLCanvasElement;
 
 declare global {
@@ -73,11 +73,10 @@ interface Contexts {
 const contexts: Contexts = {};
 
 const getContext = (
+  frame: string,
+  layer: string,
   sprite: Sprite,
-  artboard: Artboard,
 ): CanvasRenderingContext2D => {
-  const { frame, layer } = artboard;
-
   if (!contexts[frame]) {
     contexts[frame] = {};
   }
@@ -100,7 +99,10 @@ const getContext = (
   return context;
 };
 
+const preventDefault = (event: React.MouseEvent) => event.preventDefault();
+
 export {
+  preventDefault,
   getTransparentPattern,
   clean,
   imageSmoothing,

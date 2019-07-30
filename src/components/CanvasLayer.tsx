@@ -1,6 +1,8 @@
+import React from 'react';
 import styled from '@emotion/styled';
+import { preventDefault } from '../utils';
 
-const CanvasLayer = styled.canvas`
+const Canvas = styled.canvas`
   cursor: crosshair;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
@@ -12,4 +14,14 @@ const CanvasLayer = styled.canvas`
   left: 0;
 `;
 
-export default CanvasLayer;
+interface PropTypes {
+  width: number;
+  height: number;
+  style: React.CSSProperties;
+}
+
+const CanvasLayer: React.FC<PropTypes> = (props, ref) => (
+  <Canvas ref={ref} onContextMenu={preventDefault} {...props} />
+);
+
+export default React.forwardRef(CanvasLayer);

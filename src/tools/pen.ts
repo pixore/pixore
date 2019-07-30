@@ -1,32 +1,65 @@
-import { clean } from '../utils';
+import { clean, getContext } from '../utils';
 import { calculatePosition, validCord } from '../utils/canvas';
 import { Key } from '../contexts/Modifiers';
 import { manageEvents as $ } from '../utils/dom/events';
 import { getModifierState } from '../utils/keyboard';
-import { paintPreview } from '../utils/paint';
 import Vector from '../utils/vector';
+import { createOnMouseMovePreview } from './utils';
 import { ListenerContextRef } from './types';
 
-const addEventListener = (listenerContextRef: ListenerContextRef) => {
+type Context = ListenerContextRef & {
+  current: {
+    last: number;
+  };
+};
+
+const addEventListener = (listenerContextRef: Context) => {
   const $window = $(window);
   const saveLastDrag = (lastDrag: Vector) => {
     listenerContextRef.current.lastDrag = lastDrag;
   };
 
-  const onMouseDownPanning = (event: MouseEvent) => {
+  const onMouseMovePreview = createOnMouseMovePreview(listenerContextRef);
+
+  const paint = (cord: Vector) => {
+    const { x, y } = cord;
+    const {
+      artboard,
+      sprite,
+      context: previewContext,
+    } = listenerContextRef.current;
+    const { primaryColor, frame, layer } = artboard;
+    const layerContext = getContext(frame, layer, sprite);
+
+    previewContext.fillStyle = primaryColor;
+    previewContext.fillRect(
+      x * artboard.scale + artboard.x,
+      y * artboard.scale + artboard.y,
+      artboard.scale,
+      artboard.scale,
+    );
+    layerContext.fillStyle = primaryColor;
+    layerContext.fillRect(x, y, 1, 1);
+  };
+
+  const onMouseMovePanning = (event: MouseEvent) => {
     const {
       artboard,
       canvas,
-      changePosition,
+      artboardActions,
       lastDrag,
     } = listenerContextRef.current;
-    event.preventDefault();
+
+    const { changePosition } = artboardActions;
     const { clientX, clientY } = event;
     const currentDrag: Vector = { x: clientX, y: clientY };
-    clean(canvas);
+
     const dragDiff = lastDrag
       ? Vector.getDiff(currentDrag, lastDrag)
       : { x: 0, y: 0 };
+
+    event.preventDefault();
+    clean(canvas);
 
     changePosition({
       x: artboard.x + dragDiff.x,
@@ -37,46 +70,50 @@ const addEventListener = (listenerContextRef: ListenerContextRef) => {
     saveLastDrag(currentDrag);
   };
 
-  const onMouseDownPaiting = () => console.log('paiting');
+  const onMouseUpPanning = () => {
+    saveLastDrag(undefined);
+    $window
+      .off('mousemove', onMouseMovePanning)
+      .off('mouseup', onMouseUpPanning)
+      .on('mousemove', onMouseMovePreview);
+  };
 
-  const onMouseMovePreview = (event: MouseEvent) => {
-    const { artboard, sprite, context, canvas } = listenerContextRef.current;
-    event.preventDefault();
-    const { clientX, clientY } = event;
-    clean(canvas);
-    const cord = calculatePosition(artboard, clientX, clientY);
+  const onMouseMovePainting = (event: MouseEvent) => {
+    const { artboard, sprite, spriteActions } = listenerContextRef.current;
+    const { createNewVersion } = spriteActions;
+    const cord = calculatePosition(artboard, event.clientX, event.clientY);
 
     if (validCord(sprite, cord)) {
-      paintPreview(cord, context, artboard);
-    } else {
-      clean(canvas);
+      paint(cord);
+      createNewVersion();
     }
   };
 
-  const onMouseUp = () => {
-    saveLastDrag(undefined);
-    $window.off('mouseup', onMouseUp);
-  };
-
-  // TODO: I think this could be solved by using (and implementing) 'once' instead of 'on'
-  const onMouseUpRemove = () => {
+  const onMouseUpPainting = () => {
     $window
-      .off('mousemove', onMouseDownPanning)
-      .off('mousemove', onMouseDownPaiting)
-      .off('mouseup', onMouseUpRemove);
+      .off('mouseup', onMouseUpPainting)
+      .off('mousemove', onMouseMovePainting)
+      .on('mousemove', onMouseMovePreview);
   };
 
   const onMouseDown = (event: MouseEvent) => {
+    const { canvas } = listenerContextRef.current;
     const { clientX, clientY } = event;
+    const isPanning = getModifierState(Key.Spacebar);
+
     saveLastDrag({ x: clientX, y: clientY });
+    $window.off('mousemove', onMouseMovePreview);
+    clean(canvas);
 
-    if (getModifierState(Key.Spacebar)) {
-      $window.on('mousemove', onMouseDownPanning);
+    if (isPanning) {
+      $window
+        .on('mousemove', onMouseMovePanning)
+        .on('mouseup', onMouseUpPanning);
     } else {
-      $window.on('mousemove', onMouseDownPaiting);
+      $window
+        .on('mousemove', onMouseMovePainting)
+        .on('mouseup', onMouseUpPainting);
     }
-
-    $window.on('mouseup', onMouseUp).on('mouseup', onMouseUpRemove);
   };
 
   $window.on('mousedown', onMouseDown).on('mousemove', onMouseMovePreview);
@@ -85,7 +122,10 @@ const addEventListener = (listenerContextRef: ListenerContextRef) => {
     $window
       .off('mousedown', onMouseDown)
       .off('mousemove', onMouseMovePreview)
-      .off('mouseup', onMouseUp);
+      .off('mousemove', onMouseMovePainting)
+      .off('mousemove', onMouseMovePanning)
+      .off('mouseup', onMouseUpPanning)
+      .off('mouseup', onMouseUpPainting);
 };
 
 const name = 'pen';

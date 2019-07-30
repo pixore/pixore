@@ -1,5 +1,5 @@
-import { Artboard } from '../contexts/Artboard';
-import { Sprite } from '../contexts/Sprite';
+import { Artboard, ArtboardsActions } from '../contexts/Artboard';
+import { Sprite, SpriteActions } from '../contexts/Sprite';
 import Vector from '../utils/vector';
 
 interface ListenerContext {
@@ -8,7 +8,8 @@ interface ListenerContext {
   context: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
   lastDrag?: Vector;
-  changePosition: Function;
+  artboardActions: ArtboardsActions;
+  spriteActions: SpriteActions;
 }
 
 type ListenerContextRef = React.MutableRefObject<ListenerContext>;

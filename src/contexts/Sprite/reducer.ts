@@ -27,6 +27,13 @@ const reducer = (state: Sprite, action: Action): Sprite => {
         ...state,
         frames: frames.concat(payload as string),
       };
+    case actionType.CREATE_NEW_VERSION:
+      const { version = 0 } = state;
+
+      return {
+        ...state,
+        version: version + 1,
+      };
     default:
       return state;
   }
@@ -80,6 +87,11 @@ const createActions = (
     });
 
     return id;
+  },
+  createNewVersion() {
+    dispatch({
+      type: actionType.CREATE_NEW_VERSION,
+    });
   },
 });
 

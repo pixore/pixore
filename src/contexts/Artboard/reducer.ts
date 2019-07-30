@@ -86,8 +86,8 @@ const createActions = (dispatch: Dispatch): ArtboardsActions => ({
       payload,
     });
   },
-  center(stats: DOMRect, sprite: Sprite) {
-    const { scale, x, y } = getScaleAndPosition(stats, sprite);
+  center(stats: DOMRect, size: Size) {
+    const { scale, x, y } = getScaleAndPosition(stats, size);
 
     const payload = {
       scale,
