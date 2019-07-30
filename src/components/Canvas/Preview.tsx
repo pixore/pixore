@@ -2,12 +2,13 @@ import React from 'react';
 import CanvasLayer from '../CanvasLayer';
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
-import { useSprite } from '../../contexts/Sprite';
+import { useSprite, useSpriteActions } from '../../contexts/Sprite';
 import { getTool, ListenerContext } from '../../tools';
 
 const usePreview = () => {
   const { onRef: setRef, context, canvas } = useCanvas2DContext();
-  const { changePosition } = useArtboardActions();
+  const artboardActions = useArtboardActions();
+  const spriteActions = useSpriteActions();
   const sprite = useSprite();
   const artboard = useArtboard();
   const listenerContextRef = React.useRef<ListenerContext>({
@@ -15,7 +16,8 @@ const usePreview = () => {
     canvas,
     sprite,
     artboard,
-    changePosition,
+    artboardActions,
+    spriteActions,
   });
   const { tool: toolName } = artboard;
 
@@ -24,7 +26,8 @@ const usePreview = () => {
     canvas,
     sprite,
     artboard,
-    changePosition,
+    artboardActions,
+    spriteActions,
   };
 
   React.useEffect(() => {

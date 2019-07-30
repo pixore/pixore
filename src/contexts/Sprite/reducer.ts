@@ -29,7 +29,6 @@ const reducer = (state: Sprite, action: Action): Sprite => {
       };
     case actionType.CREATE_NEW_VERSION:
       const { version = 0 } = state;
-      console.log(state);
 
       return {
         ...state,

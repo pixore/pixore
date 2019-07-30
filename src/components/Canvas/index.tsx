@@ -39,7 +39,10 @@ const Canvas: React.FC = () => {
       center(stats, sprite);
       setStats(stats);
     }
-  }, [element, sprite, center]);
+    // NOTE: this effect should be execute only once,
+    // when the component is mounted an the element is available
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [element]);
 
   const style: React.CSSProperties = {
     width,
@@ -70,6 +73,7 @@ const Canvas: React.FC = () => {
     });
   };
 
+  // TODO Move brackground and mask layers to its own components
   return (
     <div ref={elementRef} style={style} onWheel={onWheel}>
       <CanvasLayer
