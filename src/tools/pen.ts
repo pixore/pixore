@@ -9,7 +9,7 @@ import { ListenerContextRef } from './types';
 
 type Context = ListenerContextRef & {
   current: {
-    last: number;
+    lastPosition?: Vector;
   };
 };
 
@@ -55,7 +55,7 @@ const addEventListener = (listenerContextRef: Context) => {
     const currentDrag: Vector = { x: clientX, y: clientY };
 
     const dragDiff = lastDrag
-      ? Vector.getDiff(currentDrag, lastDrag)
+      ? Vector.getDelta(currentDrag, lastDrag)
       : { x: 0, y: 0 };
 
     event.preventDefault();
@@ -79,14 +79,27 @@ const addEventListener = (listenerContextRef: Context) => {
   };
 
   const onMouseMovePainting = (event: MouseEvent) => {
-    const { artboard, sprite, spriteActions } = listenerContextRef.current;
+    const {
+      artboard,
+      sprite,
+      spriteActions,
+      lastPosition,
+    } = listenerContextRef.current;
     const { createNewVersion } = spriteActions;
     const cord = calculatePosition(artboard, event.clientX, event.clientY);
+    const delta = Vector.getAbsoluteDelta(lastPosition, cord);
+    const importantDiff = delta.x > 1 || delta.y > 1;
 
-    if (validCord(sprite, cord)) {
-      paint(cord);
-      createNewVersion();
+    if (validCord(sprite, cord) && validCord(sprite, lastPosition)) {
+      if (importantDiff) {
+        Vector.lineBetween(lastPosition, cord, paint);
+      } else {
+        paint(cord);
+        createNewVersion();
+      }
     }
+
+    listenerContextRef.current.lastPosition = cord;
   };
 
   const onMouseUpPainting = () => {
@@ -97,19 +110,21 @@ const addEventListener = (listenerContextRef: Context) => {
   };
 
   const onMouseDown = (event: MouseEvent) => {
-    const { canvas } = listenerContextRef.current;
+    const { canvas, artboard } = listenerContextRef.current;
     const { clientX, clientY } = event;
     const isPanning = getModifierState(Key.Spacebar);
 
     saveLastDrag({ x: clientX, y: clientY });
     $window.off('mousemove', onMouseMovePreview);
     clean(canvas);
+    const cord = calculatePosition(artboard, event.clientX, event.clientY);
 
     if (isPanning) {
       $window
         .on('mousemove', onMouseMovePanning)
         .on('mouseup', onMouseUpPanning);
     } else {
+      listenerContextRef.current.lastPosition = cord;
       $window
         .on('mousemove', onMouseMovePainting)
         .on('mouseup', onMouseUpPainting);
@@ -117,7 +132,6 @@ const addEventListener = (listenerContextRef: Context) => {
   };
 
   $window.on('mousedown', onMouseDown).on('mousemove', onMouseMovePreview);
-
   return () =>
     $window
       .off('mousedown', onMouseDown)
