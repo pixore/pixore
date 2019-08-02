@@ -1,15 +1,17 @@
-import { clean, getContext } from '../utils';
+import { clean, isTransparent } from '../utils';
+import { getContext, getMainContext, mirrorContext } from '../utils/contexts';
 import { calculatePosition, validCord } from '../utils/canvas';
 import { Key } from '../contexts/Modifiers';
 import { manageEvents as $ } from '../utils/dom/events';
 import { getModifierState } from '../utils/keyboard';
 import Vector from '../utils/vector';
 import { createOnMouseMovePreview } from './utils';
-import { ListenerContextRef } from './types';
+import { ListenerContextRef, Click } from './types';
 
 type Context = ListenerContextRef & {
   current: {
     lastPosition?: Vector;
+    clickType?: number;
   };
 };
 
@@ -21,25 +23,36 @@ const addEventListener = (listenerContextRef: Context) => {
 
   const onMouseMovePreview = createOnMouseMovePreview(listenerContextRef);
 
-  const paint = (cord: Vector) => {
+  const paint = (cord: Vector, color: string) => {
     const { x, y } = cord;
     const {
       artboard,
       sprite,
       context: previewContext,
     } = listenerContextRef.current;
-    const { primaryColor, frame, layer } = artboard;
+    const { frame, layer, scale } = artboard;
     const layerContext = getContext(frame, layer, sprite);
-
-    previewContext.fillStyle = primaryColor;
-    previewContext.fillRect(
-      x * artboard.scale + artboard.x,
-      y * artboard.scale + artboard.y,
-      artboard.scale,
-      artboard.scale,
-    );
-    layerContext.fillStyle = primaryColor;
-    layerContext.fillRect(x, y, 1, 1);
+    const previewX = x * scale + artboard.x;
+    const previewY = y * scale + artboard.y;
+    if (isTransparent(color)) {
+      previewContext.clearRect(
+        previewX,
+        previewY,
+        artboard.scale,
+        artboard.scale,
+      );
+      layerContext.clearRect(x, y, 1, 1);
+    } else {
+      previewContext.fillStyle = color;
+      previewContext.fillRect(
+        previewX,
+        previewY,
+        artboard.scale,
+        artboard.scale,
+      );
+      layerContext.fillStyle = color;
+      layerContext.fillRect(x, y, 1, 1);
+    }
   };
 
   const onMouseMovePanning = (event: MouseEvent) => {
@@ -82,20 +95,24 @@ const addEventListener = (listenerContextRef: Context) => {
     const {
       artboard,
       sprite,
-      spriteActions,
       lastPosition,
+      clickType,
     } = listenerContextRef.current;
-    const { createNewVersion } = spriteActions;
     const cord = calculatePosition(artboard, event.clientX, event.clientY);
     const delta = Vector.getAbsoluteDelta(lastPosition, cord);
     const importantDiff = delta.x > 1 || delta.y > 1;
+    const { primaryColor, secondaryColor } = artboard;
 
     if (validCord(sprite, cord) && validCord(sprite, lastPosition)) {
+      console.log(clickType, primaryColor, secondaryColor);
+
+      const color = clickType === Click.LEFT ? primaryColor : secondaryColor;
       if (importantDiff) {
-        Vector.lineBetween(lastPosition, cord, paint);
+        Vector.lineBetween(lastPosition, cord, (newCord) =>
+          paint(newCord, color),
+        );
       } else {
-        paint(cord);
-        createNewVersion();
+        paint(cord, color);
       }
     }
 
@@ -103,6 +120,9 @@ const addEventListener = (listenerContextRef: Context) => {
   };
 
   const onMouseUpPainting = () => {
+    const { spriteActions } = listenerContextRef.current;
+    const { createNewVersion } = spriteActions;
+    createNewVersion();
     $window
       .off('mouseup', onMouseUpPainting)
       .off('mousemove', onMouseMovePainting)
@@ -110,7 +130,11 @@ const addEventListener = (listenerContextRef: Context) => {
   };
 
   const onMouseDown = (event: MouseEvent) => {
-    const { canvas, artboard } = listenerContextRef.current;
+    const {
+      canvas,
+      artboard,
+      context: previewContext,
+    } = listenerContextRef.current;
     const { clientX, clientY } = event;
     const isPanning = getModifierState(Key.Spacebar);
 
@@ -124,7 +148,14 @@ const addEventListener = (listenerContextRef: Context) => {
         .on('mousemove', onMouseMovePanning)
         .on('mouseup', onMouseUpPanning);
     } else {
+      const mainContext = getMainContext();
+
+      mirrorContext(mainContext, previewContext);
+      clean(mainContext.canvas);
+
       listenerContextRef.current.lastPosition = cord;
+      listenerContextRef.current.clickType = event.button;
+
       $window
         .on('mousemove', onMouseMovePainting)
         .on('mouseup', onMouseUpPainting);

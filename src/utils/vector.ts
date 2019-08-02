@@ -43,7 +43,6 @@ const lineBetween = (
   while (vector1.x !== vector2.x || vector1.y !== vector2.y) {
     callback(vector1);
     e2 = 2 * err;
-    console.log({ e2, err });
 
     if (e2 > -delta.y) {
       err -= delta.y;

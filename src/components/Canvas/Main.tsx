@@ -4,7 +4,8 @@ import { useCanvas2DContext } from '../../hooks/useCanvas';
 import { useSprite } from '../../contexts/Sprite';
 import { useArtboard } from '../../contexts/Artboard';
 import { PaintFunction } from '../../utils/paint';
-import { imageSmoothingDisabled, clean, getContext } from '../../utils';
+import { imageSmoothingDisabled, clean } from '../../utils';
+import { getContext, saveMainContext } from '../../utils/contexts';
 
 interface PropTypes {
   width: number;
@@ -41,6 +42,12 @@ const useMain = () => {
   const sprite = useSprite();
   const artboard = useArtboard();
   const { onRef: setRef, context } = useCanvas2DContext();
+
+  React.useEffect(() => {
+    if (context) {
+      saveMainContext(context);
+    }
+  }, [context]);
 
   React.useEffect(() => {
     if (context) {

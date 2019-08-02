@@ -1,5 +1,3 @@
-import { Sprite } from '../contexts/Sprite';
-
 let transparentPattern: HTMLCanvasElement;
 
 declare global {
@@ -64,39 +62,8 @@ const getNewId = (): string => {
   return id;
 };
 
-interface Contexts {
-  [key: string]: {
-    [key: string]: CanvasRenderingContext2D;
-  };
-}
-
-const contexts: Contexts = {};
-
-const getContext = (
-  frame: string,
-  layer: string,
-  sprite: Sprite,
-): CanvasRenderingContext2D => {
-  if (!contexts[frame]) {
-    contexts[frame] = {};
-  }
-
-  let context = contexts[frame][layer];
-
-  if (context) {
-    return context;
-  }
-
-  const { width, height } = sprite;
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-
-  context = canvas.getContext('2d');
-
-  contexts[frame][layer] = context;
-
-  return context;
+const isTransparent = (value: string): boolean => {
+  return value === 'transparent' || value.trim() == 'rgba(0, 0, 0, 0)';
 };
 
 const preventDefault = (event: React.MouseEvent) => event.preventDefault();
@@ -107,7 +74,7 @@ export {
   clean,
   imageSmoothing,
   imageSmoothingDisabled,
-  getContext,
   getIdByReference,
   getNewId,
+  isTransparent,
 };
