@@ -21,8 +21,8 @@ const addPreview = (contextRef: ContextRef): RemovePreview => {
 
     clean(previewContext.canvas);
 
-    previewContext.fillStyle = 'red';
-    previewContext.fillRect(previewX, previewY, scale, scale);
+    previewContext.strokeStyle = 'black';
+    previewContext.strokeRect(previewX, previewY, scale, scale);
   };
 
   const onMouseMove = (event: MouseEvent) => {

@@ -27,8 +27,8 @@ const Bootstrap: React.FC<PropTypes> = (props) => {
       addSprite({
         id: '1',
         name: 'New Sprite',
-        width: 50,
-        height: 50,
+        width: 20,
+        height: 20,
         layers: [],
         frames: [],
       });

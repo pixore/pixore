@@ -22,10 +22,19 @@ const addEventListener = (contextRef: Context) => {
   const removePanning = addPanning(contextRef);
   const removePreview = addPreview(contextRef);
 
-  const paint = (cord: Vector, color: string) => {
-    const { x, y } = cord;
-    const { artboard, sprite, mainContext } = contextRef.current;
+  const getColor = (clickType: number): string => {
+    const { artboard } = contextRef.current;
+    const { primaryColor, secondaryColor } = artboard;
+
+    return clickType === Click.LEFT ? primaryColor : secondaryColor;
+  };
+
+  const paint = (cord: Vector) => {
+    const { artboard, sprite, mainContext, clickType } = contextRef.current;
     const { frame, layer, scale } = artboard;
+    const { x, y } = cord;
+
+    const color = getColor(clickType);
     const layerContext = getContext(frame, layer, sprite);
     const previewX = round2(x * scale + artboard.x);
     const previewY = round2(y * scale + artboard.y);
@@ -42,20 +51,16 @@ const addEventListener = (contextRef: Context) => {
   };
 
   const onMouseMovePainting = (event: MouseEvent) => {
-    const { artboard, sprite, lastPosition, clickType } = contextRef.current;
+    const { artboard, sprite, lastPosition } = contextRef.current;
     const cord = calculatePosition(artboard, event.clientX, event.clientY);
     const delta = Vector.getAbsoluteDelta(lastPosition, cord);
     const importantDiff = delta.x > 1 || delta.y > 1;
-    const { primaryColor, secondaryColor } = artboard;
 
     if (validCord(sprite, cord) && validCord(sprite, lastPosition)) {
-      const color = clickType === Click.LEFT ? primaryColor : secondaryColor;
       if (importantDiff) {
-        Vector.lineBetween(lastPosition, cord, (newCord) =>
-          paint(newCord, color),
-        );
+        Vector.lineBetween(lastPosition, cord, (newCord) => paint(newCord));
       } else {
-        paint(cord, color);
+        paint(cord);
       }
     }
 
@@ -72,7 +77,7 @@ const addEventListener = (contextRef: Context) => {
   };
 
   const onMouseDown = (event: MouseEvent) => {
-    const { artboard } = contextRef.current;
+    const { artboard, sprite } = contextRef.current;
     const { clientX, clientY } = event;
     const isPanning = getModifierState(Key.Spacebar);
 
@@ -81,6 +86,10 @@ const addEventListener = (contextRef: Context) => {
     if (!isPanning) {
       contextRef.current.lastPosition = cord;
       contextRef.current.clickType = event.button;
+
+      if (validCord(sprite, cord)) {
+        paint(cord);
+      }
 
       $window
         .on('mousemove', onMouseMovePainting)
