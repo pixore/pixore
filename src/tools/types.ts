@@ -8,7 +8,7 @@ enum Click {
   RIGHT = 2,
 }
 
-interface ListenerContext {
+interface Context {
   artboard: Artboard;
   sprite: Sprite;
   mainContext: CanvasRenderingContext2D;
@@ -18,12 +18,12 @@ interface ListenerContext {
   spriteActions: SpriteActions;
 }
 
-type ListenerContextRef = React.MutableRefObject<ListenerContext>;
+type ContextRef = React.MutableRefObject<Context>;
 
-type Tool = (listenerContextRef: ListenerContextRef) => () => void;
+type Tool = (contextRef: ContextRef) => () => void;
 
 interface Tools {
   [key: string]: Tool;
 }
 
-export { Tools, ListenerContextRef, ListenerContext, Tool, Click };
+export { Tools, ContextRef, Context, Tool, Click };

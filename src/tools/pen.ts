@@ -1,79 +1,48 @@
-import { isTransparent, clean } from '../utils';
+import { isTransparent, round2 } from '../utils';
 import { getContext } from '../utils/contexts';
 import { calculatePosition, validCord } from '../utils/canvas';
 import { Key } from '../contexts/Modifiers';
 import { manageEvents as $ } from '../utils/dom/events';
 import { getModifierState } from '../utils/keyboard';
 import Vector from '../utils/vector';
-import { ListenerContextRef, Click } from './types';
+import { ContextRef, Click } from './types';
+import { addPanning, addPreview } from './utils';
 
-type Context = ListenerContextRef & {
+type Context = ContextRef & {
   current: {
     lastPosition?: Vector;
     clickType?: number;
   };
 };
 
-const addEventListener = (listenerContextRef: Context) => {
+const addEventListener = (contextRef: Context) => {
+  const { previewContext } = contextRef.current;
   const $window = $(window);
-  const saveLastDrag = (lastDrag: Vector) => {
-    listenerContextRef.current.lastDrag = lastDrag;
-  };
+  const $previewCanvas = $(previewContext.canvas);
+  const removePanning = addPanning(contextRef);
+  const removePreview = addPreview(contextRef);
 
   const paint = (cord: Vector, color: string) => {
     const { x, y } = cord;
-    const { artboard, sprite, mainContext } = listenerContextRef.current;
+    const { artboard, sprite, mainContext } = contextRef.current;
     const { frame, layer, scale } = artboard;
     const layerContext = getContext(frame, layer, sprite);
-    const previewX = x * scale + artboard.x;
-    const previewY = y * scale + artboard.y;
+    const previewX = round2(x * scale + artboard.x);
+    const previewY = round2(y * scale + artboard.y);
+
     if (isTransparent(color)) {
-      mainContext.clearRect(previewX, previewY, artboard.scale, artboard.scale);
+      mainContext.clearRect(previewX, previewY, scale, scale);
       layerContext.clearRect(x, y, 1, 1);
     } else {
       mainContext.fillStyle = color;
-      mainContext.fillRect(previewX, previewY, artboard.scale, artboard.scale);
+      mainContext.fillRect(previewX, previewY, scale, scale);
       layerContext.fillStyle = color;
       layerContext.fillRect(x, y, 1, 1);
     }
   };
 
-  const onMouseMovePanning = (event: MouseEvent) => {
-    const { artboard, artboardActions, lastDrag } = listenerContextRef.current;
-
-    const { changePosition } = artboardActions;
-    const { clientX, clientY } = event;
-    const currentDrag: Vector = { x: clientX, y: clientY };
-
-    const dragDiff = lastDrag
-      ? Vector.getDelta(currentDrag, lastDrag)
-      : { x: 0, y: 0 };
-
-    event.preventDefault();
-
-    changePosition({
-      x: artboard.x + dragDiff.x,
-      y: artboard.y + dragDiff.y,
-      scale: artboard.scale,
-    });
-
-    saveLastDrag(currentDrag);
-  };
-
-  const onMouseUpPanning = () => {
-    saveLastDrag(undefined);
-    $window
-      .off('mousemove', onMouseMovePanning)
-      .off('mouseup', onMouseUpPanning);
-  };
-
   const onMouseMovePainting = (event: MouseEvent) => {
-    const {
-      artboard,
-      sprite,
-      lastPosition,
-      clickType,
-    } = listenerContextRef.current;
+    const { artboard, sprite, lastPosition, clickType } = contextRef.current;
     const cord = calculatePosition(artboard, event.clientX, event.clientY);
     const delta = Vector.getAbsoluteDelta(lastPosition, cord);
     const importantDiff = delta.x > 1 || delta.y > 1;
@@ -90,11 +59,11 @@ const addEventListener = (listenerContextRef: Context) => {
       }
     }
 
-    listenerContextRef.current.lastPosition = cord;
+    contextRef.current.lastPosition = cord;
   };
 
   const onMouseUpPainting = () => {
-    const { spriteActions } = listenerContextRef.current;
+    const { spriteActions } = contextRef.current;
     const { createNewVersion } = spriteActions;
     createNewVersion();
     $window
@@ -103,20 +72,15 @@ const addEventListener = (listenerContextRef: Context) => {
   };
 
   const onMouseDown = (event: MouseEvent) => {
-    const { artboard } = listenerContextRef.current;
+    const { artboard } = contextRef.current;
     const { clientX, clientY } = event;
     const isPanning = getModifierState(Key.Spacebar);
 
-    saveLastDrag({ x: clientX, y: clientY });
-    const cord = calculatePosition(artboard, event.clientX, event.clientY);
+    const cord = calculatePosition(artboard, clientX, clientY);
 
-    if (isPanning) {
-      $window
-        .on('mousemove', onMouseMovePanning)
-        .on('mouseup', onMouseUpPanning);
-    } else {
-      listenerContextRef.current.lastPosition = cord;
-      listenerContextRef.current.clickType = event.button;
+    if (!isPanning) {
+      contextRef.current.lastPosition = cord;
+      contextRef.current.clickType = event.button;
 
       $window
         .on('mousemove', onMouseMovePainting)
@@ -124,14 +88,16 @@ const addEventListener = (listenerContextRef: Context) => {
     }
   };
 
-  $window.on('mousedown', onMouseDown);
-  return () =>
+  $previewCanvas.on('mousedown', onMouseDown);
+  return () => {
+    removePanning();
+    removePreview();
+
+    $previewCanvas.off('mousedown', onMouseDown);
     $window
-      .off('mousedown', onMouseDown)
       .off('mousemove', onMouseMovePainting)
-      .off('mousemove', onMouseMovePanning)
-      .off('mouseup', onMouseUpPanning)
       .off('mouseup', onMouseUpPainting);
+  };
 };
 
 const name = 'pen';

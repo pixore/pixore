@@ -7,17 +7,14 @@ import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
 import FrameLayers from './FrameLayers';
 import Background from './Background';
 import Mask from './Mask';
-import { getTool, ListenerContext } from '../../tools';
+import { getTool, Context as ListenerContext } from '../../tools';
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
+import { round2 } from '../../utils';
 
 const maskStyles = css`
   pointer-events: none;
 `;
-
-const round = (num: number) => {
-  return Number(num.toFixed(2));
-};
 
 const useWheel = () => {
   const artboardActions = useArtboardActions();
@@ -28,7 +25,7 @@ const useWheel = () => {
   const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     const { y, x } = artboard;
     const deltaY = event.deltaY;
-    const scale = round(artboard.scale - deltaY / 120);
+    const scale = round2(artboard.scale - deltaY / 120);
 
     if (scale < 1) {
       return;
@@ -96,13 +93,16 @@ const Canvas: React.FC = () => {
     if (!(previewContext && previewContext.canvas)) {
       return;
     }
+    if (!(mainContext && mainContext.canvas)) {
+      return;
+    }
 
     const addEventListener = getTool(toolName);
 
     if (addEventListener) {
       return addEventListener(listenerContextRef);
     }
-  }, [previewContext, toolName]);
+  }, [previewContext, mainContext, toolName]);
 
   const style: React.CSSProperties = {
     width,
