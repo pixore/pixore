@@ -11,8 +11,8 @@ enum Click {
 interface ListenerContext {
   artboard: Artboard;
   sprite: Sprite;
-  context: CanvasRenderingContext2D;
-  canvas: HTMLCanvasElement;
+  mainContext: CanvasRenderingContext2D;
+  previewContext: CanvasRenderingContext2D;
   lastDrag?: Vector;
   artboardActions: ArtboardsActions;
   spriteActions: SpriteActions;

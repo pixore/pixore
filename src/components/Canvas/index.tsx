@@ -2,62 +2,33 @@
 import React from 'react';
 import { css, jsx } from '@emotion/core';
 
-import { useSprite } from '../../contexts/Sprite';
+import { useSprite, useSpriteActions } from '../../contexts/Sprite';
 import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
-import useCanvas from '../../hooks/useCanvas';
-import usePaintCanvas from '../../hooks/usePaintCanvas';
+import FrameLayers from './FrameLayers';
+import Background from './Background';
+import Mask from './Mask';
+import { getTool, ListenerContext } from '../../tools';
+import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
-import Preview from './Preview';
-import Main from './Main';
 
 const maskStyles = css`
   pointer-events: none;
 `;
 
-const Canvas: React.FC = () => {
-  const sprite = useSprite();
-  const [stats, setStats] = React.useState<ClientRect>();
+const round = (num: number) => {
+  return Number(num.toFixed(2));
+};
+
+const useWheel = () => {
+  const artboardActions = useArtboardActions();
   const artboard = useArtboard();
-  const { center, changePosition } = useArtboardActions();
-  const elementRef = React.useRef<HTMLDivElement>();
-  const { background, mask } = useCanvas();
-  const { current: element } = elementRef;
-  const { innerWidth: width, innerHeight: height } = window;
-
-  usePaintCanvas({
-    background,
-    mask,
-    sprite,
-    artboard,
-  });
-
-  React.useEffect(() => {
-    if (element) {
-      const { current: element } = elementRef;
-      const stats = element.parentElement.getBoundingClientRect();
-
-      center(stats, sprite);
-      setStats(stats);
-    }
-    // NOTE: this effect should be execute only once,
-    // when the component is mounted an the element is available
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [element]);
-
-  const style: React.CSSProperties = {
-    width,
-    height,
-  };
-
-  if (stats) {
-    style.marginTop = -stats.top;
-    style.marginLeft = -stats.left;
-  }
+  const sprite = useSprite();
+  const { changePosition } = artboardActions;
 
   const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     const { y, x } = artboard;
     const deltaY = event.deltaY;
-    const scale = artboard.scale - deltaY / 120;
+    const scale = round(artboard.scale - deltaY / 120);
 
     if (scale < 1) {
       return;
@@ -72,25 +43,109 @@ const Canvas: React.FC = () => {
       x: x - Math.round(diffX / 2),
     });
   };
+  return { onWheel };
+};
 
-  // TODO Move brackground and mask layers to its own components
+const Canvas: React.FC = () => {
+  const sprite = useSprite();
+  const [stats, setStats] = React.useState<ClientRect>();
+  const { onRef: setMainRef, context: mainContext } = useCanvas2DContext();
+  const {
+    onRef: setPreviewRef,
+    context: previewContext,
+  } = useCanvas2DContext();
+  const artboard = useArtboard();
+  const artboardActions = useArtboardActions();
+  const spriteActions = useSpriteActions();
+  const { onWheel } = useWheel();
+  const { center } = artboardActions;
+  const [element, setElement] = React.useState<HTMLDivElement>();
+  const { innerWidth: width, innerHeight: height } = window;
+  const { layer, tool: toolName } = artboard;
+  const { layers } = sprite;
+  const listenerContextRef = React.useRef<ListenerContext>({
+    mainContext,
+    previewContext,
+    sprite,
+    artboard,
+    artboardActions,
+    spriteActions,
+  });
+
+  listenerContextRef.current = {
+    mainContext,
+    previewContext,
+    sprite,
+    artboard,
+    artboardActions,
+    spriteActions,
+  };
+
+  React.useEffect(() => {
+    if (element) {
+      const stats = element.parentElement.getBoundingClientRect();
+
+      center(stats, sprite);
+      setStats(stats);
+    }
+    // NOTE: this effect should be execute only once,
+    // when the component is mounted an the element is available
+  }, [element]);
+
+  React.useEffect(() => {
+    if (!(previewContext && previewContext.canvas)) {
+      return;
+    }
+
+    const addEventListener = getTool(toolName);
+
+    if (addEventListener) {
+      return addEventListener(listenerContextRef);
+    }
+  }, [previewContext, toolName]);
+
+  const style: React.CSSProperties = {
+    width,
+    height,
+  };
+
+  if (stats) {
+    style.marginTop = -stats.top;
+    style.marginLeft = -stats.left;
+  }
+  const indexOfCurrentLayer = layers.indexOf(layer);
+  const layersBelow = layers.slice(0, indexOfCurrentLayer);
+  const layersAbove = layers.slice(indexOfCurrentLayer + 1, layers.length);
+
   return (
-    <div ref={elementRef} style={style} onWheel={onWheel}>
-      <CanvasLayer
+    <div ref={setElement} style={style} onWheel={onWheel}>
+      <Background style={style} width={width} height={height} />
+      <FrameLayers
+        style={style}
         width={width}
         height={height}
-        ref={background.onRef}
-        style={style}
+        layers={layersBelow}
       />
-      <Main width={width} height={height} style={style} />
-      <Preview width={width} height={height} style={style} />
-      <CanvasLayer
+      <FrameLayers
+        ref={setMainRef}
+        style={style}
         width={width}
         height={height}
-        ref={mask.onRef}
-        style={style}
-        css={maskStyles}
+        layers={[layer]}
       />
+      <FrameLayers
+        style={style}
+        width={width}
+        height={height}
+        layers={layersAbove}
+      />
+      <CanvasLayer
+        ref={setPreviewRef}
+        style={style}
+        width={width}
+        height={height}
+      />
+      <Mask css={maskStyles} style={style} width={width} height={height} />
     </div>
   );
 };
