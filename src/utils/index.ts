@@ -68,7 +68,12 @@ const isTransparent = (value: string): boolean => {
 
 const preventDefault = (event: React.MouseEvent) => event.preventDefault();
 
+const round2 = (num: number) => {
+  return Number(num.toFixed(2));
+};
+
 export {
+  round2,
   preventDefault,
   getTransparentPattern,
   clean,
