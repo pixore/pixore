@@ -121,12 +121,14 @@ const Canvas: React.FC = () => {
     <div ref={setElement} style={style} onWheel={onWheel}>
       <Background style={style} width={width} height={height} />
       <FrameLayers
+        data-id="layers-below"
         style={style}
         width={width}
         height={height}
         layers={layersBelow}
       />
       <FrameLayers
+        data-id="current-layer"
         ref={setMainRef}
         style={style}
         width={width}
@@ -134,6 +136,7 @@ const Canvas: React.FC = () => {
         layers={[layer]}
       />
       <FrameLayers
+        data-id="layers-above"
         style={style}
         width={width}
         height={height}
