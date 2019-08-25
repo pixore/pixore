@@ -1,10 +1,12 @@
-import { ContextRef } from './types';
+import { ContextRef, Click } from './types';
+import { getContext } from '../utils/contexts';
 import { Key } from '../contexts/Modifiers';
 import { getModifierState } from '../utils/keyboard';
 import { manageEvents as $ } from '../utils/dom/events';
 import Vector from '../utils/vector';
-import { round2, clean } from '../utils';
+import { round2, isTransparent, clean } from '../utils';
 import { calculatePosition } from '../utils/canvas';
+import { Artboard } from '../contexts/Artboard';
 
 type RemovePanning = () => void;
 type RemovePreview = () => void;
@@ -100,4 +102,31 @@ const addPanning = (contextRef: ContextRef): RemovePanning => {
   };
 };
 
-export { addPanning, addPreview };
+const getColor = (artboard: Artboard, clickType: number): string => {
+  const { primaryColor, secondaryColor } = artboard;
+
+  return clickType === Click.LEFT ? primaryColor : secondaryColor;
+};
+
+const paint = (contextRef: ContextRef, cord: Vector) => {
+  const { artboard, sprite, mainContext, clickType } = contextRef.current;
+  const { frame, layer, scale } = artboard;
+  const { x, y } = cord;
+
+  const color = getColor(artboard, clickType);
+  const layerContext = getContext(frame, layer, sprite);
+  const previewX = round2(x * scale + artboard.x);
+  const previewY = round2(y * scale + artboard.y);
+
+  if (isTransparent(color)) {
+    mainContext.clearRect(previewX, previewY, scale, scale);
+    layerContext.clearRect(x, y, 1, 1);
+  } else {
+    mainContext.fillStyle = color;
+    mainContext.fillRect(previewX, previewY, scale, scale);
+    layerContext.fillStyle = color;
+    layerContext.fillRect(x, y, 1, 1);
+  }
+};
+
+export { addPanning, addPreview, getColor, paint };

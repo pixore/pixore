@@ -16,6 +16,7 @@ interface Context {
   lastDrag?: Vector;
   artboardActions: ArtboardsActions;
   spriteActions: SpriteActions;
+  clickType?: number;
 }
 
 type ContextRef = React.MutableRefObject<Context>;

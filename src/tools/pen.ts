@@ -1,12 +1,10 @@
-import { isTransparent, round2 } from '../utils';
-import { getContext } from '../utils/contexts';
 import { calculatePosition, validCord } from '../utils/canvas';
 import { Key } from '../contexts/Modifiers';
 import { manageEvents as $ } from '../utils/dom/events';
 import { getModifierState } from '../utils/keyboard';
 import Vector from '../utils/vector';
-import { ContextRef, Click } from './types';
-import { addPanning, addPreview } from './utils';
+import { ContextRef } from './types';
+import { addPanning, addPreview, paint } from './utils';
 
 type Context = ContextRef & {
   current: {
@@ -22,34 +20,6 @@ const addEventListener = (contextRef: Context) => {
   const removePanning = addPanning(contextRef);
   const removePreview = addPreview(contextRef);
 
-  const getColor = (clickType: number): string => {
-    const { artboard } = contextRef.current;
-    const { primaryColor, secondaryColor } = artboard;
-
-    return clickType === Click.LEFT ? primaryColor : secondaryColor;
-  };
-
-  const paint = (cord: Vector) => {
-    const { artboard, sprite, mainContext, clickType } = contextRef.current;
-    const { frame, layer, scale } = artboard;
-    const { x, y } = cord;
-
-    const color = getColor(clickType);
-    const layerContext = getContext(frame, layer, sprite);
-    const previewX = round2(x * scale + artboard.x);
-    const previewY = round2(y * scale + artboard.y);
-
-    if (isTransparent(color)) {
-      mainContext.clearRect(previewX, previewY, scale, scale);
-      layerContext.clearRect(x, y, 1, 1);
-    } else {
-      mainContext.fillStyle = color;
-      mainContext.fillRect(previewX, previewY, scale, scale);
-      layerContext.fillStyle = color;
-      layerContext.fillRect(x, y, 1, 1);
-    }
-  };
-
   const onMouseMovePainting = (event: MouseEvent) => {
     const { artboard, sprite, lastPosition } = contextRef.current;
     const cord = calculatePosition(artboard, event.clientX, event.clientY);
@@ -58,9 +28,11 @@ const addEventListener = (contextRef: Context) => {
 
     if (validCord(sprite, cord) && validCord(sprite, lastPosition)) {
       if (importantDiff) {
-        Vector.lineBetween(lastPosition, cord, (newCord) => paint(newCord));
+        Vector.lineBetween(lastPosition, cord, (newCord) =>
+          paint(contextRef, newCord),
+        );
       } else {
-        paint(cord);
+        paint(contextRef, cord);
       }
     }
 
@@ -88,7 +60,7 @@ const addEventListener = (contextRef: Context) => {
       contextRef.current.clickType = event.button;
 
       if (validCord(sprite, cord)) {
-        paint(cord);
+        paint(contextRef, cord);
       }
 
       $window
