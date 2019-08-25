@@ -37,14 +37,14 @@ const IndexPage = () => (
         </Container>
         <Container>
           <Layout type={Layout.ROW}>
-            <Container initialSize="10%">
+            <Container initialSize={200} isFixedSize={true}>
               <Palette />
             </Container>
-            <Container initialSize="85%">
+            <Container>
               <Layout type={Layout.COLUMN}>
                 <Container>
                   <Layout type={Layout.ROW}>
-                    <Container isFixedSize={true}>
+                    <Container>
                       <Layout type={Layout.COLUMN}>
                         <Container isFixedSize={true} initialSize={25}>
                           <label>Tabs</label>
@@ -54,7 +54,7 @@ const IndexPage = () => (
                         </Container>
                       </Layout>
                     </Container>
-                    <Container initialSize={60}>
+                    <Container isFixedSize={true} initialSize={60}>
                       <Tool name="pen" />
                       <Tool name="eraser" />
                       <Tool name="pick" />
@@ -64,15 +64,17 @@ const IndexPage = () => (
                     </Container>
                   </Layout>
                 </Container>
-                <Container initialSize={200}>
+                <Container isFixedSize={true} initialSize={200}>
                   {({ dimensions }) => (
                     <Layout type={Layout.ROW}>
-                      <Container isFixedSize={true}>
+                      <Container>
                         <FramesAndLayers />
                       </Container>
-                      <Container initialSize={dimensions.height}>
+                      <Container
+                        isFixedSize={true}
+                        initialSize={dimensions.height}
+                      >
                         {dimensions.height}
-                        {/* <canvas className="preview" /> */}
                       </Container>
                     </Layout>
                   )}
