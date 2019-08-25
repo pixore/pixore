@@ -28,9 +28,11 @@ const FramesAndLayers = () => {
   };
 
   const onNewLayer = () => {
-    addNewLayerToSprite({
+    const layer = addNewLayerToSprite({
       name: 'New Layer',
     });
+
+    changeLayer(layer);
   };
 
   if (!sprite || !artboard) {
