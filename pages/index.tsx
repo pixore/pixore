@@ -56,11 +56,6 @@ const IndexPage = () => (
                     </Container>
                     <Container isFixedSize={true} initialSize={60}>
                       <Tool name="pen" />
-                      <Tool name="eraser" />
-                      <Tool name="pick" />
-                      <Tool name="bucket" />
-                      <Tool name="line" />
-                      <Tool name="rect" />
                     </Container>
                   </Layout>
                 </Container>
