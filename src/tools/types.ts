@@ -2,22 +2,29 @@ import { Artboard, ArtboardsActions } from '../contexts/Artboard';
 import { Sprite, SpriteActions } from '../contexts/Sprite';
 import Vector from '../utils/vector';
 
-interface ListenerContext {
+// SOURCE: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button#Return_value
+enum Click {
+  LEFT = 0,
+  RIGHT = 2,
+}
+
+interface Context {
   artboard: Artboard;
   sprite: Sprite;
-  context: CanvasRenderingContext2D;
-  canvas: HTMLCanvasElement;
+  mainContext: CanvasRenderingContext2D;
+  previewContext: CanvasRenderingContext2D;
   lastDrag?: Vector;
   artboardActions: ArtboardsActions;
   spriteActions: SpriteActions;
+  clickType?: number;
 }
 
-type ListenerContextRef = React.MutableRefObject<ListenerContext>;
+type ContextRef = React.MutableRefObject<Context>;
 
-type Tool = (listenerContextRef: ListenerContextRef) => () => void;
+type Tool = (contextRef: ContextRef) => () => void;
 
 interface Tools {
   [key: string]: Tool;
 }
 
-export { Tools, ListenerContextRef, ListenerContext, Tool };
+export { Tools, ContextRef, Context, Tool, Click };

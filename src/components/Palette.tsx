@@ -4,6 +4,7 @@ import Color from './Color';
 const Palette: React.FC = () => {
   return (
     <div style={{ fontSize: 0 }}>
+      <Color value="transparent" />
       <Color value="#000000" />
       <Color value="#12173D" />
       <Color value="#293268" />

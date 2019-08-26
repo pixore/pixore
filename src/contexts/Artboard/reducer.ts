@@ -1,7 +1,5 @@
-import { Sprite } from '../Sprite';
 import { Artboard, ArtboardsActions, actionType, Action } from './types';
-
-const { floor } = Math;
+import { round2 } from '../../utils';
 
 interface Size {
   width: number;
@@ -13,8 +11,8 @@ export function getScaleAndPosition(stats: DOMRect, size: Size) {
 
   const scale =
     stats.height > stats.width
-      ? floor(stats.width / size.width)
-      : floor(stats.height / size.height);
+      ? round2(stats.width / size.width)
+      : round2(stats.height / size.height);
 
   const width = size.width * scale;
   const height = size.height * scale;

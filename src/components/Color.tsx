@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 
 import { useArtboardActions, useArtboard } from '../contexts/Artboard';
+import { isTransparent } from '../utils';
 
 interface ButtonPropTypes {
   size: number;
@@ -12,7 +13,14 @@ interface ButtonPropTypes {
 }
 
 const getSize = ({ size }: ButtonPropTypes) => `${size}px`;
-const getBackground = ({ value }: ButtonPropTypes) => value;
+const getBackground = ({ value }: ButtonPropTypes) => {
+  if (isTransparent(value)) {
+    return 'linear-gradient(135deg, rgba(255,255,255,1) 50%, rgba(0,0,0,1) 50%);';
+  }
+
+  return value;
+};
+
 const getDecoration = ({ isSelected, size }: ButtonPropTypes) =>
   isSelected
     ? css`
