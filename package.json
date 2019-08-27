@@ -56,7 +56,7 @@
     "eslint-plugin-react-hooks": "^1.6.0",
     "husky": "^2.4.1",
     "jest": "^24.9.0",
-    "now": "^15.6.0",
+    "now": "^15.8.7",
     "typescript": "^3.5.3"
   },
   "husky": {
