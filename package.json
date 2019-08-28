@@ -9,7 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "release": "standard-version"
+    "release": "standard-version && git push --follow-tags origin HEAD"
   },
   "repository": {
     "type": "git",
