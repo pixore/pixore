@@ -9,13 +9,13 @@ import { useFramesActions } from '../Frames';
 const defaultValueState = undefined;
 
 const defaultValueActions = {
-  changeName(name) {
+  changeName(_name) {
     invariant(false, 'Context not implemented');
   },
-  changeSprite(sprite) {
+  changeSprite(_sprite) {
     invariant(false, 'Context not implemented');
   },
-  addNewLayerToSprite(newLayer) {
+  addNewLayerToSprite(_newLayer) {
     invariant(false, 'Context not implemented');
     return '';
   },

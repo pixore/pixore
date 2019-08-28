@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface Canvas2DContext {
+export interface Canvas2DContext {
   context: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
   onRef: (ref: HTMLCanvasElement) => void;
@@ -29,6 +29,6 @@ const useCanvas = () => {
   };
 };
 
-export { Canvas2DContext, useCanvas2DContext };
+export { useCanvas2DContext };
 
 export default useCanvas;

@@ -1,10 +1,5 @@
-import {
-  SpritesState,
-  actionType,
-  Action,
-  SpritesActions,
-  Sprite,
-} from './types';
+import { SpritesState, actionType, Action, SpritesActions } from './types';
+import { Sprite } from '../Sprite';
 
 const reducer = (state: SpritesState, action: Action): SpritesState => {
   const { type, payload } = action;

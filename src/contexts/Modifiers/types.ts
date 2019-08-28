@@ -1,25 +1,23 @@
-enum Key {
+export enum Key {
   Spacebar = ' ',
 }
 
-enum actionType {
+export enum actionType {
   CHANGE_MODIFIER_STATE,
 }
 
-interface Payload {
+export interface Payload {
   key: Key;
   state: boolean;
 }
 
-interface Action {
+export interface Action {
   type: actionType;
   payload: Payload;
 }
 
-interface ModifiersActions {
+export interface ModifiersActions {
   changeModifierState: (key: Key, state: boolean) => void;
 }
 
-type ModifiersState = { [key in Key]?: boolean };
-
-export { Key, ModifiersState, actionType, Action, Payload, ModifiersActions };
+export type ModifiersState = { [key in Key]?: boolean };

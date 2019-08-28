@@ -1,22 +1,20 @@
 import { Sprite } from '../Sprite';
 
-enum actionType {
+export enum actionType {
   ADD_SPRITE,
 }
 
-type Payload = Sprite;
+export type Payload = Sprite;
 
-interface Action {
+export interface Action {
   type: actionType;
   payload: Payload;
 }
 
-interface SpritesActions {
+export interface SpritesActions {
   addSprite: (sprite: Sprite) => void;
 }
 
-interface SpritesState {
+export interface SpritesState {
   [key: string]: Sprite;
 }
-
-export { SpritesState, SpritesActions, actionType, Action };

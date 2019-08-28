@@ -5,7 +5,7 @@ import { SpritesState, SpritesActions } from './types';
 
 const defaultState = {};
 const defaultActions = {
-  addSprite(sprite) {
+  addSprite(_sprite) {
     invariant(false, 'Context not implemented');
   },
 };

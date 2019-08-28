@@ -6,7 +6,7 @@ import { reducer, createActions } from './reducer';
 const defaultValueState = {};
 
 const defaultValueActions = {
-  addLayer(layer) {
+  addLayer(_layer) {
     invariant(false, 'Context not implemented');
   },
 };

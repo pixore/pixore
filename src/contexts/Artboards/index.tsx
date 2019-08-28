@@ -5,7 +5,7 @@ import { ArtboardsState, ArtboardsActions } from './types';
 
 const defaultState = {};
 const defaultActions = {
-  addArtboard(artboard) {
+  addArtboard(_artboard) {
     invariant(false, 'Context not implemented');
   },
 };

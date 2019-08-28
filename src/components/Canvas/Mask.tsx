@@ -4,7 +4,7 @@ import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
 import { useSprite } from '../../contexts/Sprite';
 import { useArtboard } from '../../contexts/Artboard';
-import { clean, round2 } from '../../utils';
+import { clean } from '../../utils';
 
 interface PropTypes {
   width: number;
@@ -22,8 +22,8 @@ const Background: React.FC<PropTypes> = (props) => {
       return;
     }
     const { scale } = artboard;
-    let width = sprite.width * scale;
-    let height = sprite.height * scale;
+    const width = sprite.width * scale;
+    const height = sprite.height * scale;
     clean(context.canvas);
     context.fillStyle = '#494949';
     context.fillRect(0, 0, context.canvas.width, context.canvas.width);

@@ -3,7 +3,7 @@ import { Sprite } from '../contexts/Sprite';
 
 const { floor } = Math;
 
-interface Cord {
+export interface Cord {
   x: number;
   y: number;
 }
@@ -23,4 +23,4 @@ const validCord = (sprite: Sprite, cord: Cord) => {
   );
 };
 
-export { calculatePosition, validCord, Cord };
+export { calculatePosition, validCord };

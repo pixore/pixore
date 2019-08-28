@@ -1,4 +1,4 @@
-enum actionType {
+export enum actionType {
   CHANGE_NAME,
   CHANGE_SPRITE,
   ADD_LAYER,
@@ -6,19 +6,19 @@ enum actionType {
   CREATE_NEW_VERSION,
 }
 
-type Payload = Sprite | string;
+export type Payload = Sprite | string;
 
-interface Action {
+export interface Action {
   type: actionType;
   payload?: Payload;
 }
 
-interface Palette {
+export interface Palette {
   id: string;
   name: string;
 }
 
-interface Sprite {
+export interface Sprite {
   id: string;
   name: string;
   width: number;
@@ -29,12 +29,10 @@ interface Sprite {
   palette?: Palette;
 }
 
-interface SpriteActions {
+export interface SpriteActions {
   changeName: (name: string) => void;
   changeSprite: (sprite: Sprite) => void;
   addNewLayerToSprite: (newLayer: { name: string }) => string;
   addNewFrameToSprite: () => string;
   createNewVersion: () => void;
 }
-
-export { Sprite, Palette, SpriteActions, Action, Payload, actionType };
