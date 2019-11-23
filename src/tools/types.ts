@@ -3,12 +3,12 @@ import { Sprite, SpriteActions } from '../contexts/Sprite';
 import Vector from '../utils/vector';
 
 // SOURCE: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button#Return_value
-enum Click {
+export enum Click {
   LEFT = 0,
   RIGHT = 2,
 }
 
-interface Context {
+export interface Context {
   artboard: Artboard;
   sprite: Sprite;
   mainContext: CanvasRenderingContext2D;
@@ -19,12 +19,10 @@ interface Context {
   clickType?: number;
 }
 
-type ContextRef = React.MutableRefObject<Context>;
+export type ContextRef = React.MutableRefObject<Context>;
 
-type Tool = (contextRef: ContextRef) => () => void;
+export type Tool = (contextRef: ContextRef) => () => void;
 
-interface Tools {
+export interface Tools {
   [key: string]: Tool;
 }
-
-export { Tools, ContextRef, Context, Tool, Click };

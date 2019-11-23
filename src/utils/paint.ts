@@ -3,7 +3,7 @@ import { Artboard } from '../contexts/Artboard';
 import { clean, getTransparentPattern } from './';
 import { Cord } from './canvas';
 
-type PaintFunction = (
+export type PaintFunction = (
   mainContext: CanvasRenderingContext2D,
   sprite: Sprite,
   artboard: Artboard,
@@ -22,8 +22,8 @@ const paintBackground: PaintFunction = (context, sprite, artboard) => {
 };
 
 const paintMask: PaintFunction = (maskContext, sprite, artboard) => {
-  let width = sprite.width * artboard.scale;
-  let height = sprite.height * artboard.scale;
+  const width = sprite.width * artboard.scale;
+  const height = sprite.height * artboard.scale;
   maskContext.fillStyle = '#494949';
   maskContext.fillRect(
     0,
@@ -41,7 +41,7 @@ const paintPreview = function(
 ) {
   clean(context.canvas);
 
-  let realCord = {
+  const realCord = {
     x: cord.x * artboard.scale + artboard.x,
     y: cord.y * artboard.scale + artboard.y,
   };
@@ -56,4 +56,4 @@ const paintPreview = function(
   context.fillRect(realCord.x, realCord.y, artboard.scale, artboard.scale);
 };
 
-export { paintBackground, paintMask, paintPreview, PaintFunction };
+export { paintBackground, paintMask, paintPreview };

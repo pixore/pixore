@@ -1,25 +1,23 @@
-interface Layer {
+export interface Layer {
   id: string;
   name: string;
 }
 
-enum actionType {
+export enum actionType {
   ADD_LAYER,
 }
 
-type Payload = Layer;
+export type Payload = Layer;
 
-interface Action {
+export interface Action {
   type: actionType;
   payload: Payload;
 }
 
-interface LayersActions {
+export interface LayersActions {
   addLayer: (layer: Layer) => void;
 }
 
-interface LayersState {
+export interface LayersState {
   [key: string]: Layer;
 }
-
-export { Layer, Action, actionType, LayersActions, LayersState, Payload };

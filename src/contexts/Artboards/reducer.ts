@@ -1,10 +1,5 @@
-import {
-  ArtboardsState,
-  actionType,
-  Action,
-  ArtboardsActions,
-  Artboard,
-} from './types';
+import { ArtboardsState, actionType, Action, ArtboardsActions } from './types';
+import { Artboard } from '../Artboard';
 
 const reducer = (state: ArtboardsState, action: Action): ArtboardsState => {
   const { type, payload } = action;

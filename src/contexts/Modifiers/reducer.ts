@@ -19,7 +19,7 @@ const reducer = (state: ModifiersState, action: Action): ModifiersState => {
   }
 };
 
-type Dispatch = (action: Action) => void;
+export type Dispatch = (action: Action) => void;
 
 const createActions = (dispatch: Dispatch): ModifiersActions => ({
   changeModifierState(key: Key, state: boolean) {
@@ -33,4 +33,4 @@ const createActions = (dispatch: Dispatch): ModifiersActions => ({
   },
 });
 
-export { reducer, Dispatch, createActions };
+export { reducer, createActions };

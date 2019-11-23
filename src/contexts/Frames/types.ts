@@ -1,24 +1,22 @@
-interface Frame {
+export interface Frame {
   id: string;
 }
 
-enum actionType {
+export enum actionType {
   ADD_FRAME,
 }
 
-type Payload = Frame;
+export type Payload = Frame;
 
-interface Action {
+export interface Action {
   type: actionType;
   payload: Payload;
 }
 
-interface FramesActions {
+export interface FramesActions {
   addFrame: (frame: Frame) => void;
 }
 
-interface FramesState {
+export interface FramesState {
   [key: string]: Frame;
 }
-
-export { Frame, Action, actionType, FramesActions, FramesState, Payload };

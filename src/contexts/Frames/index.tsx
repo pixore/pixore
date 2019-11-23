@@ -6,7 +6,7 @@ import { reducer, createActions } from './reducer';
 const defaultValueState = {};
 
 const defaultValueActions = {
-  addFrame(frame) {
+  addFrame(_frame) {
     invariant(false, 'Context not implemented');
   },
 };

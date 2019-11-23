@@ -1,7 +1,6 @@
 const TEST_REGEX = '(/__tests__/.*|(\\.|/)|spec)\\.(tsx?|ts?)$';
 
 module.exports = {
-  setupFilesAfterEnv: ['@testing-library/react/cleanup-after-each'],
   testRegex: TEST_REGEX,
   transform: {
     '^.+\\.tsx?$': 'babel-jest',

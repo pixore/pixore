@@ -7,28 +7,28 @@ import { useArtboards } from '../Artboards';
 const defaultValueState = undefined;
 
 const defaultValueActions = {
-  center(payload) {
+  center(_payload) {
     invariant(false, 'Context not implemented');
   },
-  changePosition(payload) {
+  changePosition(_payload) {
     invariant(false, 'Context not implemented');
   },
-  changeArtboard(artboard) {
+  changeArtboard(_artboard) {
     invariant(false, 'Context not implemented');
   },
-  changeLayer(layer) {
+  changeLayer(_layer) {
     invariant(false, 'Context not implemented');
   },
-  changeFrame(frame) {
+  changeFrame(_frame) {
     invariant(false, 'Context not implemented');
   },
-  changePrimaryColor(color) {
+  changePrimaryColor(_color) {
     invariant(false, 'Context not implemented');
   },
-  changeSecondaryColor(color) {
+  changeSecondaryColor(_color) {
     invariant(false, 'Context not implemented');
   },
-  changeTool(tool) {
+  changeTool(_tool) {
     invariant(false, 'Context not implemented');
   },
 };

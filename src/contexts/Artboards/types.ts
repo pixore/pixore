@@ -1,22 +1,20 @@
 import { Artboard } from '../Artboard';
 
-enum actionType {
+export enum actionType {
   ADD_ARTBOARD,
 }
 
-type Payload = Artboard;
+export type Payload = Artboard;
 
-interface Action {
+export interface Action {
   type: actionType;
   payload: Payload;
 }
 
-interface ArtboardsState {
+export interface ArtboardsState {
   [key: string]: Artboard;
 }
 
-interface ArtboardsActions {
+export interface ArtboardsActions {
   addArtboard: (artboard: Artboard) => void;
 }
-
-export { ArtboardsState, Action, actionType, ArtboardsActions, Artboard };
