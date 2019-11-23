@@ -2,7 +2,7 @@ import React from 'react';
 const About: React.FC = () => {
   return (
     <>
-      <h3>About Pixore (v0.0.2)</h3>
+      <h3>About Pixore (v0.0.4)</h3>
       <hr />
       <p>
         Hi, {"I'm"} Jose and welcome to Pixore, an editor for pixel art heavily
