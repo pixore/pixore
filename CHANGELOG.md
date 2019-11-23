@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/pixore/pixore/compare/v0.0.2...v0.0.3) (2019-11-23)
+
+
+### Features
+
+* **components:** create About component ([63ffa00](https://github.com/pixore/pixore/commit/63ffa00f9eddda8ffb2eed2da4169564f583c872))
+* **components:** create Changelog component ([9398562](https://github.com/pixore/pixore/commit/93985626eb503cfa3b516bf20ab064c6e721b916))
+* **index:** use About and Changelog components ([953c302](https://github.com/pixore/pixore/commit/953c302eda0cec30c952f90b83cd52b5140e5244))
+* **introduction :** create introduction modal ([c19d75c](https://github.com/pixore/pixore/commit/c19d75c4587dcef6cf6fd3bd39c353ee09a21674))
+
 ### 0.0.2 (2019-08-28)
 
 
