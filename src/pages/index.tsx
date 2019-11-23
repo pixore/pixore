@@ -1,21 +1,21 @@
 import 'react-dynamic-layout/dist/style/base/index.css';
 import 'react-dynamic-layout/dist/style/dark/index.css';
-import '../src/styles.css';
+import '../styles.css';
 import React from 'react';
 import Head from 'next/head';
 import { Global, css } from '@emotion/core';
 import { Layout, Container, Float, Dragbar } from 'react-dynamic-layout';
 
-import Tool from '../src/components/Tool';
-import Editor from '../src/components/Editor';
-import Menu from '../src/components/Menu';
-import Canvas from '../src/components/Canvas';
-import About from '../src/components/About';
-import Changelog from '../src/components/Changelog';
-import FramesAndLayers from '../src/components/FramesAndLayers';
-import Palette from '../src/components/Palette';
-import Bootstrap from '../src/components/Bootstrap';
-import { round2 } from '../src/utils';
+import Tool from '../components/Tool';
+import Editor from '../components/Editor';
+import Menu from '../components/Menu';
+import Canvas from '../components/Canvas';
+import About from '../components/About';
+import Changelog from '../components/Changelog';
+import FramesAndLayers from '../components/FramesAndLayers';
+import Palette from '../components/Palette';
+import Bootstrap from '../components/Bootstrap';
+import { round2 } from '../utils';
 
 const globalStyle = css`
   html {
