@@ -1,21 +1,18 @@
 import 'react-dynamic-layout/dist/style/base/index.css';
-import 'react-dynamic-layout/dist/style/dark/index.css';
 import '../styles.css';
 import React from 'react';
 import Head from 'next/head';
 import { Global, css } from '@emotion/core';
+import Subdivide from '@pixore/subdivide';
 import { Layout, Container, Float, Dragbar } from 'react-dynamic-layout';
 
-import Tool from '../components/Tool';
 import Editor from '../components/Editor';
 import Menu from '../components/Menu';
-import Canvas from '../components/Canvas';
 import About from '../components/About';
 import Changelog from '../components/Changelog';
-import FramesAndLayers from '../components/FramesAndLayers';
-import Palette from '../components/Palette';
 import Bootstrap from '../components/Bootstrap';
 import { round2 } from '../utils';
+import PanelMaster from '../components/PanelMaster';
 
 const globalStyle = css`
   html {
@@ -111,47 +108,15 @@ const IndexPage = () => {
             <Menu name="open" />
           </Container>
           <Container>
-            <Layout type={Layout.ROW}>
-              <Container initialSize={200} isFixedSize={true}>
-                <Palette />
-              </Container>
-              <Container>
-                <Layout type={Layout.COLUMN}>
-                  <Container>
-                    <Layout type={Layout.ROW}>
-                      <Container>
-                        <Layout type={Layout.COLUMN}>
-                          <Container isFixedSize={true} initialSize={25}>
-                            <label>Tabs</label>
-                          </Container>
-                          <Container>
-                            <Canvas />
-                          </Container>
-                        </Layout>
-                      </Container>
-                      <Container isFixedSize={true} initialSize={60}>
-                        <Tool name="pen" />
-                      </Container>
-                    </Layout>
-                  </Container>
-                  <Container isFixedSize={true} initialSize={200}>
-                    {({ dimensions }) => (
-                      <Layout type={Layout.ROW}>
-                        <Container>
-                          <FramesAndLayers />
-                        </Container>
-                        <Container
-                          isFixedSize={true}
-                          initialSize={dimensions.height}
-                        >
-                          {dimensions.height}
-                        </Container>
-                      </Layout>
-                    )}
-                  </Container>
-                </Layout>
-              </Container>
-            </Layout>
+            {({ dimensions }) => {
+              return (
+                <Subdivide
+                  height={dimensions.height}
+                  top={25}
+                  component={PanelMaster}
+                />
+              );
+            }}
           </Container>
         </Layout>
       </Bootstrap>
