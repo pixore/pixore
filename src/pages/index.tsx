@@ -73,6 +73,7 @@ const useFloat = () => {
               left: 0,
               width: '100%',
               height: '100%',
+              overflow: 'auto',
             }}
           >
             <About />
@@ -91,6 +92,11 @@ const IndexPage = () => {
     <Editor>
       <Bootstrap>
         <Head>
+          <title>Pixore</title>
+          <meta
+            name="description"
+            content="Pixore, an web-based editor for pixel art"
+          />
           <script
             async
             defer
