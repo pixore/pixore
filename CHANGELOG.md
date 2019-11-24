@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/pixore/pixore/compare/v0.0.4...v0.0.5) (2019-11-24)
+
+
+### Bug Fixes
+
+* **welcome:** add scroll to the welcome window ([382f60a](https://github.com/pixore/pixore/commit/382f60aa1038344a1b4000a92f7ab3b349dc54d9))
+
 ### [0.0.4](https://github.com/pixore/pixore/compare/v0.0.3...v0.0.4) (2019-11-23)
 
 ### [0.0.3](https://github.com/pixore/pixore/compare/v0.0.2...v0.0.3) (2019-11-23)
