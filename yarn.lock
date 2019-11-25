@@ -1397,6 +1397,11 @@
   resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.6.1.tgz#7345dcd624f92779fb4a0fc4a28ab16d69b53476"
   integrity sha512-SMGDydSjmvOz3Q4faGGJikdeqHumHmxB1YfYR7XTWrDQxJMod+J7mSkaS12NY4o/uPQ4xOwwL6cXWN+KpFjOQg==
 
+"@reach/visually-hidden@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@reach/visually-hidden/-/visually-hidden-0.6.2.tgz#36744201d0464bcaedc6163b379844612341a1dc"
+  integrity sha512-YI2IMink8kn3vcugOKjFcQgF+GUd1p3kMWtLVxvEr1oj8iOyNASBP4j9ouYR9ZqIEO8SZhk9O+IHdXQhs0csxg==
+
 "@reach/window-size@^0.6.2":
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/@reach/window-size/-/window-size-0.6.2.tgz#e1af23de96848c89dabe56c1eb7c1a8481fdca47"
