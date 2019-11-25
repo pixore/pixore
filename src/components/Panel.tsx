@@ -15,9 +15,10 @@ const radius = 10;
 const headerStyle: React.CSSProperties = {
   background: '#3B4252',
   height: 30,
-  borderTop: '2px #2E3440 solid',
-  borderLeft: '2px #2E3440 solid',
-  borderRight: '2px #2E3440 solid',
+  borderStyle: 'solid',
+  borderColor: '#2E3440',
+  borderWidth: 2,
+  borderBottomWidth: 0,
   borderTopLeftRadius: radius,
   borderTopRightRadius: radius,
 };

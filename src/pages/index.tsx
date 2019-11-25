@@ -1,30 +1,18 @@
 import 'react-dynamic-layout/dist/style/base/index.css';
 import '../styles.css';
 import React from 'react';
-import Head from 'next/head';
-import { Global, css } from '@emotion/core';
 import Subdivide from '@pixore/subdivide';
 import { Layout, Container, Float, Dragbar } from 'react-dynamic-layout';
 
 import Editor from '../components/Editor';
-import Menu from '../components/Menu';
+import Header from '../components/Header';
+import Head from '../components/Head';
+import GlobalStyle from '../components/GlobalStyle';
 import About from '../components/About';
 import Changelog from '../components/Changelog';
 import Bootstrap from '../components/Bootstrap';
 import { round2 } from '../utils';
 import PanelMaster from '../components/PanelMaster';
-
-const globalStyle = css`
-  html {
-    box-sizing: border-box;
-  }
-
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
-  }
-`;
 
 const toggle = (val: boolean): boolean => !val;
 
@@ -88,24 +76,11 @@ const IndexPage = () => {
   return (
     <Editor>
       <Bootstrap>
-        <Head>
-          <title>Pixore</title>
-          <meta
-            name="description"
-            content="Pixore, an web-based editor for pixel art"
-          />
-          <script
-            async
-            defer
-            src="https://buttons.github.io/buttons.js"
-          ></script>
-        </Head>
-        <Global styles={globalStyle} />
+        <Head />
+        <GlobalStyle />
         <Layout type={Layout.COLUMN} floats={floats}>
           <Container isFixedSize={true} initialSize={25}>
-            <Menu name="save" />
-            <Menu name="new" />
-            <Menu name="open" />
+            <Header />
           </Container>
           <Container>
             {({ dimensions }) => {

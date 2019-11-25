@@ -10,6 +10,8 @@ body {
 
 .rdl-container {
   overflow: hidden;
+  outline: unset;
+  background: #2e3440;
 }
 
 * {
