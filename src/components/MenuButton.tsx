@@ -1,6 +1,9 @@
 import '@reach/menu-button/styles.css';
+import React from 'react';
 import styled from '@emotion/styled';
 import * as Reach from '@reach/menu-button';
+
+const notImplemented = () => alert('not implemented');
 
 const MenuButton = styled(Reach.MenuButton)`
   background: transparent;
@@ -14,4 +17,24 @@ const MenuList = styled(Reach.MenuList)`
   padding: 0.5rem 0;
 `;
 
-export { MenuButton, MenuList };
+const Line = styled.span`
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: #2e3440;
+`;
+
+const ItemSeparator = styled(Reach.MenuItem)`
+  padding: 5px 0;
+  pointer-events: none;
+`;
+
+const MenuItemSeparator = () => {
+  return (
+    <ItemSeparator aria-disabled disabled onSelect={notImplemented}>
+      <Line />
+    </ItemSeparator>
+  );
+};
+
+export { MenuButton, MenuList, MenuItemSeparator, notImplemented };
