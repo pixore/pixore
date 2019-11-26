@@ -1,5 +1,5 @@
 import { SpritesState, actionType, Action, SpritesActions } from './types';
-import { Sprite } from '../Sprite';
+import { Sprite } from '../../types';
 
 const reducer = (state: SpritesState, action: Action): SpritesState => {
   const { type, payload } = action;

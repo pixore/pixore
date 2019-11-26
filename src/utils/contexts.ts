@@ -1,4 +1,4 @@
-import { Sprite } from '../contexts/Sprite';
+import { Sprite } from '../types';
 
 type Context = CanvasRenderingContext2D;
 
@@ -56,7 +56,7 @@ const getMainContext = () => getContextById(MAIN_CONTEXT_ID);
 function mirrorContext(originContext: Context, destinationContext: Context) {
   const { canvas: originCanvas } = originContext;
   const { canvas: destinationCanvas } = destinationContext;
-  let { width, height } = originCanvas;
+  const { width, height } = originCanvas;
   destinationCanvas.width = width;
   destinationCanvas.height = height;
 

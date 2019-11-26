@@ -57,14 +57,11 @@ const Bootstrap: React.FC<PropTypes> = (props) => {
     if (artboardIds.length === 0) {
       addArtboard({
         id,
-        scale: 1,
         tool: 'pen',
         primaryColor: '#000000',
         secondaryColor: 'transparent',
         frame: frames[0],
         layer: layers[0],
-        y: 0,
-        x: 0,
       });
     }
 

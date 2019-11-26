@@ -15,11 +15,22 @@ const Select = styled.select`
   max-width: 2.1rem;
 `;
 
-const PanelSelect: React.FC = () => {
+interface PropTypes {
+  className?: string;
+}
+
+const PanelSelect: React.FC<PropTypes> = (props) => {
+  const { className } = props;
   const { onChange, panelName } = usePane();
 
   return (
-    <Select value={panelName} onChange={onChange} name="panel" id="panel">
+    <Select
+      className={className}
+      value={panelName}
+      onChange={onChange}
+      name="panel"
+      id="panel"
+    >
       {panels.map((panel) => {
         return (
           <option key={panel.value} value={panel.value}>
@@ -30,5 +41,18 @@ const PanelSelect: React.FC = () => {
     </Select>
   );
 };
+
+interface FloatProps {
+  top: number;
+  left: number;
+}
+
+const FloatPanelSelect = styled(PanelSelect)`
+  position: absolute;
+  top: ${(props: FloatProps) => props.top}px;
+  left: ${(props: FloatProps) => props.left}px;
+`;
+
+export { FloatPanelSelect };
 
 export default PanelSelect;

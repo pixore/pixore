@@ -10,7 +10,7 @@ const globalStyle = css`
   *,
   *:before,
   *:after {
-    box-sizing: inherit;
+    box-sizing: border-box;
     color: #eceff4;
   }
 `;

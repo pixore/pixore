@@ -1,7 +1,5 @@
-/** @jsx jsx */
 import React from 'react';
-import { css, jsx } from '@emotion/core';
-
+import styled from '@emotion/styled';
 import { useSprite, useSpriteActions } from '../../contexts/Sprite';
 import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
 import FrameLayers from './FrameLayers';
@@ -10,38 +8,18 @@ import Mask from './Mask';
 import { getTool, Context as ListenerContext } from '../../tools';
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
-import { round2 } from '../../utils';
+import useCanvas from './useCanvas';
+import PanelSelect from '../PanelSelect';
 
-const maskStyles = css`
-  pointer-events: none;
+const Float = styled.div`
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.5);
 `;
-
-const useWheel = () => {
-  const artboardActions = useArtboardActions();
-  const artboard = useArtboard();
-  const sprite = useSprite();
-  const { changePosition } = artboardActions;
-
-  const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    const { y, x } = artboard;
-    const deltaY = event.deltaY;
-    const scale = round2(artboard.scale - deltaY / 120);
-
-    if (scale < 1) {
-      return;
-    }
-
-    const diffX = sprite.width * scale - artboard.scale * sprite.width;
-    const diffY = sprite.height * scale - artboard.scale * sprite.height;
-
-    changePosition({
-      scale,
-      y: y - Math.round(diffY / 2),
-      x: x - Math.round(diffX / 2),
-    });
-  };
-  return { onWheel };
-};
 
 const Canvas: React.FC = () => {
   const sprite = useSprite();
@@ -54,12 +32,13 @@ const Canvas: React.FC = () => {
   const artboard = useArtboard();
   const artboardActions = useArtboardActions();
   const spriteActions = useSpriteActions();
-  const { onWheel } = useWheel();
-  const { center } = artboardActions;
+  const canvas = useCanvas();
+  const { onWheel } = canvas;
   const [element, setElement] = React.useState<HTMLDivElement>();
   const { innerWidth: width, innerHeight: height } = window;
   const { layer, tool: toolName } = artboard;
   const { layers } = sprite;
+
   const listenerContextRef = React.useRef<ListenerContext>({
     mainContext,
     previewContext,
@@ -67,6 +46,7 @@ const Canvas: React.FC = () => {
     artboard,
     artboardActions,
     spriteActions,
+    canvas,
   });
 
   listenerContextRef.current = {
@@ -76,13 +56,14 @@ const Canvas: React.FC = () => {
     artboard,
     artboardActions,
     spriteActions,
+    canvas,
   };
 
   React.useEffect(() => {
     if (element) {
       const stats = element.parentElement.getBoundingClientRect();
 
-      center(stats, sprite);
+      canvas.center(stats, sprite);
       setStats(stats);
     }
     // NOTE: this effect should be execute only once,
@@ -119,13 +100,14 @@ const Canvas: React.FC = () => {
 
   return (
     <div ref={setElement} style={style} onWheel={onWheel}>
-      <Background style={style} width={width} height={height} />
+      <Background style={style} width={width} height={height} {...canvas} />
       <FrameLayers
         data-id="layers-below"
         style={style}
         width={width}
         height={height}
         layers={layersBelow}
+        {...canvas}
       />
       <FrameLayers
         data-id="current-layer"
@@ -134,6 +116,7 @@ const Canvas: React.FC = () => {
         width={width}
         height={height}
         layers={[layer]}
+        {...canvas}
       />
       <FrameLayers
         data-id="layers-above"
@@ -141,6 +124,7 @@ const Canvas: React.FC = () => {
         width={width}
         height={height}
         layers={layersAbove}
+        {...canvas}
       />
       <CanvasLayer
         ref={setPreviewRef}
@@ -148,7 +132,10 @@ const Canvas: React.FC = () => {
         width={width}
         height={height}
       />
-      <Mask css={maskStyles} style={style} width={width} height={height} />
+      <Mask style={style} width={width} height={height} {...canvas} />
+      <Float>
+        <PanelSelect />
+      </Float>
     </div>
   );
 };

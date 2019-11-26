@@ -1,6 +1,7 @@
 import React from 'react';
 import invariant from 'invariant';
-import { Sprite, SpriteActions } from './types';
+import { Sprite } from '../../types';
+import { SpriteActions } from './types';
 import { reducer, createActions } from './reducer';
 import { useSprites } from '../Sprites';
 import { useLayersActions } from '../Layers';
