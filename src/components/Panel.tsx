@@ -31,8 +31,8 @@ const Content = styled.div`
   border-left: 2px #2e3440 solid;
   border-right: 2px #2e3440 solid;
   padding: 4px;
-  border-bottom-left-radius: radius;
-  border-bottom-right-radius: radius;
+  border-bottom-left-radius: ${radius}px;
+  border-bottom-right-radius: ${radius}px;
 `;
 
 const Panel: React.FC = (props) => {
