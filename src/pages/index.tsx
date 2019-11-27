@@ -1,8 +1,9 @@
 import 'react-dynamic-layout/dist/style/base/index.css';
 import '../styles.css';
 import React from 'react';
-import Subdivide from '@pixore/subdivide';
+import Subdivide, { Config, LayoutState } from '@pixore/subdivide';
 import { Layout, Container, Float, Dragbar } from 'react-dynamic-layout';
+import defaultLayout from '../default-layout.json';
 
 import Editor from '../components/Editor';
 import Header from '../components/Header';
@@ -85,11 +86,13 @@ const IndexPage = () => {
           <Container>
             {({ dimensions }) => {
               return (
-                <Subdivide
-                  height={dimensions.height}
-                  top={25}
-                  component={PanelMaster}
-                />
+                <Config.Provider initialState={defaultLayout as LayoutState}>
+                  <Subdivide
+                    height={dimensions.height}
+                    top={25}
+                    component={PanelMaster}
+                  />
+                </Config.Provider>
               );
             }}
           </Container>

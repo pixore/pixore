@@ -45,7 +45,7 @@ const Main = () => {
     return <div>waiting...</div>;
   }
 
-  const Component = components[state as string];
+  const Component = components[state as string] || Palette;
 
   return (
     <Context.Provider value={context}>

@@ -1,0 +1,135 @@
+{
+  "rootId": 2,
+  "overlay": {
+    "width": 0,
+    "height": 0,
+    "left": 0,
+    "top": 0,
+    "direction": "right",
+    "show": false
+  },
+  "containers": {
+    "0": {
+      "id": 0,
+      "parent": 2,
+      "isGroup": false,
+      "children": [],
+      "splitRatio": 10.037128712871299,
+      "top": 0,
+      "left": 0,
+      "width": 10.037128712871299,
+      "height": 100,
+      "state": "palette"
+    },
+    "1": {
+      "id": 1,
+      "parent": 6,
+      "isGroup": false,
+      "splitRatio": 10.586377899626063,
+      "children": [],
+      "width": 9.523809523809597,
+      "height": 27.362355730673993,
+      "top": 72.637644269326,
+      "left": 90.47619047619045,
+      "state": "preview"
+    },
+    "2": {
+      "id": 2,
+      "parent": -1,
+      "isGroup": true,
+      "children": [0, 4],
+      "splitRatio": 100,
+      "top": 0,
+      "left": 0,
+      "width": 100,
+      "height": 100,
+      "directionType": "HORIZONTAL"
+    },
+    "3": {
+      "id": 3,
+      "parent": 4,
+      "isGroup": false,
+      "splitRatio": 72.637644269326,
+      "children": [],
+      "width": 89.96287128712879,
+      "height": 72.637644269326,
+      "top": 0,
+      "left": 10.037128712871299,
+      "state": "canvas"
+    },
+    "4": {
+      "id": 4,
+      "parent": 2,
+      "isGroup": true,
+      "splitRatio": 89.96287128712879,
+      "children": [3, 6],
+      "width": 89.96287128712879,
+      "height": 100,
+      "top": 0,
+      "left": 10.037128712871299,
+      "directionType": "VERTICAL"
+    },
+    "5": {
+      "id": 5,
+      "parent": 6,
+      "isGroup": false,
+      "splitRatio": 89.41362210037391,
+      "children": [],
+      "width": 80.43906176331913,
+      "height": 27.362355730673993,
+      "top": 72.637644269326,
+      "left": 10.037128712871299,
+      "state": "sequencer"
+    },
+    "6": {
+      "id": 6,
+      "parent": 4,
+      "isGroup": true,
+      "splitRatio": 27.362355730673993,
+      "children": [5, 1],
+      "width": 89.96287128712879,
+      "height": 27.362355730673993,
+      "top": 72.637644269326,
+      "left": 10.037128712871299,
+      "directionType": "HORIZONTAL"
+    }
+  },
+  "layout": {
+    "top": 0,
+    "left": 0,
+    "width": 1680,
+    "height": 482
+  },
+  "dividers": {
+    "0-4": {
+      "id": "0-4",
+      "left": 10.037128712871299,
+      "top": 0,
+      "directionType": "HORIZONTAL",
+      "previous": 0,
+      "next": 4,
+      "width": 0,
+      "height": 100
+    },
+    "3-6": {
+      "id": "3-6",
+      "left": 10.037128712871299,
+      "top": 72.637644269326,
+      "directionType": "VERTICAL",
+      "previous": 3,
+      "next": 6,
+      "width": 89.96287128712879,
+      "height": 0
+    },
+    "5-1": {
+      "id": "5-1",
+      "left": 90.47619047619045,
+      "top": 72.637644269326,
+      "directionType": "HORIZONTAL",
+      "previous": 5,
+      "next": 1,
+      "width": 0,
+      "height": 27.362355730673993
+    }
+  }
+}
