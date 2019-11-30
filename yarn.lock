@@ -1344,10 +1344,10 @@
   resolved "https://registry.yarnpkg.com/@pixore/prettier-config/-/prettier-config-0.0.2.tgz#3d1dee70ea9ea79a8a88384447ffd5b14e5afef1"
   integrity sha512-N/5THsJvUJp2tpDRWUYw7cJlPejFic9j/bq4XKp0XtDqVhDQEZDpWd5JhyZTRweyuqNtgevYAQbQMm0OIQ8Uhg==
 
-"@pixore/subdivide@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@pixore/subdivide/-/subdivide-0.0.4.tgz#7208ba67904a1bb98a87145d6b08a4cd6088dd74"
-  integrity sha512-LFr/3iXHrr1Uuq8swE8QrNHOTGmRlbZ7SLDkGK873g+fkfrN63cVTDFlsc9TCtRn1mulloTf2VdszIxdKr47jw==
+"@pixore/subdivide@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@pixore/subdivide/-/subdivide-0.0.6.tgz#3626efbba6bd91a90109c50ff3dcb96426b6d81b"
+  integrity sha512-+7UgcbZMeWrvE3SDTgfQDt2avcFFR+wNkMhHTbGQ1x9gnqkM1boxpZFfBhz1LXTkyFDwPmxe64yJQFD8o/V8Og==
   dependencies:
     tiny-emitter "^2.1.0"
     utility-types "^3.10.0"

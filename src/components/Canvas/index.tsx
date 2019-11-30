@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { useContainer } from '@pixore/subdivide';
 import { useSprite, useSpriteActions } from '../../contexts/Sprite';
 import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
 import FrameLayers from './FrameLayers';
@@ -21,9 +22,21 @@ const Float = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
+const Container = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #2e3440;
+  border-radius: 10px;
+  background: #3b4252;
+  overflow: hidden;
+`;
+
 const Canvas: React.FC = () => {
   const sprite = useSprite();
-  const [stats, setStats] = React.useState<ClientRect>();
+  const { stats } = useContainer();
   const { onRef: setMainRef, context: mainContext } = useCanvas2DContext();
   const {
     onRef: setPreviewRef,
@@ -32,10 +45,8 @@ const Canvas: React.FC = () => {
   const artboard = useArtboard();
   const artboardActions = useArtboardActions();
   const spriteActions = useSpriteActions();
-  const canvas = useCanvas();
+  const canvas = useCanvas(stats);
   const { onWheel } = canvas;
-  const [element, setElement] = React.useState<HTMLDivElement>();
-  const { innerWidth: width, innerHeight: height } = window;
   const { layer, tool: toolName } = artboard;
   const { layers } = sprite;
 
@@ -60,15 +71,10 @@ const Canvas: React.FC = () => {
   };
 
   React.useEffect(() => {
-    if (element) {
-      const stats = element.parentElement.getBoundingClientRect();
-
+    if (stats && canvas.scale === 0) {
       canvas.center(stats, sprite);
-      setStats(stats);
     }
-    // NOTE: this effect should be execute only once,
-    // when the component is mounted an the element is available
-  }, [element]);
+  }, [stats, canvas, sprite]);
 
   React.useEffect(() => {
     if (!(previewContext && previewContext.canvas)) {
@@ -85,58 +91,27 @@ const Canvas: React.FC = () => {
     }
   }, [previewContext, mainContext, toolName]);
 
-  const style: React.CSSProperties = {
-    width,
-    height,
-  };
-
-  if (stats) {
-    style.marginTop = -stats.top;
-    style.marginLeft = -stats.left;
-  }
   const indexOfCurrentLayer = layers.indexOf(layer);
   const layersBelow = layers.slice(0, indexOfCurrentLayer);
   const layersAbove = layers.slice(indexOfCurrentLayer + 1, layers.length);
 
   return (
-    <div ref={setElement} style={style} onWheel={onWheel}>
-      <Background style={style} width={width} height={height} {...canvas} />
-      <FrameLayers
-        data-id="layers-below"
-        style={style}
-        width={width}
-        height={height}
-        layers={layersBelow}
-        {...canvas}
-      />
+    <Container onWheel={onWheel}>
+      <Background {...stats} {...canvas} />
+      <FrameLayers data-id="layers-below" layers={layersBelow} {...canvas} />
       <FrameLayers
         data-id="current-layer"
         ref={setMainRef}
-        style={style}
-        width={width}
-        height={height}
         layers={[layer]}
         {...canvas}
       />
-      <FrameLayers
-        data-id="layers-above"
-        style={style}
-        width={width}
-        height={height}
-        layers={layersAbove}
-        {...canvas}
-      />
-      <CanvasLayer
-        ref={setPreviewRef}
-        style={style}
-        width={width}
-        height={height}
-      />
-      <Mask style={style} width={width} height={height} {...canvas} />
+      <FrameLayers data-id="layers-above" layers={layersAbove} {...canvas} />
+      <CanvasLayer ref={setPreviewRef} {...canvas} />
+      <Mask {...canvas} />
       <Float>
         <PanelSelect />
       </Float>
-    </div>
+    </Container>
   );
 };
 

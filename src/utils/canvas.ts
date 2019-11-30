@@ -1,4 +1,4 @@
-import { Canvas, Sprite } from '../types';
+import { CanvasStats, Sprite } from '../types';
 
 const { floor } = Math;
 
@@ -7,9 +7,14 @@ export interface Cord {
   y: number;
 }
 
-const calculatePosition = (canvas: Canvas, x: number, y: number): Cord => {
-  x = floor((x - canvas.x) / canvas.scale);
-  y = floor((y - canvas.y) / canvas.scale);
+const calculatePosition = (
+  canvas: CanvasStats,
+  clientX: number,
+  clientY: number,
+): Cord => {
+  const x = floor((clientX - (canvas.x + canvas.left)) / canvas.scale);
+  const y = floor((clientY - (canvas.y + canvas.top)) / canvas.scale);
+
   return { x, y };
 };
 

@@ -22,7 +22,8 @@ const addEventListener = (contextRef: Context) => {
 
   const onMouseMovePainting = (event: MouseEvent) => {
     const { sprite, lastPosition, canvas } = contextRef.current;
-    const cord = calculatePosition(canvas, event.clientX, event.clientY);
+    const { clientX, clientY } = event;
+    const cord = calculatePosition(canvas, clientX, clientY);
     const delta = Vector.getAbsoluteDelta(lastPosition, cord);
     const importantDiff = delta.x > 1 || delta.y > 1;
 

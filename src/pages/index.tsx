@@ -72,7 +72,7 @@ const useFloat = () => {
 };
 
 const IndexPage = () => {
-  const floats = useFloat();
+  const floats = []; // useFloat();
 
   return (
     <Editor>

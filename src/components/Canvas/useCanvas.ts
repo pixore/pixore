@@ -9,10 +9,11 @@ const defaultValueState = {
   y: 0,
 };
 
-const useCanvas = () => {
+const useCanvas = (stats: DOMRect) => {
   const [state, dispatch] = React.useReducer(reducer, defaultValueState);
   const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
   const sprite = useSprite();
+  const { width, height, left, top } = stats || {};
 
   const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     const deltaY = event.deltaY;
@@ -32,7 +33,7 @@ const useCanvas = () => {
     });
   };
 
-  return { onWheel, ...actions, ...state };
+  return { onWheel, ...actions, ...state, width, height, left, top };
 };
 
 export default useCanvas;

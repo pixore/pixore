@@ -140,6 +140,7 @@ type OffOn = (
 ) => ManageEvents;
 
 interface ManageEvents {
+  element?: HTMLElement | Window;
   on: On;
   off: Off;
   offOn: OffOn;
@@ -221,6 +222,7 @@ const offOnFactory = (on: On, off: Off, manageEvents: ManageEvents): OffOn => (
 
 const manageEvents = (element: HTMLElement | Window): ManageEvents => {
   const manageEvents: {
+    element?: HTMLElement | Window;
     offOn?: OffOn;
     on?: On;
     off?: Off;
@@ -232,6 +234,8 @@ const manageEvents = (element: HTMLElement | Window): ManageEvents => {
   manageEvents.offOn = offOn;
   manageEvents.on = on;
   manageEvents.off = off;
+  manageEvents.element = element;
+
   return manageEvents as ManageEvents;
 };
 

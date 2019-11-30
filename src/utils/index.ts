@@ -74,8 +74,6 @@ const round2 = (num: number) => {
 };
 
 const getScaleAndPosition = (stats: Stats, size: Size) => {
-  const { top, left } = stats;
-
   const scale =
     stats.height > stats.width
       ? round2(stats.width / size.width)
@@ -89,8 +87,8 @@ const getScaleAndPosition = (stats: Stats, size: Size) => {
 
   return {
     scale,
-    x: left + marginLeft,
-    y: top + marginTop,
+    x: marginLeft,
+    y: marginTop,
   };
 };
 

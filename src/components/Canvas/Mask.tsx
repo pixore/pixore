@@ -9,14 +9,14 @@ import { clean } from '../../utils';
 interface PropTypes {
   width: number;
   height: number;
-  style: React.CSSProperties;
   scale: number;
   y: number;
   x: number;
+  className?: string;
 }
 
 const Mask: React.FC<PropTypes> = (props) => {
-  const { scale, x, y } = props;
+  const { scale, x, y, width, height, className } = props;
   const sprite = useSprite();
   const artboard = useArtboard();
   const { onRef: setRef, context } = useCanvas2DContext();
@@ -31,9 +31,17 @@ const Mask: React.FC<PropTypes> = (props) => {
     context.fillStyle = '#494949';
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);
     context.clearRect(x, y, width, height);
-  }, [context, sprite, artboard, scale, y, x]);
+  }, [context, sprite, artboard, scale, y, x, width, height]);
 
-  return <CanvasLayer data-id="mask" ref={setRef} {...props} />;
+  return (
+    <CanvasLayer
+      className={className}
+      data-id="mask"
+      ref={setRef}
+      width={width}
+      height={height}
+    />
+  );
 };
 
 export default styled(Mask)`

@@ -10,7 +10,6 @@ import { useArtboard } from '../../contexts/Artboard';
 interface PropTypes {
   width: number;
   height: number;
-  style: React.CSSProperties;
   layers: string[];
   scale: number;
   x: number;
@@ -21,7 +20,7 @@ const FrameLayers: React.FC<PropTypes> = (props, ref) => {
   const sprite = useSprite();
   const artboard = useArtboard();
   const { onRef: setRef, context, canvas } = useCanvas2DContext();
-  const { layers, scale, y, x } = props;
+  const { layers, scale, y, x, width, height } = props;
 
   React.useEffect(() => {
     if (canvas) {
@@ -53,9 +52,9 @@ const FrameLayers: React.FC<PropTypes> = (props, ref) => {
         );
       }, undefined);
     }
-  }, [context, sprite, artboard, layers, x, y, scale]);
+  }, [context, sprite, artboard, layers, x, y, scale, width, height]);
 
-  return <CanvasLayer ref={setRef} {...props} />;
+  return <CanvasLayer ref={setRef} width={width} height={height} />;
 };
 
 export default React.forwardRef(FrameLayers);

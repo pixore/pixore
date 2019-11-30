@@ -38,6 +38,14 @@ export interface Canvas {
   x: number;
 }
 
+export interface CanvasStats {
+  scale: number;
+  y: number;
+  x: number;
+  left: number;
+  top: number;
+}
+
 export interface Size {
   width: number;
   height: number;
