@@ -13,7 +13,7 @@ const Changelog: React.FC = () => {
           </ul>
         </li>
         <li>
-          <h4>0.1.0 (2019-10-30)</h4>
+          <h4>0.1.0 (2019-11-30)</h4>
           <ul>
             <li>Brand new dark theme</li>
             <li>Brand new layout system</li>
