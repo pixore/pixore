@@ -1,4 +1,4 @@
-import { Sprite } from '../contexts/Sprite';
+import { Sprite } from '../types';
 import { Artboard } from '../contexts/Artboard';
 import { clean, getTransparentPattern } from './';
 import { Cord } from './canvas';
