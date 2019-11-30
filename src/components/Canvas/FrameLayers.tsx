@@ -10,15 +10,17 @@ import { useArtboard } from '../../contexts/Artboard';
 interface PropTypes {
   width: number;
   height: number;
-  style: React.CSSProperties;
   layers: string[];
+  scale: number;
+  x: number;
+  y: number;
 }
 
 const FrameLayers: React.FC<PropTypes> = (props, ref) => {
   const sprite = useSprite();
   const artboard = useArtboard();
   const { onRef: setRef, context, canvas } = useCanvas2DContext();
-  const { layers } = props;
+  const { layers, scale, y, x, width, height } = props;
 
   React.useEffect(() => {
     if (canvas) {
@@ -29,8 +31,8 @@ const FrameLayers: React.FC<PropTypes> = (props, ref) => {
   React.useEffect(() => {
     if (context) {
       const { frame } = artboard;
-      const width = sprite.width * artboard.scale;
-      const height = sprite.height * artboard.scale;
+      const width = sprite.width * scale;
+      const height = sprite.height * scale;
 
       clean(context.canvas);
       imageSmoothingDisabled(context);
@@ -43,16 +45,16 @@ const FrameLayers: React.FC<PropTypes> = (props, ref) => {
           0,
           sprite.width,
           sprite.height,
-          artboard.x,
-          artboard.y,
+          x,
+          y,
           width,
           height,
         );
       }, undefined);
     }
-  }, [context, sprite, artboard, layers]);
+  }, [context, sprite, artboard, layers, x, y, scale, width, height]);
 
-  return <CanvasLayer ref={setRef} {...props} />;
+  return <CanvasLayer ref={setRef} width={width} height={height} />;
 };
 
 export default React.forwardRef(FrameLayers);

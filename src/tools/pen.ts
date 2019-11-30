@@ -21,8 +21,9 @@ const addEventListener = (contextRef: Context) => {
   const removePreview = addPreview(contextRef);
 
   const onMouseMovePainting = (event: MouseEvent) => {
-    const { artboard, sprite, lastPosition } = contextRef.current;
-    const cord = calculatePosition(artboard, event.clientX, event.clientY);
+    const { sprite, lastPosition, canvas } = contextRef.current;
+    const { clientX, clientY } = event;
+    const cord = calculatePosition(canvas, clientX, clientY);
     const delta = Vector.getAbsoluteDelta(lastPosition, cord);
     const importantDiff = delta.x > 1 || delta.y > 1;
 
@@ -49,11 +50,11 @@ const addEventListener = (contextRef: Context) => {
   };
 
   const onMouseDown = (event: MouseEvent) => {
-    const { artboard, sprite } = contextRef.current;
+    const { canvas, sprite } = contextRef.current;
     const { clientX, clientY } = event;
     const isPanning = getModifierState(Key.Spacebar);
 
-    const cord = calculatePosition(artboard, clientX, clientY);
+    const cord = calculatePosition(canvas, clientX, clientY);
 
     if (!isPanning) {
       contextRef.current.lastPosition = cord;

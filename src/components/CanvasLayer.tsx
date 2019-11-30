@@ -17,11 +17,20 @@ const Canvas = styled.canvas`
 interface PropTypes {
   width: number;
   height: number;
-  style: React.CSSProperties;
+  className?: string;
 }
 
-const CanvasLayer: React.FC<PropTypes> = (props, ref) => (
-  <Canvas ref={ref} onContextMenu={preventDefault} {...props} />
-);
+const CanvasLayer: React.FC<PropTypes> = (props, ref) => {
+  const { width, height, className } = props;
+  return (
+    <Canvas
+      className={className}
+      ref={ref}
+      width={width}
+      height={height}
+      onContextMenu={preventDefault}
+    />
+  );
+};
 
 export default React.forwardRef(CanvasLayer);

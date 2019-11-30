@@ -12,6 +12,13 @@ const Changelog: React.FC = () => {
             <li>Technically the first one, so everything is new 🥳</li>
           </ul>
         </li>
+        <li>
+          <h4>0.1.0 (2019-11-30)</h4>
+          <ul>
+            <li>Brand new dark theme</li>
+            <li>Brand new layout system</li>
+          </ul>
+        </li>
       </ul>
 
       <p style={{ textAlign: 'center' }}>

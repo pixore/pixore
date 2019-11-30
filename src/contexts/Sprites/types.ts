@@ -1,4 +1,4 @@
-import { Sprite } from '../Sprite';
+import { Sprite } from '../../types';
 
 export enum actionType {
   ADD_SPRITE,

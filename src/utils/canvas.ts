@@ -1,5 +1,4 @@
-import { Artboard } from '../contexts/Artboard';
-import { Sprite } from '../contexts/Sprite';
+import { CanvasStats, Sprite } from '../types';
 
 const { floor } = Math;
 
@@ -8,9 +7,14 @@ export interface Cord {
   y: number;
 }
 
-const calculatePosition = (artboard: Artboard, x: number, y: number): Cord => {
-  x = floor((x - artboard.x) / artboard.scale);
-  y = floor((y - artboard.y) / artboard.scale);
+const calculatePosition = (
+  canvas: CanvasStats,
+  clientX: number,
+  clientY: number,
+): Cord => {
+  const x = floor((clientX - (canvas.x + canvas.left)) / canvas.scale);
+  const y = floor((clientY - (canvas.y + canvas.top)) / canvas.scale);
+
   return { x, y };
 };
 

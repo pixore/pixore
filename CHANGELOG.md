@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/pixore/pixore/compare/v0.0.6...v0.1.0) (2019-11-30)
+
+
+### Bug Fixes
+
+* **changelog:** fix release date ([56535c6](https://github.com/pixore/pixore/commit/56535c6f8e09bb3d68e1902dc84c5cbc44c38c0f))
+
+### [0.0.6](https://github.com/pixore/pixore/compare/v0.0.5...v0.0.6) (2019-11-30)
+
+
+### Features
+
+* **canvas:** make the position independent of the artboard ([660f5a9](https://github.com/pixore/pixore/commit/660f5a9af018bacebc2905cba6ad84f3e2e03862))
+* **header:** create project name component ([6734bea](https://github.com/pixore/pixore/commit/6734bea652f60c88338977ebf391471b368ce052))
+* **header:** improve header and create separator ([2f14418](https://github.com/pixore/pixore/commit/2f14418f6b9b887e5e70654a2e361f64be2db365))
+* **layout:** add default layout ([2c11195](https://github.com/pixore/pixore/commit/2c11195c6ec386099c3273a9e46ed0d3eb744444))
+* **layout:** use subdivide component ([f8ff92c](https://github.com/pixore/pixore/commit/f8ff92c34edf3e74294ffcb6af5fa50f57eb7808))
+* **panel:** create panel component ([7fbb24f](https://github.com/pixore/pixore/commit/7fbb24fb4c1a4124055d7c4f391bacd9f213e906))
+* **panel:** create panel select component ([624759b](https://github.com/pixore/pixore/commit/624759bbe02d4981d42c759632788d1134ef42bb))
+* **panel:** create simplest preview panel ([c589be2](https://github.com/pixore/pixore/commit/c589be2d0b5dc6a46dea27f81dac1656433997db))
+* **panel:** improve panel styles ([e79a197](https://github.com/pixore/pixore/commit/e79a19765f6114681760e7fa7debfc61d7155600))
+* **panels:** make palette and frames-and-layers panels ([4f93955](https://github.com/pixore/pixore/commit/4f939556f45cb378b82e4a40558885726aa2d23d))
+* **styles:** improve styles ([6ead73d](https://github.com/pixore/pixore/commit/6ead73db259c3711ed0686a0206e195d71ba7bf1))
+
+
+### Bug Fixes
+
+* **buttons:** fix button colors ([6743d57](https://github.com/pixore/pixore/commit/6743d57d7da02576422eb9240a5573def0018a98))
+* **canvas:** fix problems with the canvas and the new layout ([b03e783](https://github.com/pixore/pixore/commit/b03e783cff0e0ea4b9b8fb80af0f14171927dd1a))
+* **panel:** use correct value for the radius ([52f7c9d](https://github.com/pixore/pixore/commit/52f7c9d77d6886d9b6497fb542e0e5552f2b440a))
+
 ### [0.0.5](https://github.com/pixore/pixore/compare/v0.0.4...v0.0.5) (2019-11-24)
 
 

@@ -16,10 +16,10 @@ const addPreview = (contextRef: ContextRef): RemovePreview => {
 
   const paint = (cord: Vector) => {
     const { x, y } = cord;
-    const { artboard, previewContext } = contextRef.current;
-    const { scale } = artboard;
-    const previewX = round2(x * scale + artboard.x);
-    const previewY = round2(y * scale + artboard.y);
+    const { previewContext, canvas } = contextRef.current;
+    const { scale } = canvas;
+    const previewX = round2(x * scale + canvas.x);
+    const previewY = round2(y * scale + canvas.y);
 
     clean(previewContext.canvas);
 
@@ -28,9 +28,9 @@ const addPreview = (contextRef: ContextRef): RemovePreview => {
   };
 
   const onMouseMove = (event: MouseEvent) => {
-    const { artboard } = contextRef.current;
+    const { canvas } = contextRef.current;
     const { clientX, clientY } = event;
-    const cord = calculatePosition(artboard, clientX, clientY);
+    const cord = calculatePosition(canvas, clientX, clientY);
 
     paint(cord);
   };
@@ -52,9 +52,8 @@ const addPanning = (contextRef: ContextRef): RemovePanning => {
   };
 
   const onMouseMovePanning = (event: MouseEvent) => {
-    const { artboard, artboardActions, lastDrag } = contextRef.current;
+    const { lastDrag, canvas } = contextRef.current;
 
-    const { changePosition } = artboardActions;
     const { clientX, clientY } = event;
     const currentDrag: Vector = { x: clientX, y: clientY };
 
@@ -64,10 +63,10 @@ const addPanning = (contextRef: ContextRef): RemovePanning => {
 
     event.preventDefault();
 
-    changePosition({
-      x: artboard.x + dragDiff.x,
-      y: artboard.y + dragDiff.y,
-      scale: artboard.scale,
+    canvas.update({
+      x: canvas.x + dragDiff.x,
+      y: canvas.y + dragDiff.y,
+      scale: canvas.scale,
     });
 
     saveLastDrag(currentDrag);
@@ -109,14 +108,21 @@ const getColor = (artboard: Artboard, clickType: number): string => {
 };
 
 const paint = (contextRef: ContextRef, cord: Vector) => {
-  const { artboard, sprite, mainContext, clickType } = contextRef.current;
-  const { frame, layer, scale } = artboard;
+  const {
+    artboard,
+    sprite,
+    mainContext,
+    clickType,
+    canvas,
+  } = contextRef.current;
+  const { frame, layer } = artboard;
+  const { scale } = canvas;
   const { x, y } = cord;
 
   const color = getColor(artboard, clickType);
   const layerContext = getContext(frame, layer, sprite);
-  const previewX = round2(x * scale + artboard.x);
-  const previewY = round2(y * scale + artboard.y);
+  const previewX = round2(x * scale + canvas.x);
+  const previewY = round2(y * scale + canvas.y);
 
   if (isTransparent(color)) {
     mainContext.clearRect(previewX, previewY, scale, scale);

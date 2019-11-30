@@ -10,4 +10,44 @@ body {
 
 .rdl-container {
   overflow: hidden;
+  outline: unset;
+  background: #2e3440;
+}
+
+button {
+  background: #3b4252;
+  border: 1px solid #d8dee9;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 2px;
+  color: #d8dee9;
+}
+
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.px-corner {
+  cursor: grab;
+}
+
+.px-divider--vertical {
+  cursor: row-resize;
+}
+
+.px-divider--horizontal {
+  cursor: col-resize;
+}
+
+select {
+  background: #4c566a;
+  border: 0;
+  color: #eceff4;
+  outline-color: #5e81ac;
 }

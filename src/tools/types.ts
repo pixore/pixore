@@ -1,6 +1,7 @@
 import { Artboard, ArtboardsActions } from '../contexts/Artboard';
-import { Sprite, SpriteActions } from '../contexts/Sprite';
+import { SpriteActions } from '../contexts/Sprite';
 import Vector from '../utils/vector';
+import { Sprite, CanvasStats, HookCanvas } from '../types';
 
 // SOURCE: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button#Return_value
 export enum Click {
@@ -17,6 +18,7 @@ export interface Context {
   artboardActions: ArtboardsActions;
   spriteActions: SpriteActions;
   clickType?: number;
+  canvas: CanvasStats & HookCanvas;
 }
 
 export type ContextRef = React.MutableRefObject<Context>;

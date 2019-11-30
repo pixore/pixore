@@ -7,22 +7,16 @@
     "allowJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
     "skipLibCheck": true,
     "baseUrl": ".",
     "noEmit": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "lib": [
-      "dom",
-      "es2015",
-      "es2016"
-    ],
+    "typeRoots": ["./node_modules/@types"],
+    "lib": ["dom", "es2015", "es2016"],
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
@@ -36,9 +30,5 @@
     "*.config.js",
     "coverage/*"
   ],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import styled from '@emotion/styled';
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
 import { useSprite } from '../../contexts/Sprite';
@@ -9,10 +9,14 @@ import { clean } from '../../utils';
 interface PropTypes {
   width: number;
   height: number;
-  style: React.CSSProperties;
+  scale: number;
+  y: number;
+  x: number;
+  className?: string;
 }
 
-const Background: React.FC<PropTypes> = (props) => {
+const Mask: React.FC<PropTypes> = (props) => {
+  const { scale, x, y, width, height, className } = props;
   const sprite = useSprite();
   const artboard = useArtboard();
   const { onRef: setRef, context } = useCanvas2DContext();
@@ -21,33 +25,25 @@ const Background: React.FC<PropTypes> = (props) => {
     if (!context) {
       return;
     }
-    const { scale } = artboard;
     const width = sprite.width * scale;
     const height = sprite.height * scale;
     clean(context.canvas);
     context.fillStyle = '#494949';
-    context.fillRect(0, 0, context.canvas.width, context.canvas.width);
-    context.clearRect(artboard.x, artboard.y, width, height);
+    context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    context.clearRect(x, y, width, height);
+  }, [context, sprite, artboard, scale, y, x, width, height]);
 
-    // for (let x = 0; x < sprite.width; x++) {
-    //   const realX = round2(artboard.x + x * scale);
-
-    //   context.moveTo(realX, artboard.y);
-    //   context.lineTo(realX, artboard.y + height);
-    // }
-
-    // for (let y = 0; y < sprite.height; y++) {
-    //   const realY = round2(artboard.y + y * scale);
-
-    //   context.moveTo(artboard.x, realY);
-    //   context.lineTo(artboard.x + width, realY);
-    // }
-
-    // context.strokeStyle = 'red';
-    // context.stroke();
-  }, [context, sprite, artboard]);
-
-  return <CanvasLayer ref={setRef} {...props} />;
+  return (
+    <CanvasLayer
+      className={className}
+      data-id="mask"
+      ref={setRef}
+      width={width}
+      height={height}
+    />
+  );
 };
 
-export default Background;
+export default styled(Mask)`
+  pointer-events: none;
+`;

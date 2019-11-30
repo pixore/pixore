@@ -1,3 +1,5 @@
+import { Sprite } from '../../types';
+
 export enum actionType {
   CHANGE_NAME,
   CHANGE_SPRITE,
@@ -11,22 +13,6 @@ export type Payload = Sprite | string;
 export interface Action {
   type: actionType;
   payload?: Payload;
-}
-
-export interface Palette {
-  id: string;
-  name: string;
-}
-
-export interface Sprite {
-  id: string;
-  name: string;
-  width: number;
-  height: number;
-  layers: string[];
-  frames: string[];
-  version?: number;
-  palette?: Palette;
 }
 
 export interface SpriteActions {

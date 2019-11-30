@@ -4,6 +4,7 @@ import { useSpriteActions, useSprite } from '../contexts/Sprite';
 import { useLayers } from '../contexts/Layers';
 import { useFrames } from '../contexts/Frames';
 import { useArtboard, useArtboardActions } from '../contexts/Artboard';
+import Panel from './Panel';
 
 const baseStyle = css`
   border: 1px solid black;
@@ -40,7 +41,7 @@ const FramesAndLayers = () => {
   }
 
   return (
-    <div>
+    <Panel>
       <button onClick={onNewFrame}>New Frame</button>
       <button onClick={onNewLayer}>New Layer</button>
       <table css={baseStyle}>
@@ -93,7 +94,7 @@ const FramesAndLayers = () => {
           ))}
         </tbody>
       </table>
-    </div>
+    </Panel>
   );
 };
 

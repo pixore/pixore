@@ -1,4 +1,5 @@
-import { SpriteActions, Sprite, Action, actionType } from './types';
+import { SpriteActions, Action, actionType } from './types';
+import { Sprite } from '../../types';
 import { getNewId } from '../../utils';
 import { LayersActions } from '../Layers';
 import { FramesActions } from '../Frames';

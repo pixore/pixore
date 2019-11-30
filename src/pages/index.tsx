@@ -1,33 +1,19 @@
 import 'react-dynamic-layout/dist/style/base/index.css';
-import 'react-dynamic-layout/dist/style/dark/index.css';
 import '../styles.css';
 import React from 'react';
-import Head from 'next/head';
-import { Global, css } from '@emotion/core';
+import Subdivide, { Config, LayoutState } from '@pixore/subdivide';
 import { Layout, Container, Float, Dragbar } from 'react-dynamic-layout';
+import defaultLayout from '../default-layout.json';
 
-import Tool from '../components/Tool';
 import Editor from '../components/Editor';
-import Menu from '../components/Menu';
-import Canvas from '../components/Canvas';
+import Header from '../components/Header';
+import Head from '../components/Head';
+import GlobalStyle from '../components/GlobalStyle';
 import About from '../components/About';
 import Changelog from '../components/Changelog';
-import FramesAndLayers from '../components/FramesAndLayers';
-import Palette from '../components/Palette';
 import Bootstrap from '../components/Bootstrap';
 import { round2 } from '../utils';
-
-const globalStyle = css`
-  html {
-    box-sizing: border-box;
-  }
-
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
-  }
-`;
+import PanelMaster from '../components/PanelMaster';
 
 const toggle = (val: boolean): boolean => !val;
 
@@ -91,67 +77,24 @@ const IndexPage = () => {
   return (
     <Editor>
       <Bootstrap>
-        <Head>
-          <title>Pixore</title>
-          <meta
-            name="description"
-            content="Pixore, an web-based editor for pixel art"
-          />
-          <script
-            async
-            defer
-            src="https://buttons.github.io/buttons.js"
-          ></script>
-        </Head>
-        <Global styles={globalStyle} />
+        <Head />
+        <GlobalStyle />
         <Layout type={Layout.COLUMN} floats={floats}>
           <Container isFixedSize={true} initialSize={25}>
-            <Menu name="save" />
-            <Menu name="new" />
-            <Menu name="open" />
+            <Header />
           </Container>
           <Container>
-            <Layout type={Layout.ROW}>
-              <Container initialSize={200} isFixedSize={true}>
-                <Palette />
-              </Container>
-              <Container>
-                <Layout type={Layout.COLUMN}>
-                  <Container>
-                    <Layout type={Layout.ROW}>
-                      <Container>
-                        <Layout type={Layout.COLUMN}>
-                          <Container isFixedSize={true} initialSize={25}>
-                            <label>Tabs</label>
-                          </Container>
-                          <Container>
-                            <Canvas />
-                          </Container>
-                        </Layout>
-                      </Container>
-                      <Container isFixedSize={true} initialSize={60}>
-                        <Tool name="pen" />
-                      </Container>
-                    </Layout>
-                  </Container>
-                  <Container isFixedSize={true} initialSize={200}>
-                    {({ dimensions }) => (
-                      <Layout type={Layout.ROW}>
-                        <Container>
-                          <FramesAndLayers />
-                        </Container>
-                        <Container
-                          isFixedSize={true}
-                          initialSize={dimensions.height}
-                        >
-                          {dimensions.height}
-                        </Container>
-                      </Layout>
-                    )}
-                  </Container>
-                </Layout>
-              </Container>
-            </Layout>
+            {({ dimensions }) => {
+              return (
+                <Config.Provider initialState={defaultLayout as LayoutState}>
+                  <Subdivide
+                    height={dimensions.height}
+                    top={25}
+                    component={PanelMaster}
+                  />
+                </Config.Provider>
+              );
+            }}
           </Container>
         </Layout>
       </Bootstrap>

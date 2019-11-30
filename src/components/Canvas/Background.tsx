@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useContainer } from '@pixore/subdivide';
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
 import { clean, getTransparentPattern } from '../../utils';
@@ -9,10 +9,13 @@ import { useArtboard } from '../../contexts/Artboard';
 interface PropTypes {
   width: number;
   height: number;
-  style: React.CSSProperties;
+  scale: number;
+  y: number;
+  x: number;
 }
 
 const Background: React.FC<PropTypes> = (props) => {
+  const { scale, x, y, width, height } = props;
   const sprite = useSprite();
   const artboard = useArtboard();
   const { onRef: setRef, context } = useCanvas2DContext();
@@ -22,16 +25,11 @@ const Background: React.FC<PropTypes> = (props) => {
       const pattern = context.createPattern(getTransparentPattern(), 'repeat');
       clean(context.canvas);
       context.fillStyle = pattern;
-      context.fillRect(
-        artboard.x,
-        artboard.y,
-        sprite.width * artboard.scale,
-        sprite.height * artboard.scale,
-      );
+      context.fillRect(x, y, sprite.width * scale, sprite.height * scale);
     }
-  }, [context, sprite, artboard]);
+  }, [context, sprite, artboard, scale, y, x, width, height]);
 
-  return <CanvasLayer ref={setRef} {...props} />;
+  return <CanvasLayer ref={setRef} width={width} height={height} />;
 };
 
 export default Background;

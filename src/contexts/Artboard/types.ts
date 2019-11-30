@@ -1,8 +1,4 @@
-import { Sprite } from '../Sprite/types';
-
 export enum actionType {
-  CENTER,
-  CHANGE_POSITION,
   CHANGE_ARTBOARD,
   CHANGE_FRAME,
   CHANGE_LAYER,
@@ -17,15 +13,7 @@ export interface Stats {
   left: number;
 }
 
-export interface ChangePositionPayload {
-  scale: number;
-  x: number;
-  y: number;
-}
-
 export interface ArtboardsActions {
-  center: (stats: Stats, sprite: Sprite) => void;
-  changePosition: (payload: ChangePositionPayload) => void;
   changeArtboard: (artboard: Artboard) => void;
   changeLayer: (layer: string) => void;
   changeFrame: (frame: string) => void;
@@ -38,15 +26,12 @@ export interface Artboard {
   id: string;
   primaryColor: string;
   secondaryColor: string;
-  scale: number;
   layer: string;
   frame: string;
   tool: string;
-  x: number;
-  y: number;
 }
 
-type Payload = Artboard | ChangePositionPayload | string;
+type Payload = Artboard | string;
 
 export interface Action {
   type: actionType;

@@ -1,3 +1,4 @@
+import { Size, Stats } from '../types';
 let transparentPattern: HTMLCanvasElement;
 
 declare global {
@@ -72,8 +73,28 @@ const round2 = (num: number) => {
   return Number(num.toFixed(2));
 };
 
+const getScaleAndPosition = (stats: Stats, size: Size) => {
+  const scale =
+    stats.height > stats.width
+      ? round2(stats.width / size.width)
+      : round2(stats.height / size.height);
+
+  const width = size.width * scale;
+  const height = size.height * scale;
+
+  const marginTop = (stats.height - height) / 2;
+  const marginLeft = (stats.width - width) / 2;
+
+  return {
+    scale,
+    x: marginLeft,
+    y: marginTop,
+  };
+};
+
 export {
   round2,
+  getScaleAndPosition,
   preventDefault,
   getTransparentPattern,
   clean,
