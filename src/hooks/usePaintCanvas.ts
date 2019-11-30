@@ -1,7 +1,7 @@
 import React from 'react';
 import { Canvas2DContext } from './useCanvas';
 import { paintBackground, paintMask } from '../utils/paint';
-import { Sprite } from 'src/contexts/Sprite';
+import { Sprite } from '../types';
 import { Artboard } from '../contexts/Artboard';
 
 type UsePaintCanvas = ({
