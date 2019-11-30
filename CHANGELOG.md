@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/pixore/pixore/compare/v0.0.6...v0.1.0) (2019-11-30)
+
+
+### Bug Fixes
+
+* **changelog:** fix release date ([56535c6](https://github.com/pixore/pixore/commit/56535c6f8e09bb3d68e1902dc84c5cbc44c38c0f))
+
 ### [0.0.6](https://github.com/pixore/pixore/compare/v0.0.5...v0.0.6) (2019-11-30)
 
 
