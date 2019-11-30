@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "jest",
+    "test:types": "tsc --noEmit",
     "dev": "next",
     "build": "next build",
     "start": "next start",
