@@ -1,5 +1,4 @@
 import React from 'react';
-import { useContainer } from '@pixore/subdivide';
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
 import { clean, getTransparentPattern } from '../../utils';

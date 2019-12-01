@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
 import { clean, imageSmoothingDisabled } from '../../utils';
