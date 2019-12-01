@@ -21,13 +21,13 @@ interface PropTypes {
 }
 
 const CanvasLayer: React.FC<PropTypes> = (props, ref) => {
-  const { width, height, className } = props;
+  const { width = 0, height = 0, className } = props;
   return (
     <Canvas
       className={className}
       ref={ref}
-      width={width}
-      height={height}
+      width={Math.floor(width)}
+      height={Math.floor(height)}
       onContextMenu={preventDefault}
     />
   );

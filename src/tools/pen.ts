@@ -14,11 +14,15 @@ type Context = ContextRef & {
 };
 
 const addEventListener = (contextRef: Context) => {
-  const { previewContext } = contextRef.current;
+  const { previewContext, sprite } = contextRef.current;
+  const tempContext = document.createElement('canvas').getContext('2d');
   const $window = $(window);
   const $previewCanvas = $(previewContext.canvas);
   const removePanning = addPanning(contextRef);
   const removePreview = addPreview(contextRef);
+
+  tempContext.canvas.width = sprite.width;
+  tempContext.canvas.height = sprite.height;
 
   const onMouseMovePainting = (event: MouseEvent) => {
     const { sprite, lastPosition, canvas } = contextRef.current;
@@ -30,10 +34,10 @@ const addEventListener = (contextRef: Context) => {
     if (validCord(sprite, cord) && validCord(sprite, lastPosition)) {
       if (importantDiff) {
         Vector.lineBetween(lastPosition, cord, (newCord) =>
-          paint(contextRef, newCord),
+          paint(contextRef, newCord, tempContext),
         );
-      } else {
-        paint(contextRef, cord);
+      } else if (lastPosition.y !== cord.y || lastPosition.x !== cord.x) {
+        paint(contextRef, cord, tempContext);
       }
     }
 
@@ -61,7 +65,7 @@ const addEventListener = (contextRef: Context) => {
       contextRef.current.clickType = event.button;
 
       if (validCord(sprite, cord)) {
-        paint(contextRef, cord);
+        paint(contextRef, cord, tempContext);
       }
 
       $window

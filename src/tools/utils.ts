@@ -4,12 +4,13 @@ import { Key } from '../contexts/Modifiers';
 import { getModifierState } from '../utils/keyboard';
 import { manageEvents as $ } from '../utils/dom/events';
 import Vector from '../utils/vector';
-import { round2, isTransparent, clean } from '../utils';
+import { round1, isTransparent, clean } from '../utils';
 import { calculatePosition } from '../utils/canvas';
 import { Artboard } from '../contexts/Artboard';
 
 type RemovePanning = () => void;
 type RemovePreview = () => void;
+type Context2D = CanvasRenderingContext2D;
 
 const addPreview = (contextRef: ContextRef): RemovePreview => {
   const $window = $(window);
@@ -18,8 +19,8 @@ const addPreview = (contextRef: ContextRef): RemovePreview => {
     const { x, y } = cord;
     const { previewContext, canvas } = contextRef.current;
     const { scale } = canvas;
-    const previewX = round2(x * scale + canvas.x);
-    const previewY = round2(y * scale + canvas.y);
+    const previewX = round1(x * scale + canvas.x);
+    const previewY = round1(y * scale + canvas.y);
 
     clean(previewContext.canvas);
 
@@ -107,7 +108,21 @@ const getColor = (artboard: Artboard, clickType: number): string => {
   return clickType === Click.LEFT ? primaryColor : secondaryColor;
 };
 
-const paint = (contextRef: ContextRef, cord: Vector) => {
+const paintOrClear = (context: Context2D, cord: Vector, color: string) => {
+  const { x, y } = cord;
+  if (isTransparent(color)) {
+    context.clearRect(x, y, 1, 1);
+  } else {
+    context.fillStyle = color;
+    context.fillRect(x, y, 1, 1);
+  }
+};
+
+const paint = (
+  contextRef: ContextRef,
+  cord: Vector,
+  tempContext: Context2D,
+) => {
   const {
     artboard,
     sprite,
@@ -116,23 +131,27 @@ const paint = (contextRef: ContextRef, cord: Vector) => {
     canvas,
   } = contextRef.current;
   const { frame, layer } = artboard;
-  const { scale } = canvas;
-  const { x, y } = cord;
+  const { scale, x, y } = canvas;
+  const width = sprite.width * scale;
+  const height = sprite.height * scale;
 
   const color = getColor(artboard, clickType);
   const layerContext = getContext(frame, layer, sprite);
-  const previewX = round2(x * scale + canvas.x);
-  const previewY = round2(y * scale + canvas.y);
 
-  if (isTransparent(color)) {
-    mainContext.clearRect(previewX, previewY, scale, scale);
-    layerContext.clearRect(x, y, 1, 1);
-  } else {
-    mainContext.fillStyle = color;
-    mainContext.fillRect(previewX, previewY, scale, scale);
-    layerContext.fillStyle = color;
-    layerContext.fillRect(x, y, 1, 1);
-  }
+  paintOrClear(layerContext, cord, color);
+  paintOrClear(tempContext, cord, color);
+
+  mainContext.drawImage(
+    layerContext.canvas,
+    0,
+    0,
+    sprite.width,
+    sprite.height,
+    x,
+    y,
+    width,
+    height,
+  );
 };
 
-export { addPanning, addPreview, getColor, paint };
+export { addPanning, addPreview, getColor, paint, paintOrClear };

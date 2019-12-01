@@ -12,7 +12,7 @@ import GlobalStyle from '../components/GlobalStyle';
 import About from '../components/About';
 import Changelog from '../components/Changelog';
 import Bootstrap from '../components/Bootstrap';
-import { round2 } from '../utils';
+import { round1 } from '../utils';
 import PanelMaster from '../components/PanelMaster';
 
 const toggle = (val: boolean): boolean => !val;
@@ -25,8 +25,8 @@ const useFloat = () => {
   const [initialLeft, setInitialLeft] = React.useState(0);
 
   React.useEffect(() => {
-    const left = round2(window.innerWidth / 2 - initialWidth / 2);
-    const top = round2(window.innerHeight / 2 - initialHeight / 1.5);
+    const left = round1(window.innerWidth / 2 - initialWidth / 2);
+    const top = round1(window.innerHeight / 2 - initialHeight / 1.5);
 
     setInitialTop(top);
     setInitialLeft(left);
@@ -72,7 +72,7 @@ const useFloat = () => {
 };
 
 const IndexPage = () => {
-  const floats = useFloat();
+  const floats = []; //useFloat();
 
   return (
     <Editor>
