@@ -6,7 +6,7 @@ import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
 import FrameLayers from './FrameLayers';
 import Background from './Background';
 import Mask from './Mask';
-import { getTool, Context as ListenerContext } from '../../tools';
+import { getTool, Context as ListenerContext, Tool } from '../../tools';
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
 import useCanvas from './useCanvas';
@@ -33,6 +33,19 @@ const Container = styled.div`
   background: #3b4252;
   overflow: hidden;
 `;
+
+const isReady = (
+  previewContext: CanvasRenderingContext2D,
+  mainContext: CanvasRenderingContext2D,
+  tool: Tool,
+): boolean => {
+  return Boolean(
+    previewContext &&
+      previewContext.canvas &&
+      mainContext && mainContext.canvas &&
+      tool,
+  );
+};
 
 const Canvas: React.FC = () => {
   const sprite = useSprite();
@@ -77,14 +90,10 @@ const Canvas: React.FC = () => {
   }, [stats, canvas, sprite]);
 
   React.useEffect(() => {
-    if (!(previewContext && previewContext.canvas)) {
-      return;
-    }
-    if (!(mainContext && mainContext.canvas)) {
-      return;
-    }
-
     const addEventListener = getTool(toolName);
+    if (!isReady(previewContext, mainContext, addEventListener)) {
+      return;
+    }
 
     if (addEventListener) {
       return addEventListener(listenerContextRef);

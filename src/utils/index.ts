@@ -73,11 +73,13 @@ const round2 = (num: number) => {
   return Number(num.toFixed(2));
 };
 
+const defaultMargin = 50;
+
 const getScaleAndPosition = (stats: Stats, size: Size) => {
   const scale =
     stats.height > stats.width
-      ? round2(stats.width / size.width)
-      : round2(stats.height / size.height);
+      ? round2((stats.width - defaultMargin) / size.width)
+      : round2((stats.height - defaultMargin) / size.height);
 
   const width = size.width * scale;
   const height = size.height * scale;
