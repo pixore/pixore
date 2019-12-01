@@ -6,11 +6,12 @@ import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
 import FrameLayers from './FrameLayers';
 import Background from './Background';
 import Mask from './Mask';
-import { getTool, Context as ListenerContext, Tool } from '../../tools';
+import { Context as ListenerContext } from '../../tools';
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
 import useCanvas from './useCanvas';
 import PanelSelect from '../PanelSelect';
+import useTool from './useTool';
 
 const Float = styled.div`
   display: inline-block;
@@ -33,19 +34,6 @@ const Container = styled.div`
   background: #3b4252;
   overflow: hidden;
 `;
-
-const isReady = (
-  previewContext: CanvasRenderingContext2D,
-  mainContext: CanvasRenderingContext2D,
-  tool: Tool,
-): boolean => {
-  return Boolean(
-    previewContext &&
-      previewContext.canvas &&
-      mainContext && mainContext.canvas &&
-      tool,
-  );
-};
 
 const Canvas: React.FC = () => {
   const sprite = useSprite();
@@ -83,22 +71,13 @@ const Canvas: React.FC = () => {
     canvas,
   };
 
+  useTool(listenerContextRef, toolName);
+
   React.useEffect(() => {
     if (stats && canvas.scale === 0) {
       canvas.center(stats, sprite);
     }
   }, [stats, canvas, sprite]);
-
-  React.useEffect(() => {
-    const addEventListener = getTool(toolName);
-    if (!isReady(previewContext, mainContext, addEventListener)) {
-      return;
-    }
-
-    if (addEventListener) {
-      return addEventListener(listenerContextRef);
-    }
-  }, [previewContext, mainContext, toolName]);
 
   const indexOfCurrentLayer = layers.indexOf(layer);
   const layersBelow = layers.slice(0, indexOfCurrentLayer);
