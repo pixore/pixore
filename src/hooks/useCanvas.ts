@@ -22,13 +22,4 @@ const useCanvas2DContext = (): Canvas2DContext => {
   return { context, onRef, canvas };
 };
 
-const useCanvas = () => {
-  return {
-    background: useCanvas2DContext(),
-    mask: useCanvas2DContext(),
-  };
-};
-
 export { useCanvas2DContext };
-
-export default useCanvas;

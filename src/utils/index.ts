@@ -69,15 +69,17 @@ const isTransparent = (value: string): boolean => {
 
 const preventDefault = (event: React.MouseEvent) => event.preventDefault();
 
-const round2 = (num: number) => {
-  return Number(num.toFixed(2));
+const round1 = (num: number) => {
+  return Number(num.toFixed(1));
 };
+
+const defaultMargin = 50;
 
 const getScaleAndPosition = (stats: Stats, size: Size) => {
   const scale =
     stats.height > stats.width
-      ? round2(stats.width / size.width)
-      : round2(stats.height / size.height);
+      ? (stats.width - defaultMargin) / size.width
+      : (stats.height - defaultMargin) / size.height;
 
   const width = size.width * scale;
   const height = size.height * scale;
@@ -93,7 +95,7 @@ const getScaleAndPosition = (stats: Stats, size: Size) => {
 };
 
 export {
-  round2,
+  round1,
   getScaleAndPosition,
   preventDefault,
   getTransparentPattern,

@@ -1344,13 +1344,20 @@
   resolved "https://registry.yarnpkg.com/@pixore/prettier-config/-/prettier-config-0.0.2.tgz#3d1dee70ea9ea79a8a88384447ffd5b14e5afef1"
   integrity sha512-N/5THsJvUJp2tpDRWUYw7cJlPejFic9j/bq4XKp0XtDqVhDQEZDpWd5JhyZTRweyuqNtgevYAQbQMm0OIQ8Uhg==
 
-"@pixore/subdivide@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@pixore/subdivide/-/subdivide-0.0.6.tgz#3626efbba6bd91a90109c50ff3dcb96426b6d81b"
-  integrity sha512-+7UgcbZMeWrvE3SDTgfQDt2avcFFR+wNkMhHTbGQ1x9gnqkM1boxpZFfBhz1LXTkyFDwPmxe64yJQFD8o/V8Og==
+"@pixore/subdivide@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@pixore/subdivide/-/subdivide-0.0.7.tgz#03cf52c08f98524fe1a89141ea260036c0745007"
+  integrity sha512-PnyTXyOZPcog/olajkmjiYMqPCm+NHsItvZ7WDQlkaqKRN7t6ElI0N3RmdR/IPKFCP0jYUEhHs8O5NjazTvszw==
   dependencies:
     tiny-emitter "^2.1.0"
     utility-types "^3.10.0"
+
+"@pixore/window@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@pixore/window/-/window-0.1.0.tgz#8b68887236237d784056f1bb0b314549b20f100c"
+  integrity sha512-jxP92iJXPS4Uh2tlFTRLECBcdB6JX6HEU2/a0F+pinyHTBrtmkj+kC0hBEHHAYEGhXoAPQv/Ub4MBpJD7qHHhA==
+  dependencies:
+    "@reach/portal" "^0.6.2"
 
 "@reach/component-component@^0.6.2":
   version "0.6.2"
@@ -2710,11 +2717,6 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
-
-classnames@^2.2.6:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
-  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
 cli-cursor@^2.1.0:
   version "2.1.0"
@@ -7667,13 +7669,6 @@ react-dom@^16.9.0:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.18.0"
-
-react-dynamic-layout@^4.7.0-beta.3:
-  version "4.7.0-beta.4"
-  resolved "https://registry.yarnpkg.com/react-dynamic-layout/-/react-dynamic-layout-4.7.0-beta.4.tgz#bbaf59e96e24c820abb0a45cd2942432befedded"
-  integrity sha512-8iNbDJgvaKBmnRDsQMtTU3hWgDHyPL4vdvw/IA3ZrGJRi5fDuKuVSkSWKKNu9ZWx2W518TRspeolTvpgR1gtyA==
-  dependencies:
-    classnames "^2.2.6"
 
 react-error-overlay@5.1.6:
   version "5.1.6"

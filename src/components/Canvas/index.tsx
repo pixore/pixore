@@ -3,13 +3,14 @@ import styled from '@emotion/styled';
 import { useContainer } from '@pixore/subdivide';
 import { useSprite, useSpriteActions } from '../../contexts/Sprite';
 import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
+import useCanvas from './useCanvas';
+import useTool from './useTool';
 import FrameLayers from './FrameLayers';
 import Background from './Background';
 import Mask from './Mask';
-import { getTool, Context as ListenerContext } from '../../tools';
+import { Context as ListenerContext } from '../../tools';
 import { useCanvas2DContext } from '../../hooks/useCanvas';
 import CanvasLayer from '../CanvasLayer';
-import useCanvas from './useCanvas';
 import PanelSelect from '../PanelSelect';
 
 const Float = styled.div`
@@ -70,26 +71,13 @@ const Canvas: React.FC = () => {
     canvas,
   };
 
+  useTool(listenerContextRef, toolName);
+
   React.useEffect(() => {
     if (stats && canvas.scale === 0) {
       canvas.center(stats, sprite);
     }
   }, [stats, canvas, sprite]);
-
-  React.useEffect(() => {
-    if (!(previewContext && previewContext.canvas)) {
-      return;
-    }
-    if (!(mainContext && mainContext.canvas)) {
-      return;
-    }
-
-    const addEventListener = getTool(toolName);
-
-    if (addEventListener) {
-      return addEventListener(listenerContextRef);
-    }
-  }, [previewContext, mainContext, toolName]);
 
   const indexOfCurrentLayer = layers.indexOf(layer);
   const layersBelow = layers.slice(0, indexOfCurrentLayer);

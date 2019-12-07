@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/pixore/pixore/compare/v0.1.0...v0.2.0) (2019-12-07)
+
+
+### Features
+
+* **canvas:** add a margin to the default scale ([8682a29](https://github.com/pixore/pixore/commit/8682a2938c30b6d93ef9b239cf3ffc91c508e58e))
+* **canvas:** create useTool ([34e8418](https://github.com/pixore/pixore/commit/34e84182968535676c5e6bcceaa542b2f1d851cb))
+* **welcome:** use @pixore/window to create the welcome window ([e097fad](https://github.com/pixore/pixore/commit/e097fadd773646e3cdd2a77d8f86360779ab1ff1))
+
+
+### Bug Fixes
+
+* **canvas:** make painting pixel perfect base on the layout ([e9f7cc5](https://github.com/pixore/pixore/commit/e9f7cc50afcbc3109a52baa648f604227e4976f8))
+* **types:** fix imported type ([a5073d7](https://github.com/pixore/pixore/commit/a5073d777d885781d8bd8397f630c3e7ce6e3450))
+* **types:** fix imported types ([2d4bc09](https://github.com/pixore/pixore/commit/2d4bc091eb7524c13951a1b79358e5d6c6ea44f0))
+
 ## [0.1.0](https://github.com/pixore/pixore/compare/v0.0.6...v0.1.0) (2019-11-30)
 
 

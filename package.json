@@ -1,6 +1,6 @@
 {
   "name": "pixore",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -26,15 +26,15 @@
   "dependencies": {
     "@emotion/core": "^10.0.16",
     "@emotion/styled": "^10.0.15",
-    "@pixore/subdivide": "0.0.6",
+    "@pixore/subdivide": "^0.0.7",
+    "@pixore/window": "^0.1.0",
     "@reach/menu-button": "^0.6.2",
     "@reach/visually-hidden": "^0.6.2",
     "axios": "^0.19.0",
     "invariant": "^2.2.4",
     "next": "^9.0.5",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-dynamic-layout": "^4.7.0-beta.3"
+    "react-dom": "^16.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
