@@ -8,12 +8,6 @@ body {
   overflow: auto;
 }
 
-.rdl-container {
-  overflow: hidden;
-  outline: unset;
-  background: #2e3440;
-}
-
 button {
   background: #3b4252;
   border: 1px solid #d8dee9;

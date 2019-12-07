@@ -2,6 +2,10 @@ import React from 'react';
 import styled from '@emotion/styled';
 import PanelSelect from './PanelSelect';
 
+interface PropTypes {
+  header?: React.ReactNode;
+}
+
 const Container = styled.div`
   position: absolute;
   top: 0;
@@ -22,9 +26,11 @@ const Header = styled.div`
   border-bottom-width: 0;
   border-top-left-radius: ${radius}px;
   border-top-right-radius: ${radius}px;
+  position: relative;
 `;
 
 const Content = styled.div`
+  overflow: auto;
   background: #434c5e;
   height: calc(100% - 30px);
   border-bottom: 2px #2e3440 solid;
@@ -35,13 +41,11 @@ const Content = styled.div`
   border-bottom-right-radius: ${radius}px;
 `;
 
-const Panel: React.FC = (props) => {
-  const { children } = props;
+const Panel: React.FC<PropTypes> = (props) => {
+  const { children, header } = props;
   return (
     <Container>
-      <Header>
-        <PanelSelect />
-      </Header>
+      <Header>{header || <PanelSelect />}</Header>
       <Content>{children}</Content>
     </Container>
   );
