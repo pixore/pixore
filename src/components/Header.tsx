@@ -39,6 +39,20 @@ const Header = () => {
         </MenuList>
       </Menu>
       <Menu>
+        <MenuButton>Layers</MenuButton>
+        <MenuList>
+          <MenuItem onSelect={notImplemented}>New Layer</MenuItem>
+          <MenuItem onSelect={notImplemented}>Remove Layer</MenuItem>
+        </MenuList>
+      </Menu>
+      <Menu>
+        <MenuButton>Frames</MenuButton>
+        <MenuList>
+          <MenuItem onSelect={notImplemented}>New Frame</MenuItem>
+          <MenuItem onSelect={notImplemented}>Remove Frame</MenuItem>
+        </MenuList>
+      </Menu>
+      <Menu>
         <MenuButton>Layout</MenuButton>
         <MenuList>
           <MenuItem onSelect={notImplemented}>Save Layout</MenuItem>
