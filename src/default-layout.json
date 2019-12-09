@@ -25,12 +25,12 @@
       "id": 1,
       "parent": 6,
       "isGroup": false,
-      "splitRatio": 10.586377899626063,
+      "splitRatio": 22.429888174832573,
       "children": [],
-      "width": 9.523809523809597,
+      "width": 20.17857142857149,
       "height": 27.362355730673993,
       "top": 72.637644269326,
-      "left": 90.47619047619045,
+      "left": 79.82142857142847,
       "state": "preview"
     },
     "2": {
@@ -73,9 +73,9 @@
       "id": 5,
       "parent": 6,
       "isGroup": false,
-      "splitRatio": 89.41362210037391,
+      "splitRatio": 77.57011182516743,
       "children": [],
-      "width": 80.43906176331913,
+      "width": 69.78429985855715,
       "height": 27.362355730673993,
       "top": 72.637644269326,
       "left": 10.037128712871299,
@@ -94,12 +94,7 @@
       "directionType": "HORIZONTAL"
     }
   },
-  "layout": {
-    "top": 0,
-    "left": 0,
-    "width": 1680,
-    "height": 482
-  },
+  "layout": { "top": 0, "left": 0, "width": 1078, "height": 952 },
   "dividers": {
     "0-4": {
       "id": "0-4",
@@ -123,7 +118,7 @@
     },
     "5-1": {
       "id": "5-1",
-      "left": 90.47619047619045,
+      "left": 79.82142857142847,
       "top": 72.637644269326,
       "directionType": "HORIZONTAL",
       "previous": 5,
