@@ -1,4 +1,5 @@
 import React from 'react';
+import VisuallyHidden from '@reach/visually-hidden';
 import styled from '@emotion/styled';
 import { Panels } from '../types';
 import { usePane } from './PanelMaster';
@@ -21,24 +22,29 @@ interface PropTypes {
 
 const PanelSelect: React.FC<PropTypes> = (props) => {
   const { className } = props;
-  const { onChange, panelName } = usePane();
+  const { onChange, panelName, id } = usePane();
+  const selectId = `panel-${id}`;
 
   return (
-    <Select
-      className={className}
-      value={panelName}
-      onChange={onChange}
-      name="panel"
-      id="panel"
-    >
-      {panels.map((panel) => {
-        return (
-          <option key={panel.value} value={panel.value}>
-            {panel.label}
-          </option>
-        );
-      })}
-    </Select>
+    <>
+      <VisuallyHidden>
+        <label htmlFor="selectId">change panel type</label>
+      </VisuallyHidden>
+      <Select
+        className={className}
+        value={panelName}
+        onChange={onChange}
+        id={selectId}
+      >
+        {panels.map((panel) => {
+          return (
+            <option key={panel.value} value={panel.value}>
+              {panel.label}
+            </option>
+          );
+        })}
+      </Select>
+    </>
   );
 };
 

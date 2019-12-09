@@ -85,7 +85,7 @@ const Color: React.FC<PropTypes> = (props) => {
         changeSecondaryColor(value);
       }}
     >
-      {value}
+      color {value}
     </Button>
   );
 };

@@ -9,11 +9,13 @@ import { Panels } from '../types';
 interface ContextValue {
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   panelName: string;
+  id: number;
 }
 
 const Context = React.createContext<ContextValue>({
   onChange: () => undefined,
   panelName: Panels.Palette,
+  id: -1,
 });
 
 const components = {
@@ -24,7 +26,7 @@ const components = {
 };
 
 const Main = () => {
-  const { state, setState } = useContainer();
+  const { state, setState, id } = useContainer();
 
   React.useEffect(() => {
     if (!state) {
@@ -38,6 +40,7 @@ const Main = () => {
 
   const context = {
     onChange,
+    id,
     panelName: state as string,
   };
 
