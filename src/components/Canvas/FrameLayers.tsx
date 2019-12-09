@@ -33,7 +33,7 @@ const FrameLayers: React.FC<PropTypes> = (props, ref) => {
       const width = sprite.width * scale;
       const height = sprite.height * scale;
 
-      clean(context.canvas);
+      clean(context);
       imageSmoothingDisabled(context);
 
       layers.reduce<void>((_, layer) => {

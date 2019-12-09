@@ -22,7 +22,7 @@ const addPreview = (contextRef: ContextRef): RemovePreview => {
     const previewX = round1(x * scale + canvas.x);
     const previewY = round1(y * scale + canvas.y);
 
-    clean(previewContext.canvas);
+    clean(previewContext);
 
     previewContext.strokeStyle = 'black';
     previewContext.strokeRect(previewX, previewY, scale, scale);
@@ -141,6 +141,7 @@ const paint = (
   paintOrClear(layerContext, cord, color);
   paintOrClear(tempContext, cord, color);
 
+  clean(mainContext);
   mainContext.drawImage(
     layerContext.canvas,
     0,

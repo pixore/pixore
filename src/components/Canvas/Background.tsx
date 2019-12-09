@@ -22,7 +22,7 @@ const Background: React.FC<PropTypes> = (props) => {
   React.useEffect(() => {
     if (context) {
       const pattern = context.createPattern(getTransparentPattern(), 'repeat');
-      clean(context.canvas);
+      clean(context);
       context.fillStyle = pattern;
       context.fillRect(x, y, sprite.width * scale, sprite.height * scale);
     }
