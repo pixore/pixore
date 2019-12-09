@@ -9,12 +9,13 @@ body {
 }
 
 button {
-  background: #3b4252;
-  border: 1px solid #d8dee9;
+  background: #d8dee9;
+  border: 0px solid #d8dee9;
   padding: 4px 8px;
   border-radius: 4px;
   margin: 2px;
-  color: #d8dee9;
+  color: #2e3440;
+  font-size: 0.8rem;
 }
 
 * {

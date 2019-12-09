@@ -39,7 +39,7 @@ const Bootstrap: React.FC<PropTypes> = (props) => {
 
   if (sprite.layers.length === 0) {
     addNewLayerToSprite({
-      name: 'First Layer',
+      name: 'Layer 1',
     });
 
     return null;
