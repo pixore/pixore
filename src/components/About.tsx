@@ -1,8 +1,10 @@
 import React from 'react';
+import pkg from '../../package.json';
+
 const About: React.FC = () => {
   return (
     <>
-      <h3>About Pixore (v0.1.0)</h3>
+      <h3>About Pixore (v{pkg.version})</h3>
       <hr />
       <p>
         Hi, {"I'm"} Jose and welcome to Pixore, an editor for pixel art heavily

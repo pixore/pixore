@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { Window, WindowState } from '@pixore/window';
+import pkg from '../../package.json';
 import About from './About';
 import Changelog from './Changelog';
 import Panel from './Panel';
@@ -22,20 +23,23 @@ const WelcomeWindow: React.FC = () => {
   const width = 600;
 
   React.useEffect(() => {
-    const left = Math.floor(window.innerWidth / 2 - width / 2);
-    const top = Math.floor(window.innerHeight / 2 - height / 1.5);
+    if (!localStorage.getItem(pkg.version)) {
+      const left = Math.floor(window.innerWidth / 2 - width / 2);
+      const top = Math.floor(window.innerHeight / 2 - height / 1.5);
 
-    stateRef.current = {
-      top,
-      left,
-      height,
-      width,
-    };
+      stateRef.current = {
+        top,
+        left,
+        height,
+        width,
+      };
 
-    setIsOpen(true);
+      setIsOpen(true);
+    }
   }, []);
 
   const onRequestedClose = () => {
+    localStorage.setItem(pkg.version, 'closed');
     setIsOpen(false);
   };
 
