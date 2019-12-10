@@ -10,6 +10,7 @@ const Head = () => {
         name="description"
         content="Pixore, an web-based editor for pixel art"
       />
+      <link rel="manifest" href="/manifest.json" />
       <script
         async
         src="https://www.googletagmanager.com/gtag/js?id=UA-113899183-2"
