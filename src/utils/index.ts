@@ -97,6 +97,8 @@ const getScaleAndPosition = (stats: Stats, size: Size) => {
   };
 };
 
+const toggleState = (state: boolean) => !state;
+
 export {
   round1,
   getScaleAndPosition,
@@ -108,4 +110,5 @@ export {
   getIdByReference,
   getNewId,
   isTransparent,
+  toggleState,
 };

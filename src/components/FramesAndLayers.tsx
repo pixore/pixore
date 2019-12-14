@@ -44,7 +44,8 @@ const FramesAndLayers = () => {
   const { addNewFrameToSprite, addNewLayerToSprite } = useSpriteActions();
 
   const onNewFrame = () => {
-    addNewFrameToSprite();
+    const frame = addNewFrameToSprite();
+    changeFrame(frame);
   };
 
   const onSelectFrameAndLayer = (frame: string, layer: string) => {
