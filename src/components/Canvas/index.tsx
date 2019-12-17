@@ -27,7 +27,6 @@ const Float = styled.div`
 
 const Canvas: React.FC = () => {
   const container = useContainer();
-  const { isPlaying, button } = usePlayAndPause(false);
   const sprite = useSprite();
   const { stats } = container;
   const { onRef: setMainRef, context: mainContext } = useCanvas2DContext();
@@ -42,6 +41,10 @@ const Canvas: React.FC = () => {
   const { onWheel } = canvas;
   const { layer, tool: toolName } = artboard;
   const { layers } = sprite;
+  const { isPlaying, button } = usePlayAndPause(
+    false,
+    sprite.frames.length === 1,
+  );
 
   const listenerContextRef = React.useRef<ListenerContext>({
     mainContext,
@@ -82,6 +85,7 @@ const Canvas: React.FC = () => {
   // TODO while zooming in/out if the users try to paint
   // an error happen, therefore painting should be blocked while
   // zooming in/out, and zooming in/out should be block white painting
+  // TODO when the canvas is in play mode, any interaction should deactivate it
   return (
     <HeadlessPanel onWheel={onWheel}>
       <Background {...stats} {...canvas} />

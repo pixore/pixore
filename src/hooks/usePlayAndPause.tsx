@@ -1,27 +1,35 @@
 import React from 'react';
+import styled from '@emotion/styled';
 import { toggleState } from '../utils';
 
-type PropTypes = Omit<React.HTMLProps<HTMLButtonElement>, 'type'> & {
-  isPlaying: boolean;
-};
+const Button = styled.button`
+  :disabled {
+    cursor: not-allowed;
+  }
+`;
 
-const Button: React.FC<PropTypes> = (props) => {
-  const { isPlaying, ...more } = props;
-  return <button {...more}>{isPlaying ? 'pause' : 'play'}</button>;
-};
-
-const usePlayAndPause = (defaultState = false) => {
+const usePlayAndPause = (defaultState = false, disabled = false) => {
   const [isPlaying, setIsPlaying] = React.useState(defaultState);
 
   const onClick = () => {
     setIsPlaying(toggleState);
   };
 
-  const button = <Button onClick={onClick} isPlaying={isPlaying} />;
+  const optional = {} as any;
+
+  if (disabled) {
+    optional.disabled = disabled;
+  }
+
+  const button = (
+    <Button {...optional} onClick={onClick} isPlaying={isPlaying}>
+      {isPlaying ? 'pause' : 'play'}
+    </Button>
+  );
 
   return {
     button,
-    isPlaying,
+    isPlaying: isPlaying && !disabled,
     setIsPlaying,
   };
 };

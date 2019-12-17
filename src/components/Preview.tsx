@@ -32,7 +32,10 @@ const Preview: React.FC<PropTypes> = () => {
   const { stats } = useContainer();
   const sprite = useSprite();
   const canvas = useCanvas(stats);
-  const { button, isPlaying } = usePlayAndPause(true);
+  const { button, isPlaying } = usePlayAndPause(
+    true,
+    sprite.frames.length === 1,
+  );
 
   const onCenter = () => {
     canvas.center(stats, sprite);
