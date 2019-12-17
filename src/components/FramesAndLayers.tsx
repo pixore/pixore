@@ -1,14 +1,39 @@
-/** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import React from 'react';
+import styled from '@emotion/styled';
 import { useSpriteActions, useSprite } from '../contexts/Sprite';
 import { useLayers } from '../contexts/Layers';
-import { useFrames } from '../contexts/Frames';
 import { useArtboard, useArtboardActions } from '../contexts/Artboard';
 import Panel from './Panel';
 
-const baseStyle = css`
-  border: 1px solid black;
-  border-collapse: collapse;
+interface SelectedProps {
+  isActive: boolean;
+}
+
+const SelectedLayer = styled.tr`
+  text-align: center;
+  ${({ isActive }: SelectedProps) => isActive && `background: #5e81ac;`}
+`;
+
+const Td = styled.td`
+  text-align: center;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 10px;
+  &:hover {
+    background: #5e81ac;
+  }
+`;
+
+const SelectedFrame = SelectedLayer.withComponent('col');
+
+const SelectedCell = styled(Td)`
+  width: 26px;
+  ${({ isActive }: SelectedProps) =>
+    isActive &&
+    `background: #81A1C1;
+    &:hover {
+      background: #81A1C1;
+    }`};
 `;
 
 const FramesAndLayers = () => {
@@ -16,11 +41,11 @@ const FramesAndLayers = () => {
   const sprite = useSprite();
   const artboard = useArtboard();
   const layers = useLayers();
-  const frames = useFrames();
   const { addNewFrameToSprite, addNewLayerToSprite } = useSpriteActions();
 
   const onNewFrame = () => {
-    addNewFrameToSprite();
+    const frame = addNewFrameToSprite();
+    changeFrame(frame);
   };
 
   const onSelectFrameAndLayer = (frame: string, layer: string) => {
@@ -29,8 +54,9 @@ const FramesAndLayers = () => {
   };
 
   const onNewLayer = () => {
+    const length = Object.keys(layers).length + 1;
     const layer = addNewLayerToSprite({
-      name: 'New Layer',
+      name: `Layer ${length}`,
     });
 
     changeLayer(layer);
@@ -44,53 +70,35 @@ const FramesAndLayers = () => {
     <Panel>
       <button onClick={onNewFrame}>New Frame</button>
       <button onClick={onNewLayer}>New Layer</button>
-      <table css={baseStyle}>
+      <table>
         <colgroup>
           <col />
           {sprite.frames.map((frame) => (
-            <col
-              key={frame}
-              style={{
-                background:
-                  frame === artboard.frame ? 'darkgray' : 'transparent',
-              }}
-            />
+            <SelectedFrame isActive={frame === artboard.frame} key={frame} />
           ))}
         </colgroup>
         <tbody>
           <tr>
-            <td css={baseStyle} />
+            <td />
             {sprite.frames.map((frame, index) => (
-              <td css={baseStyle} key={frame}>
+              <Td key={frame} onClick={() => changeFrame(frame)}>
                 {index + 1}
-              </td>
+              </Td>
             ))}
           </tr>
           {sprite.layers.map((layer) => (
-            <tr
-              key={layer}
-              style={{
-                background:
-                  layer === artboard.layer ? 'darkgray' : 'transparent',
-              }}
-            >
-              <td css={baseStyle}>{layers[layer].name}</td>
+            <SelectedLayer isActive={layer === artboard.layer} key={layer}>
+              <Td onClick={() => changeLayer(layer)}>{layers[layer].name}</Td>
               {sprite.frames.map((frame) => (
-                <td
+                <SelectedCell
+                  isActive={
+                    frame === artboard.frame && layer === artboard.layer
+                  }
                   key={frame}
-                  css={baseStyle}
                   onClick={() => onSelectFrameAndLayer(frame, layer)}
-                  style={{
-                    background:
-                      frame === artboard.frame && layer === artboard.layer
-                        ? 'gray'
-                        : 'transparent',
-                  }}
-                >
-                  {frames[frame].id}
-                </td>
+                />
               ))}
-            </tr>
+            </SelectedLayer>
           ))}
         </tbody>
       </table>

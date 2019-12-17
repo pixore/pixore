@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/pixore/pixore/compare/v0.2.0...v0.3.0) (2019-12-17)
+
+
+### Features
+
+* **analytics:** add analytics for production ([02e1d25](https://github.com/pixore/pixore/commit/02e1d255d1bb707a40bffac161e80b17850757e0))
+* **layout:** improve layout size ([02f3067](https://github.com/pixore/pixore/commit/02f3067f262fb8dc17d217783d709c69bd7b4405))
+* **play:** add disable state for the play button ([4692421](https://github.com/pixore/pixore/commit/46924213c8233db985783d5b7c6694212dd2cfaf))
+* **preview:** create hook to share play and pause logic ([c3e7740](https://github.com/pixore/pixore/commit/c3e774080d4cf5668f57ce4e9fbe4e59e2e3f977))
+* **preview:** create preview panel ([094d48a](https://github.com/pixore/pixore/commit/094d48ad638941022c5649badbd81df9ca144826))
+* **sequencer:** improve sequencer styles ([6720a36](https://github.com/pixore/pixore/commit/6720a3619fc32577e08268517106a490d2acb203))
+* **welcome:** show only once the welcome window by version ([b185c4f](https://github.com/pixore/pixore/commit/b185c4fc92c9b1ff4954cdaa40bd21f3fb3c33b6))
+* **welcome:** update changelog ([9e8364c](https://github.com/pixore/pixore/commit/9e8364c69983fc48a223d46a250a8157e59b113b))
+
+
+### Bug Fixes
+
+* **a11y:** fix a11y problems ([366bab2](https://github.com/pixore/pixore/commit/366bab29d380896b009cfc8c8cea6f8afe0ed365))
+* **canvas:** fix preview when the color is transparent ([2e32ea6](https://github.com/pixore/pixore/commit/2e32ea6a949df617b66ab7cb3dd71f93586fa33f))
+
 ## [0.2.0](https://github.com/pixore/pixore/compare/v0.1.0...v0.2.0) (2019-12-07)
 
 

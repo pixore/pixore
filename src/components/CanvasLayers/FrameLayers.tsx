@@ -28,29 +28,31 @@ const FrameLayers: React.FC<PropTypes> = (props, ref) => {
   }, [canvas, ref]);
 
   React.useEffect(() => {
-    if (context) {
-      const { frame } = artboard;
-      const width = sprite.width * scale;
-      const height = sprite.height * scale;
-
-      clean(context.canvas);
-      imageSmoothingDisabled(context);
-
-      layers.reduce<void>((_, layer) => {
-        const layerContext = getContext(frame, layer, sprite);
-        context.drawImage(
-          layerContext.canvas,
-          0,
-          0,
-          sprite.width,
-          sprite.height,
-          x,
-          y,
-          width,
-          height,
-        );
-      }, undefined);
+    if (!context) {
+      return;
     }
+
+    const { frame } = artboard;
+    const width = sprite.width * scale;
+    const height = sprite.height * scale;
+
+    clean(context);
+    imageSmoothingDisabled(context);
+
+    layers.forEach((layer) => {
+      const layerContext = getContext(frame, layer, sprite);
+      context.drawImage(
+        layerContext.canvas,
+        0,
+        0,
+        sprite.width,
+        sprite.height,
+        x,
+        y,
+        width,
+        height,
+      );
+    });
   }, [context, sprite, artboard, layers, x, y, scale, width, height]);
 
   return <CanvasLayer ref={setRef} width={width} height={height} />;

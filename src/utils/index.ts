@@ -40,9 +40,12 @@ const getTransparentPattern = () => {
   return transparentPattern;
 };
 
-const clean = (canvas: HTMLCanvasElement) => {
-  canvas.width = canvas.width;
-  return canvas;
+const clean = (context: CanvasRenderingContext2D) => {
+  const {
+    canvas: { width, height },
+  } = context;
+
+  context.clearRect(0, 0, width, height);
 };
 
 let counter = 0;
@@ -94,6 +97,8 @@ const getScaleAndPosition = (stats: Stats, size: Size) => {
   };
 };
 
+const toggleState = (state: boolean) => !state;
+
 export {
   round1,
   getScaleAndPosition,
@@ -105,4 +110,5 @@ export {
   getIdByReference,
   getNewId,
   isTransparent,
+  toggleState,
 };

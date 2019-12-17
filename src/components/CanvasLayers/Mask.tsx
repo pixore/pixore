@@ -27,7 +27,7 @@ const Mask: React.FC<PropTypes> = (props) => {
     }
     const width = sprite.width * scale;
     const height = sprite.height * scale;
-    clean(context.canvas);
+    clean(context);
     context.fillStyle = '#494949';
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);
     context.clearRect(x, y, width, height);

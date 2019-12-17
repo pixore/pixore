@@ -9,6 +9,7 @@ const MenuButton = styled(Reach.MenuButton)`
   background: transparent;
   border: 0px;
   text-decoration: underline;
+  color: #eceff4;
 `;
 
 const MenuList = styled(Reach.MenuList)`
