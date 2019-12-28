@@ -28,7 +28,7 @@ const PanelSelect: React.FC<PropTypes> = (props) => {
   return (
     <>
       <VisuallyHidden>
-        <label htmlFor="selectId">change panel type</label>
+        <label htmlFor={selectId}>change panel type</label>
       </VisuallyHidden>
       <Select
         className={className}
