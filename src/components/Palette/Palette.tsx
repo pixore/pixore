@@ -1,6 +1,6 @@
 import React from 'react';
-import Color from './Color';
-import Panel from './Panel';
+import Color from './PaletteColor';
+import Panel from '../Panel';
 
 const Palette: React.FC = () => {
   return (

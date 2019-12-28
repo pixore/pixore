@@ -23,7 +23,7 @@ const About: React.FC = () => {
         🚀
       </p>
 
-      <h3>Some obvious instructions (at least for me)</h3>
+      <h3>Some basic instructions</h3>
       <hr />
       <ul>
         <li>

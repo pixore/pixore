@@ -2,7 +2,7 @@ import React from 'react';
 import { useContainer } from '@pixore/subdivide';
 import Canvas from './Canvas';
 import FramesAndLayers from './FramesAndLayers';
-import Palette from './Palette';
+import Palette from './Palette/Palette';
 import Preview from './Preview';
 import { Panels } from '../types';
 

@@ -25,7 +25,7 @@ const WelcomeWindow: React.FC = () => {
   React.useEffect(() => {
     if (!localStorage.getItem(pkg.version)) {
       const left = Math.floor(window.innerWidth / 2 - width / 2);
-      const top = Math.floor(window.innerHeight / 2 - height / 1.5);
+      const top = Math.floor(window.innerHeight / 2 - height / 1.8);
 
       stateRef.current = {
         top,
