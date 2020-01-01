@@ -1,9 +1,7 @@
 import React from 'react';
 import { useContainer } from '@pixore/subdivide';
-import Canvas from './Canvas';
-import FramesAndLayers from './FramesAndLayers';
 import Palette from './Palette/Palette';
-import Preview from './Preview';
+import { components } from '../panels';
 import { Panels } from '../types';
 
 interface ContextValue {
@@ -17,13 +15,6 @@ const Context = React.createContext<ContextValue>({
   panelName: Panels.Palette,
   id: -1,
 });
-
-const components = {
-  [Panels.Canvas]: Canvas,
-  [Panels.Sequencer]: FramesAndLayers,
-  [Panels.Palette]: Palette,
-  [Panels.Preview]: Preview,
-};
 
 const Main = () => {
   const { state, setState, id } = useContainer();

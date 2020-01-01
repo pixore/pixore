@@ -19,16 +19,7 @@ const Float = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-interface PropTypes {
-  width: number;
-  height: number;
-  isPlaying: boolean;
-  scale: number;
-  x: number;
-  y: number;
-}
-
-const Preview: React.FC<PropTypes> = () => {
+const Preview: React.FC = () => {
   const { stats } = useContainer();
   const sprite = useSprite();
   const canvas = useCanvas(stats);

@@ -5,6 +5,14 @@ export enum Panels {
   Preview = 'preview',
 }
 
+export enum Windows {
+  Canvas = 'canvas',
+  Palette = 'palette',
+  Sequencer = 'sequencer',
+  Preview = 'preview',
+  Welcome = 'welcome',
+}
+
 export interface Palette {
   id: string;
   name: string;
