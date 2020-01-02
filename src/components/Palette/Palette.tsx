@@ -1,11 +1,34 @@
 import React from 'react';
+import styled from '@emotion/styled';
 import Color from './PaletteColor';
 import Panel from '../Panel';
+
+const ColorsContainers = styled.div`
+  margin: 4px;
+  display: grid;
+  font-size: 0;
+  grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+  grid-auto-rows: 1fr;
+  grid-gap: 1px;
+
+  &::before {
+    content: '';
+    width: 0;
+    padding-bottom: 100%;
+    grid-row: 1 / 1;
+    grid-column: 1 / 1;
+  }
+
+  & > *:first-child {
+    grid-row: 1 / 1;
+    grid-column: 1 / 1;
+  }
+`;
 
 const Palette: React.FC = () => {
   return (
     <Panel>
-      <div style={{ fontSize: 0 }}>
+      <ColorsContainers>
         <Color value="transparent" />
         <Color value="#000000" />
         <Color value="#12173D" />
@@ -53,7 +76,7 @@ const Palette: React.FC = () => {
         <Color value="#27D3CB" />
         <Color value="#00AAA5" />
         <Color value="#008782" />
-      </div>
+      </ColorsContainers>
     </Panel>
   );
 };
