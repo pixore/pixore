@@ -11,6 +11,7 @@ export enum Windows {
   Sequencer = 'sequencer',
   Preview = 'preview',
   Welcome = 'welcome',
+  ColorPicker = 'color-picker',
 }
 
 export interface Palette {

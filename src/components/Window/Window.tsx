@@ -1,5 +1,6 @@
 import React from 'react';
-import { Window as Win, WindowState } from '@pixore/window';
+import styled from '@emotion/styled';
+import { Window as Win, WindowState, DragArea } from '@pixore/window';
 import pkg from '../../../package.json';
 import Panel from '../Panel';
 import CloseButton from './CloseButton';
@@ -19,6 +20,14 @@ const minState: WindowState = {
   width: 100,
 };
 
+const Header = styled(DragArea)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+
 const Window: React.FC<PropTypes> = (props) => {
   const { closeWindow } = useWindowsActions();
   const { children, state, name } = props;
@@ -26,7 +35,11 @@ const Window: React.FC<PropTypes> = (props) => {
   const withBackdrop = isWelcome ? true : false;
   const isResizeable = isWelcome ? false : true;
 
-  const header = <CloseButton />;
+  const header = (
+    <Header>
+      <CloseButton />
+    </Header>
+  );
 
   const onRequestedClose = () => {
     if (isWelcome) {
