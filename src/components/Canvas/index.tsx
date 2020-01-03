@@ -14,14 +14,16 @@ import PanelSelect from '../PanelSelect';
 import { HeadlessPanel } from '../Panel';
 import { usePlayAndPause } from '../../hooks/usePlayAndPause';
 import Frames from '../CanvasLayers/Frames';
+import Tools from './Tools';
+import CenterButton from '../CenterButton';
 
 const Float = styled.div`
   display: inline-block;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 4px;
+  left: 70px;
   padding: 2px;
-  border-radius: 6px;
+  border-radius: 3px;
   background: rgba(0, 0, 0, 0.5);
 `;
 
@@ -116,8 +118,9 @@ const Canvas: React.FC = () => {
       <Float>
         <PanelSelect />
         {button}
-        <button onClick={onCenter}>center</button>
+        <CenterButton onClick={onCenter} />
       </Float>
+      <Tools />
     </HeadlessPanel>
   );
 };
