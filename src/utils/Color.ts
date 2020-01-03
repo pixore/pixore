@@ -1,4 +1,4 @@
-export interface Color {
+interface Color {
   red: number;
   green: number;
   blue: number;
@@ -12,11 +12,18 @@ export interface HSLColor {
   alpha: number;
 }
 
+export interface HSVColor {
+  hue: number;
+  saturation: number;
+  value: number;
+  alpha: number;
+}
+
 const create = (
   red: number,
   green: number,
   blue: number,
-  alpha = 0,
+  alpha = 1,
 ): Color => ({
   red,
   green,
@@ -24,15 +31,27 @@ const create = (
   alpha,
 });
 
-const createHSL = (
+const createHsl = (
   hue: number,
   saturation: number,
   lightness: number,
-  alpha = 0,
+  alpha = 1,
 ): HSLColor => ({
   hue,
   saturation,
   lightness,
+  alpha,
+});
+
+const createHsv = (
+  hue: number,
+  saturation: number,
+  value: number,
+  alpha = 1,
+) => ({
+  hue,
+  saturation,
+  value,
   alpha,
 });
 
@@ -51,7 +70,7 @@ const toHex = (color: Color): string =>
 
 const toInt = (value: number) => Math.round(value * 100);
 
-const toHSL = (color: Color): HSLColor => {
+const toHsl = (color: Color): HSLColor => {
   const { alpha } = color;
   const red = color.red / 255;
   const green = color.green / 255;
@@ -93,6 +112,99 @@ const toHSL = (color: Color): HSLColor => {
   };
 };
 
+const toHsv = (color: Color): HSVColor => {
+  const { alpha } = color;
+  const red = color.red / 255;
+  const green = color.green / 255;
+  const blue = color.blue / 255;
+
+  const max = Math.max(red, green, blue);
+  const min = Math.min(red, green, blue);
+  const hsv = createHsv(0, 0, 0, alpha);
+
+  const C = max - min;
+
+  if (C == 0) {
+    hsv.hue = 0;
+  } else if (max == red) {
+    hsv.hue = ((green - blue) / C) % 6;
+  } else if (min == green) {
+    hsv.hue = (blue - red) / C + 2;
+  } else {
+    hsv.hue = (red - green) / C + 4;
+  }
+  hsv.hue = hsv.hue * 60;
+  if (hsv.hue < 0) {
+    hsv.hue = hsv.hue + 360;
+  }
+  hsv.value = max;
+  if (hsv.value == 0) {
+    hsv.saturation = 0;
+  } else {
+    hsv.saturation = C / hsv.value;
+  }
+
+  hsv.hue = Math.round(hsv.hue);
+  hsv.saturation = Math.round(hsv.saturation * 100);
+  hsv.value = Math.round(hsv.value * 100);
+
+  return hsv;
+};
+
+const fromHex = (hex: string) => {
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+  if (!result) {
+    throw new Error('Invalid value');
+  }
+
+  return create(
+    parseInt(result[1], 16),
+    parseInt(result[2], 16),
+    parseInt(result[3], 16),
+  );
+};
+
+const fromHsv = (color: HSVColor) => {
+  const { alpha } = color;
+  const hue = color.hue / 60;
+  const saturation = color.saturation / 100.0;
+  const value = color.value / 100.0;
+  const C = value * saturation;
+  const X = C * (1 - Math.abs((hue % 2) - 1));
+
+  const rgb = create(0, 0, 0, alpha);
+  if (hue >= 0 && hue < 1) {
+    rgb.red = C;
+    rgb.green = X;
+  } else if (hue >= 1 && hue < 2) {
+    rgb.red = X;
+    rgb.green = C;
+  } else if (hue >= 2 && hue < 3) {
+    rgb.green = C;
+    rgb.blue = X;
+  } else if (hue >= 3 && hue < 4) {
+    rgb.green = X;
+    rgb.blue = C;
+  } else if (hue >= 4 && hue < 5) {
+    rgb.red = X;
+    rgb.blue = C;
+  } else {
+    rgb.red = C;
+    rgb.blue = X;
+  }
+
+  const m = value - C;
+  rgb.red = Math.round((rgb.red + m) * 255);
+  rgb.green = Math.round((rgb.green + m) * 255);
+  rgb.blue = Math.round((rgb.blue + m) * 255);
+
+  return rgb;
+};
+
 const fromHsl = (color: HSLColor) => {
   const { alpha } = color;
   const hue = color.hue / 60;
@@ -129,12 +241,26 @@ const fromHsl = (color: HSLColor) => {
   return rgb;
 };
 
+const black = () => create(0, 0, 0);
+const transparent = () => create(0, 0, 0, 0);
+const isTransparent = (color: Color | HSLColor) => color.alpha === 0;
+const toString = ({ red, green, blue, alpha }: Color) =>
+  `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+
 const Color = {
   create,
+  createHsl,
+  createHsv,
   fromHsl,
-  toHSL,
+  fromHex,
+  fromHsv,
+  toHsl,
+  toHsv,
   toHex,
-  createHSL,
+  toString,
+  black,
+  transparent,
+  isTransparent,
 };
 
 export default Color;
