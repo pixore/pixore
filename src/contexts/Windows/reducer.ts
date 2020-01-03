@@ -3,34 +3,72 @@ import {
   actionType,
   Action,
   WindowsActions,
-  WindowState,
+  OpenPayload,
+  WindowConfig,
 } from './types';
+
+let idCounter = 0;
+const createId = () => {
+  const id = `window-${idCounter}`;
+  idCounter = idCounter + 1;
+
+  return id;
+};
 
 const reducer = (state: WindowsState, action: Action): WindowsState => {
   const { type, payload } = action;
 
   switch (type) {
     case actionType.OPEN_WINDOW:
-      return state.concat(payload as WindowState);
+      const { state: windowState, id } = payload as OpenPayload;
+      return {
+        ...state,
+        [id]: windowState,
+      };
     case actionType.CLOSE_WINDOW:
-      return state.filter((item) => item.name !== payload);
+      const newState = {
+        ...state,
+      };
+
+      Reflect.deleteProperty(newState, payload as string);
+
+      return newState;
     default:
       return state;
   }
 };
 
+const defaultConfig: WindowConfig = {
+  dragable: true,
+  resizable: true,
+  backdrop: false,
+};
+
 type Dispatch = (action: Action) => void;
 const createActions = (dispatch: Dispatch): WindowsActions => ({
-  openWindow(name, state) {
+  openWindow(name, args) {
+    const { config, props, state } = args;
+    const id = createId();
+
     dispatch({
       type: actionType.OPEN_WINDOW,
-      payload: { name, state },
+      payload: {
+        id,
+        state: {
+          name,
+          config: Object.assign(defaultConfig, config),
+          props,
+          state,
+        },
+      },
     });
+
+    return id;
   },
-  closeWindow(name) {
+  closeWindow(id) {
     dispatch({
       type: actionType.CLOSE_WINDOW,
-      payload: name,
+      payload: id,
     });
   },
 });

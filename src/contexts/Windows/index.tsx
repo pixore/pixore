@@ -3,10 +3,11 @@ import invariant from 'invariant';
 import { WindowsActions, WindowsState } from './types';
 import { reducer, createActions } from './reducer';
 
-const defaultState = [];
+const defaultState = {};
 const defaultActions = {
   openWindow() {
     invariant(false, 'Context not implemented');
+    return 'id';
   },
   closeWindow() {
     invariant(false, 'Context not implemented');

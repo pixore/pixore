@@ -7,10 +7,13 @@ import CloseButton from './CloseButton';
 import { Windows } from '../../types';
 import { useWindowsActions } from '../../contexts/Windows';
 import { Context } from './Context';
+import { WindowConfig } from 'src/contexts/Windows/types.js';
 
 interface PropTypes {
   state: WindowState;
   name: Windows;
+  config: WindowConfig;
+  id: string;
 }
 
 const minState: WindowState = {
@@ -30,15 +33,18 @@ const Header = styled(DragArea)`
 
 const Window: React.FC<PropTypes> = (props) => {
   const { closeWindow } = useWindowsActions();
-  const { children, state, name } = props;
+  const { children, state, id, config } = props;
   const isWelcome = name === Windows.Welcome;
-  const withBackdrop = isWelcome ? true : false;
-  const isResizeable = isWelcome ? false : true;
+  const { dragable, backdrop, resizable } = config;
+  const withBackdrop = isWelcome ? true : backdrop;
+  const isResizeable = isWelcome ? false : resizable;
 
-  const header = (
+  const header = dragable ? (
     <Header>
       <CloseButton />
     </Header>
+  ) : (
+    <CloseButton />
   );
 
   const onRequestedClose = () => {
@@ -46,10 +52,11 @@ const Window: React.FC<PropTypes> = (props) => {
       localStorage.setItem(pkg.version, 'closed');
     }
 
-    closeWindow(name);
+    closeWindow(id);
   };
 
   const value = {
+    id,
     onRequestedClose,
   };
 

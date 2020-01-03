@@ -16,11 +16,13 @@ const Windows = () => {
   const windows = useWindowsState();
   return (
     <>
-      {windows.map(({ name, state }, index) => {
+      {Object.keys(windows).map((id) => {
+        const window = windows[id];
+        const { props, name } = window;
         const Panel = windowsComponents[name];
         return (
-          <Window name={name} state={state} key={index}>
-            <Panel />;
+          <Window id={id} {...window} key={id}>
+            <Panel {...props} />;
           </Window>
         );
       })}

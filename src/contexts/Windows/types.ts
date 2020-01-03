@@ -6,26 +6,42 @@ export enum actionType {
   CLOSE_WINDOW,
 }
 
-export interface OpenPayload {
+export interface WindowConfig {
+  dragable: boolean;
+  backdrop: boolean;
+  resizable: boolean;
+}
+
+export interface WindowState {
   name: Windows;
+  props: unknown;
+  config: WindowConfig;
   state: WinState;
 }
 
-export type Payload = OpenPayload | Windows;
+export interface OpenPayload {
+  id: string;
+  state: WindowState;
+}
+
+export type Payload = OpenPayload | string;
 
 export interface Action {
   type: actionType;
   payload: Payload;
 }
 
-export interface WindowsActions {
-  openWindow: (panelName: Windows, state: WinState) => void;
-  closeWindow: (panelName: Windows) => void;
-}
-
-export interface WindowState {
-  name: Windows;
+export interface OpenWindowArgs {
   state: WinState;
+  config?: Partial<WindowConfig>;
+  props?: unknown;
 }
 
-export type WindowsState = WindowState[];
+export interface WindowsActions {
+  openWindow: (panelName: Windows, args: OpenWindowArgs) => string;
+  closeWindow: (id: string) => void;
+}
+
+export interface WindowsState {
+  [key: string]: WindowState;
+}

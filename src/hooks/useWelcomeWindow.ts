@@ -16,7 +16,9 @@ const useWelcomeWindow = (autoOpen = false) => {
   const autoOpenRef = React.useRef(autoOpen);
 
   const openWelcomeWindow = React.useCallback(() => {
-    openWindow(Windows.Welcome, getWindowPosition());
+    openWindow(Windows.Welcome, {
+      state: getWindowPosition(),
+    });
   }, [openWindow]);
 
   React.useEffect(() => {
