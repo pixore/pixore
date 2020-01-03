@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { TinyEmitter } from 'tiny-emitter';
 import * as Sprites from '../contexts/Sprites';
 import * as Sprite from '../contexts/Sprite';
 import * as Artboards from '../contexts/Artboards';
@@ -12,6 +12,14 @@ import * as Windows from '../contexts/Windows';
 interface EditorProps {
   children: React.ReactNode;
 }
+
+const emitter = new TinyEmitter();
+
+const Context = React.createContext({
+  emitter,
+});
+
+const useEmitter = () => React.useContext(Context).emitter;
 
 const Editor: React.FC<EditorProps> = (props) => {
   const { children } = props;
@@ -35,4 +43,5 @@ const Editor: React.FC<EditorProps> = (props) => {
   );
 };
 
+export { useEmitter };
 export default Editor;
