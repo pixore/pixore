@@ -5,6 +5,7 @@ import { useSpritesActions, useSprites } from '../contexts/Sprites';
 import { useSpriteActions } from '../contexts/Sprite';
 import { useArtboards, useArtboardsActions } from '../contexts/Artboards';
 import { useArtboard } from '../contexts/Artboard';
+import { black, transparent } from '../utils/Color';
 
 interface PropTypes {
   children: React.ReactNode;
@@ -58,8 +59,8 @@ const Bootstrap: React.FC<PropTypes> = (props) => {
       addArtboard({
         id,
         tool: 'pen',
-        primaryColor: '#000000',
-        secondaryColor: 'transparent',
+        primaryColor: black(),
+        secondaryColor: transparent(),
         frame: frames[0],
         layer: layers[0],
       });

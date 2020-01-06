@@ -263,4 +263,20 @@ const Color = {
   isTransparent,
 };
 
+export {
+  create,
+  createHsl,
+  createHsv,
+  fromHsl,
+  fromHex,
+  fromHsv,
+  toHsl,
+  toHsv,
+  toHex,
+  toString,
+  black,
+  transparent,
+  isTransparent,
+};
+
 export default Color;

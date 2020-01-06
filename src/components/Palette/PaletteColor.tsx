@@ -2,8 +2,9 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 
-import Color from '../Color';
+import BoxColor from '../BoxColor';
 import { useArtboardActions, useArtboard } from '../../contexts/Artboard';
+import Color from '../../utils/Color';
 
 interface SelectMarksPropTypes {
   isSelectedAsPrimary: boolean;
@@ -74,28 +75,28 @@ const SelectMarks = styled.div`
 `;
 
 interface PropTypes {
-  value: string;
+  val: Color;
 }
 
 const PaletteColor: React.FC<PropTypes> = (props) => {
   const { changePrimaryColor, changeSecondaryColor } = useArtboardActions();
   const { primaryColor, secondaryColor } = useArtboard();
-  const { value } = props;
+  const { val } = props;
 
   return (
     <Container>
-      <Color
+      <BoxColor
         size="100%"
-        value={value}
-        onClick={() => changePrimaryColor(value)}
+        val={val}
+        onClick={() => changePrimaryColor(val)}
         onContextMenu={(event) => {
           event.preventDefault();
-          changeSecondaryColor(value);
+          changeSecondaryColor(val);
         }}
       />
       <SelectMarks
-        isSelectedAsPrimary={primaryColor === value}
-        isSelectedAsSecondary={secondaryColor === value}
+        isSelectedAsPrimary={primaryColor === val}
+        isSelectedAsSecondary={secondaryColor === val}
       />
     </Container>
   );

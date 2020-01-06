@@ -1,4 +1,5 @@
 import { Artboard, ArtboardsActions, actionType, Action } from './types';
+import Color from '../../utils/Color';
 
 const reducer = (state: Artboard, action: Action): Artboard => {
   const { type, payload } = action;
@@ -19,12 +20,12 @@ const reducer = (state: Artboard, action: Action): Artboard => {
     case actionType.CHANGE_PRIMARY_COLOR:
       return {
         ...state,
-        primaryColor: payload as string,
+        primaryColor: payload as Color,
       };
     case actionType.CHANGE_SECONDARY_COLOR:
       return {
         ...state,
-        secondaryColor: payload as string,
+        secondaryColor: payload as Color,
       };
     case actionType.CHANGE_TOOL:
       return {

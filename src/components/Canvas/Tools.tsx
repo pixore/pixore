@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import Color from '../Color';
+import BoxColor from '../BoxColor';
 import { useArtboard } from '../../contexts/Artboard';
 import { useWindowsActions } from '../../contexts/Windows';
 import { Windows } from '../../types';
+import { useEmitter } from '../Editor';
 
 const Container = styled.div`
   display: inline-block;
@@ -43,28 +44,45 @@ const PrimaryColor = styled.div`
 `;
 
 const Tools: React.FC = () => {
+  const emitter = useEmitter();
   const { primaryColor, secondaryColor } = useArtboard();
   const { openWindow } = useWindowsActions();
+  const [colorPickerId, setColorPickerId] = React.useState();
 
   const openPicker = (event: React.MouseEvent) => {
     const { clientX, clientY } = event;
-    openWindow(Windows.ColorPicker, {
-      top: clientY,
-      left: clientX,
-      height: 350,
-      width: 400,
+    const id = openWindow(Windows.ColorPicker, {
+      state: {
+        top: clientY,
+        left: clientX,
+        height: 350,
+        width: 400,
+      },
+      config: {
+        backdrop: true,
+      },
     });
+    setColorPickerId(id);
   };
+
+  React.useEffect(() => {
+    if (colorPickerId) {
+      const onDone = () => {};
+
+      emitter.on(colorPickerId, onDone);
+      return () => emitter.off(colorPickerId, onDone);
+    }
+  }, [colorPickerId, emitter]);
 
   return (
     <>
       <Container>
         <Colors>
           <SecondaryColor>
-            <Color onClick={openPicker} size={size} value={secondaryColor} />
+            <BoxColor onClick={openPicker} size={size} val={secondaryColor} />
           </SecondaryColor>
           <PrimaryColor>
-            <Color onClick={openPicker} size={size} value={primaryColor} />
+            <BoxColor onClick={openPicker} size={size} val={primaryColor} />
           </PrimaryColor>
         </Colors>
       </Container>
