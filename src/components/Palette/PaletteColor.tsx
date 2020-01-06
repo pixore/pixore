@@ -4,7 +4,7 @@ import { css } from '@emotion/core';
 
 import BoxColor from '../BoxColor';
 import { useArtboardActions, useArtboard } from '../../contexts/Artboard';
-import Color from '../../utils/Color';
+import { Color } from '../../utils/Color';
 
 interface SelectMarksPropTypes {
   isSelectedAsPrimary: boolean;

@@ -7,7 +7,7 @@ import Vector from '../utils/vector';
 import { round1, clean } from '../utils';
 import { calculatePosition } from '../utils/canvas';
 import { Artboard } from '../contexts/Artboard';
-import { isTransparent, toString } from '../utils/Color';
+import { isTransparent, toString, Color } from '../utils/Color';
 
 type RemovePanning = () => void;
 type RemovePreview = () => void;

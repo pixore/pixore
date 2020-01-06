@@ -1,38 +1,39 @@
-import Color from '../Color';
+import {
+  toHsl,
+  toHsv,
+  create,
+  createHsv,
+  createHsl,
+  fromHsl,
+  fromHsv,
+  fromHex,
+} from '../Color';
 
 test('toHsl', () => {
-  expect(Color.toHsl(Color.create(21, 105, 172))).toEqual(
-    Color.createHsl(207, 78, 38),
-  );
+  expect(toHsl(create(21, 105, 172))).toEqual(createHsl(207, 78, 38));
 
-  expect(Color.toHsl(Color.create(255, 0, 0))).toEqual(
-    Color.createHsl(0, 100, 50),
-  );
+  expect(toHsl(create(255, 0, 0))).toEqual(createHsl(0, 100, 50));
 });
 
 test('toHsv', () => {
-  expect(Color.toHsv(Color.create(21, 105, 172))).toEqual(
-    Color.createHsv(207, 88, 67),
-  );
+  expect(toHsv(create(21, 105, 172))).toEqual(createHsv(207, 88, 67));
 
-  expect(Color.toHsl(Color.create(255, 0, 0))).toEqual(
-    Color.createHsl(0, 100, 50),
-  );
+  expect(toHsl(create(255, 0, 0))).toEqual(createHsl(0, 100, 50));
 });
 
 test('fromHsl', () => {
-  const expected = Color.create(21, 104, 172);
-  const hsl = Color.createHsl(207, 78, 38);
-  expect(Color.fromHsl(hsl)).toEqual(expected);
+  const expected = create(21, 104, 172);
+  const hsl = createHsl(207, 78, 38);
+  expect(fromHsl(hsl)).toEqual(expected);
 });
 
 test('fromHsv', () => {
-  const expected = Color.create(224, 142, 121);
-  const hsv = Color.createHsv(12, 46, 88);
-  expect(Color.fromHsv(hsv)).toEqual(expected);
+  const expected = create(224, 142, 121);
+  const hsv = createHsv(12, 46, 88);
+  expect(fromHsv(hsv)).toEqual(expected);
 });
 
 test('fromHex', () => {
-  expect(Color.fromHex('#909EDD')).toEqual(Color.create(144, 158, 221));
-  expect(Color.fromHex('#FFE091')).toEqual(Color.create(255, 224, 145));
+  expect(fromHex('#909EDD')).toEqual(create(144, 158, 221));
+  expect(fromHex('#FFE091')).toEqual(create(255, 224, 145));
 });

@@ -1,4 +1,4 @@
-import Color from '../../utils/Color';
+import { Color } from '../../utils/Color';
 
 export enum actionType {
   CHANGE_ARTBOARD,

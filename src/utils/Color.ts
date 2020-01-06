@@ -1,4 +1,4 @@
-interface Color {
+export interface Color {
   red: number;
   green: number;
   blue: number;
@@ -241,30 +241,20 @@ const fromHsl = (color: HSLColor) => {
   return rgb;
 };
 
+const fullAlpha = ({ red, green, blue }: Color) => create(red, green, blue);
+const pureHue = ({ hue }: HSVColor) => {
+  return fromHsv(createHsv(hue, 100, 100));
+};
 const black = () => create(0, 0, 0);
 const transparent = () => create(0, 0, 0, 0);
 const isTransparent = (color: Color | HSLColor) => color.alpha === 0;
 const toString = ({ red, green, blue, alpha }: Color) =>
   `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 
-const Color = {
-  create,
-  createHsl,
-  createHsv,
-  fromHsl,
-  fromHex,
-  fromHsv,
-  toHsl,
-  toHsv,
-  toHex,
-  toString,
-  black,
-  transparent,
-  isTransparent,
-};
-
 export {
   create,
+  pureHue,
+  fullAlpha,
   createHsl,
   createHsv,
   fromHsl,
@@ -278,5 +268,3 @@ export {
   transparent,
   isTransparent,
 };
-
-export default Color;

@@ -1,5 +1,5 @@
 import { Artboard, ArtboardsActions, actionType, Action } from './types';
-import Color from '../../utils/Color';
+import { Color } from '../../utils/Color';
 
 const reducer = (state: Artboard, action: Action): Artboard => {
   const { type, payload } = action;

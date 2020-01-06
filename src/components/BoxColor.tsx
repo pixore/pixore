@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import { getStringTransparentPattern } from '../utils';
-import Color from '../utils/Color';
+import { Color, toString } from '../utils/Color';
+import { getTransparentBackground, getBackgroundColor } from '../utils/css';
 
 type Value = number | string;
 
@@ -37,20 +37,6 @@ const getSize = ({ size }: ButtonPropTypes) => {
   `;
 };
 
-const getBackground = ({ val }: ButtonPropTypes) => {
-  if (Color.isTransparent(val)) {
-    const transparent = getStringTransparentPattern();
-    return css`
-      background-size: 30px;
-      background-image: url(${transparent});
-    `;
-  }
-
-  return css`
-    background: ${Color.toString(val)};
-  `;
-};
-
 const Button = styled.button<ButtonPropTypes>`
   font-size: 0;
   display: inline-block;
@@ -59,8 +45,19 @@ const Button = styled.button<ButtonPropTypes>`
   padding: 0;
   border: 0;
   border-radius: 0;
-  ${getBackground};
+  background-size: 30px;
+  ${getTransparentBackground()}
   ${getSize}
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    ${getBackgroundColor}
+  }
 `;
 
 type PropTypes = {
@@ -72,7 +69,7 @@ const BoxColor: React.FC<PropTypes> = (props) => {
   const { val, size = 30 } = props;
   return (
     <Button {...props} size={size} type="button">
-      color {Color.toString(val)}
+      color {toString(val)}
     </Button>
   );
 };
