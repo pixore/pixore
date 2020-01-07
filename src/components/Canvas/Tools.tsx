@@ -56,7 +56,7 @@ const Tools: React.FC = () => {
         top: clientY,
         left: clientX,
         height: 350,
-        width: 400,
+        width: 550,
       },
       config: {
         backdrop: true,

@@ -29,6 +29,8 @@
     "@pixore/subdivide": "^0.0.8",
     "@pixore/window": "^0.1.0",
     "@reach/menu-button": "^0.6.2",
+    "@reach/slider": "^0.7.0",
+    "@reach/tabs": "^0.7.0",
     "@reach/visually-hidden": "^0.6.2",
     "axios": "^0.19.0",
     "invariant": "^2.2.4",

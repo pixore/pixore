@@ -4,7 +4,7 @@ import { components } from '../../panels';
 import { Windows as Wins } from '../../types';
 import Window from './Window';
 import { useWindowsState } from '../../contexts/Windows';
-import ColorPicker from './ColorPicker';
+import ColorPicker from './ColorPicker/ColorPicker';
 
 const windowsComponents = {
   ...components,
@@ -22,7 +22,7 @@ const Windows = () => {
         const Panel = windowsComponents[name];
         return (
           <Window id={id} {...window} key={id}>
-            <Panel {...props} />;
+            <Panel {...props} />
           </Window>
         );
       })}

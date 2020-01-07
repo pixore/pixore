@@ -1,3 +1,5 @@
+import '@reach/slider/styles.css';
+import '@reach/tabs/styles.css';
 import '../styles.css';
 import React from 'react';
 import Subdivide, { Config, LayoutState } from '@pixore/subdivide';

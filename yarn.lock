@@ -1359,6 +1359,11 @@
   dependencies:
     "@reach/portal" "^0.6.2"
 
+"@reach/auto-id@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.7.0.tgz#da7f11c11bc5aff809ccec9706a9f5d8da6052dd"
+  integrity sha512-8NU8NKItNBBscC7qsTvRFCxtHMzBy/wFTrPkAVqraUxfEhNc4UnA4vr1XsduTNfHRwr262+NbDTSeO9EqTRIjA==
+
 "@reach/component-component@^0.6.2":
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/@reach/component-component/-/component-component-0.6.2.tgz#83b367b6476ef928f101319d37416bc15bd01e2f"
@@ -1399,10 +1404,34 @@
     "@reach/observe-rect" "^1.0.3"
     prop-types "^15.7.2"
 
+"@reach/slider@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@reach/slider/-/slider-0.7.0.tgz#ee945582b9a990574321d5190841cbcc4571e374"
+  integrity sha512-IlGp90+65aA0LF93Z+HPxDSSSPbOLZMJx2wjsOMbN+Hk7vne9Ov3IUP/2vMhmh0lc4bIUoUlTbc87hmkWL/Slw==
+  dependencies:
+    "@reach/auto-id" "^0.7.0"
+    "@reach/utils" "^0.7.0"
+    warning "^4.0.3"
+
+"@reach/tabs@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@reach/tabs/-/tabs-0.7.0.tgz#716ba800e82988a98cf324674c5bb09d28c3e937"
+  integrity sha512-HTuQThG5FSQ0IDJC/2r6wrGJc/Ik7VC0CGL3Bykx/IGuQXL0TkTjQMiNtLNoddwyuY0oRGwZhXL7uZp+JozrRg==
+  dependencies:
+    "@reach/auto-id" "^0.7.0"
+    "@reach/utils" "^0.7.0"
+    prop-types "^15.7.2"
+    warning "^4.0.3"
+
 "@reach/utils@^0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.6.1.tgz#7345dcd624f92779fb4a0fc4a28ab16d69b53476"
   integrity sha512-SMGDydSjmvOz3Q4faGGJikdeqHumHmxB1YfYR7XTWrDQxJMod+J7mSkaS12NY4o/uPQ4xOwwL6cXWN+KpFjOQg==
+
+"@reach/utils@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.7.0.tgz#d089552bee11b9900cb8b54d4f151362a509eb54"
+  integrity sha512-sqPUQzpA+ofGd+38kZ3PylG5NrsbPCP6U+W5+YOrrxGDobX04807ofNRrq30unGo1ueIBzwcm5C5pu33FshpmQ==
 
 "@reach/visually-hidden@^0.6.2":
   version "0.6.2"
