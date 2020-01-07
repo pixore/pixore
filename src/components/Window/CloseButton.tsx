@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { useWindow } from './Context';
+import { useEmitter } from '../Editor';
 
 const Button = styled.button`
   background: transparent;
@@ -15,15 +16,16 @@ const Button = styled.button`
 type PropTypes = React.HTMLProps<HTMLButtonElement>;
 
 const CloseButton: React.FC<PropTypes> = (props) => {
-  const { onRequestedClose } = useWindow();
+  const emitter = useEmitter();
+  const { onRequestedClose, id } = useWindow();
+
+  const onClose = () => {
+    emitter.emit(id, {});
+    onRequestedClose();
+  };
 
   return (
-    <Button
-      {...props}
-      onClick={onRequestedClose}
-      type="button"
-      aria-label="close"
-    >
+    <Button {...props} onClick={onClose} type="button" aria-label="close">
       <svg
         width={10}
         height={10}

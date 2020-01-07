@@ -1,14 +1,18 @@
 import React from 'react';
-import WelcomeWindow from '../../components/WelcomeWindow';
 import { components } from '../../panels';
 import { Windows as Wins } from '../../types';
 import Window from './Window';
 import { useWindowsState } from '../../contexts/Windows';
-import ColorPicker from './ColorPicker/ColorPicker';
+import Welcome from './Welcome';
+import ColorPicker, {
+  PropTypes as ColorPickerPropTypes,
+} from './ColorPicker/ColorPicker';
+
+type WindowPropsTypes = ColorPickerPropTypes;
 
 const windowsComponents = {
   ...components,
-  [Wins.Welcome]: WelcomeWindow,
+  [Wins.Welcome]: Welcome,
   [Wins.ColorPicker]: ColorPicker,
 };
 
@@ -22,7 +26,7 @@ const Windows = () => {
         const Panel = windowsComponents[name];
         return (
           <Window id={id} {...window} key={id}>
-            <Panel {...props} />
+            <Panel {...(props as WindowPropsTypes)} />
           </Window>
         );
       })}

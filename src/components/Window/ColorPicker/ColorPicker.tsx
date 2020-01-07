@@ -31,18 +31,15 @@ import {
   SaturationAndValuePicker,
 } from './elements';
 import {
-  create,
   fromHsv,
   toHsl,
   toHsv,
   toString,
   pureHue,
   HSVColor,
+  Color,
 } from '../../../utils/Color';
 import { useMouseEvent } from '../../../hooks/useMouseEvent';
-
-const currentColor = create(250, 230, 100, 0.5);
-const newColor = create(250, 130, 100, 1);
 
 const getValueBetween = (value: number, max: number, min = 0) => {
   if (value < min) {
@@ -59,23 +56,36 @@ interface MouseEvent {
   clientY: number;
 }
 
-const ColorPicker: React.FC = () => {
+export interface PropTypes {
+  color: Color;
+}
+
+const ColorPicker: React.FC<PropTypes> = (props) => {
+  const { color } = props;
   const svPickerRef = React.useRef<HTMLDivElement>();
   const huePickerRef = React.useRef<HTMLDivElement>();
   const alphaPickerRef = React.useRef<HTMLDivElement>();
+  const addColorRef = React.useRef<HTMLInputElement>();
   const { id, onRequestedClose } = useWindow();
   const emitter = useEmitter();
-  const [rgb, setRgb] = React.useState(newColor);
+  const [rgb, setRgb] = React.useState(color);
   const [hsv, setHsv] = React.useState(toHsv(rgb));
   const [hsl, setHsl] = React.useState(toHsl(rgb));
 
   const newColorWithFullAlpha = pureHue(hsv);
 
-  const onClick = () => {
-    emitter.emit(id);
+  const onDone = () => {
+    emitter.emit(id, {
+      color: rgb,
+      addToPalette: addColorRef.current.checked,
+    });
     onRequestedClose();
   };
 
+  const onCancel = () => {
+    emitter.emit(id, {});
+    onRequestedClose();
+  };
   const updateHsv = (newHsv: HSVColor) => {
     const newRgb = fromHsv(newHsv);
     setHsv(newHsv);
@@ -207,7 +217,7 @@ const ColorPicker: React.FC = () => {
         </PickersContainer>
         <ValuesContainer>
           <ColorsContainer>
-            <CurrentColor val={currentColor} />
+            <CurrentColor val={color} />
             <NewColor val={rgb} />
           </ColorsContainer>
           <ColorRepresentations>
@@ -284,9 +294,17 @@ const ColorPicker: React.FC = () => {
         </ValuesContainer>
       </TopContainer>
       <BottomContainer>
-        <button onClick={onClick}>Done</button>
-        <button onClick={onClick}>Cancel</button>
-        <button onClick={onClick}>As a new color</button>
+        <button onClick={onDone}>Done</button>
+        <button onClick={onCancel}>Cancel</button>
+        <label>
+          <input
+            ref={addColorRef}
+            type="checkbox"
+            defaultChecked
+            name="add-color"
+          />
+          add to the palette
+        </label>
       </BottomContainer>
     </Container>
   );
