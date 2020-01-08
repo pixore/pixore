@@ -250,6 +250,12 @@ const transparent = () => create(0, 0, 0, 0);
 const isTransparent = (color: Color | HSLColor) => color.alpha === 0;
 const toString = ({ red, green, blue, alpha }: Color) =>
   `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+const isEqual = (color1: Color, color2: Color) =>
+  color1 === color2 ||
+  (color1.red === color2.red &&
+    color1.green === color2.green &&
+    color1.blue === color2.blue &&
+    color1.alpha === color2.alpha);
 
 export {
   create,
@@ -267,4 +273,5 @@ export {
   black,
   transparent,
   isTransparent,
+  isEqual,
 };
