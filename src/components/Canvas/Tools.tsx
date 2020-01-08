@@ -7,6 +7,7 @@ import { useWindowsActions } from '../../contexts/Windows';
 import { Windows } from '../../types';
 import { useEmitter } from '../Editor';
 import { Color } from '../../utils/Color';
+import { usePaletteActions } from '../../contexts/Palette';
 
 const Container = styled.div`
   display: inline-block;
@@ -53,6 +54,7 @@ type UpdateColorCallback = (color: Color) => void;
 
 const Tools: React.FC = () => {
   const emitter = useEmitter();
+  const { addColor } = usePaletteActions();
   const { primaryColor, secondaryColor } = useArtboard();
   const { changePrimaryColor, changeSecondaryColor } = useArtboardActions();
   const { openWindow } = useWindowsActions();
@@ -80,11 +82,16 @@ const Tools: React.FC = () => {
     });
     setColorPickerId(id);
 
-    emitter.once(id, ({ color }: ColorPickerDone) => {
+    emitter.once(id, ({ color, addToPalette }: ColorPickerDone) => {
       setColorPickerId(null);
-      if (color) {
-        callback(color);
+      if (!color) {
+        return;
       }
+
+      if (addToPalette) {
+        addColor(color);
+      }
+      callback(color);
     });
   };
 

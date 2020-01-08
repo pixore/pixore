@@ -8,6 +8,8 @@ import * as Layers from '../contexts/Layers';
 import * as Frames from '../contexts/Frames';
 import * as Modifiers from '../contexts/Modifiers';
 import * as Windows from '../contexts/Windows';
+import * as Palettes from '../contexts/Palettes';
+import * as Palette from '../contexts/Palette';
 
 interface EditorProps {
   children: React.ReactNode;
@@ -26,19 +28,23 @@ const Editor: React.FC<EditorProps> = (props) => {
 
   return (
     <Modifiers.Provider>
-      <Frames.Provider>
-        <Layers.Provider>
-          <Sprites.Provider>
-            <Sprite.Provider>
-              <Artboards.Provider>
-                <Artboard.Provider>
-                  <Windows.Provider>{children}</Windows.Provider>
-                </Artboard.Provider>
-              </Artboards.Provider>
-            </Sprite.Provider>
-          </Sprites.Provider>
-        </Layers.Provider>
-      </Frames.Provider>
+      <Palettes.Provider>
+        <Palette.Provider>
+          <Frames.Provider>
+            <Layers.Provider>
+              <Sprites.Provider>
+                <Sprite.Provider>
+                  <Artboards.Provider>
+                    <Artboard.Provider>
+                      <Windows.Provider>{children}</Windows.Provider>
+                    </Artboard.Provider>
+                  </Artboards.Provider>
+                </Sprite.Provider>
+              </Sprites.Provider>
+            </Layers.Provider>
+          </Frames.Provider>
+        </Palette.Provider>
+      </Palettes.Provider>
     </Modifiers.Provider>
   );
 };

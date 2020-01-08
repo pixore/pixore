@@ -5,14 +5,23 @@ import { useSpritesActions, useSprites } from '../contexts/Sprites';
 import { useSpriteActions } from '../contexts/Sprite';
 import { useArtboards, useArtboardsActions } from '../contexts/Artboards';
 import { useArtboard } from '../contexts/Artboard';
-import { black, transparent } from '../utils/Color';
+import { transparent, Color } from '../utils/Color';
+import { usePalettesActions, usePalettes } from '../contexts/Palettes';
+import defaultPalette from '../default-palette.json';
+import { usePalette, usePaletteActions } from '../contexts/Palette';
 
 interface PropTypes {
   children: React.ReactNode;
 }
 
+const getFirstNonTransparentColor = (colors: Color[]) => {
+  return colors.find((color) => color.alpha !== 0);
+};
+
 const Bootstrap: React.FC<PropTypes> = (props) => {
   const { children } = props;
+  const { addPalette } = usePalettesActions();
+  const { changePalette } = usePaletteActions();
   const { addNewLayerToSprite, addNewFrameToSprite } = useSpriteActions();
   const { addSprite } = useSpritesActions();
   const { addArtboard } = useArtboardsActions();
@@ -21,6 +30,8 @@ const Bootstrap: React.FC<PropTypes> = (props) => {
   const sprites = useSprites();
   const artboards = useArtboards();
   const artboard = useArtboard();
+  const palettes = usePalettes();
+  const palette = usePalette();
 
   if (!sprite) {
     const spriteIds = Object.keys(sprites);
@@ -52,6 +63,18 @@ const Bootstrap: React.FC<PropTypes> = (props) => {
     return null;
   }
 
+  const paletteIds = Object.keys(palettes);
+
+  if (paletteIds.length === 0) {
+    addPalette(defaultPalette);
+    return null;
+  }
+
+  if (!palette) {
+    changePalette(palettes[paletteIds[0]]);
+    return null;
+  }
+
   if (!artboard) {
     const { id, frames, layers } = sprite;
     const artboardIds = Object.keys(artboards);
@@ -59,7 +82,7 @@ const Bootstrap: React.FC<PropTypes> = (props) => {
       addArtboard({
         id,
         tool: 'pen',
-        primaryColor: black(),
+        primaryColor: getFirstNonTransparentColor(palette.colors),
         secondaryColor: transparent(),
         frame: frames[0],
         layer: layers[0],

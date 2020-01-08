@@ -4,7 +4,7 @@ import { css } from '@emotion/core';
 
 import BoxColor from '../BoxColor';
 import { useArtboardActions, useArtboard } from '../../contexts/Artboard';
-import { Color } from '../../utils/Color';
+import { Color, isEqual } from '../../utils/Color';
 
 interface SelectMarksPropTypes {
   isSelectedAsPrimary: boolean;
@@ -95,8 +95,8 @@ const PaletteColor: React.FC<PropTypes> = (props) => {
         }}
       />
       <SelectMarks
-        isSelectedAsPrimary={primaryColor === val}
-        isSelectedAsSecondary={secondaryColor === val}
+        isSelectedAsPrimary={isEqual(primaryColor, val)}
+        isSelectedAsSecondary={isEqual(secondaryColor, val)}
       />
     </Container>
   );
