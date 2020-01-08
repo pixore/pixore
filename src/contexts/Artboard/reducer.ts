@@ -1,4 +1,4 @@
-import { Artboard, ArtboardsActions, actionType, Action } from './types';
+import { Artboard, ArtboardActions, actionType, Action } from './types';
 import { Color } from '../../utils/Color';
 
 const reducer = (state: Artboard, action: Action): Artboard => {
@@ -39,7 +39,7 @@ const reducer = (state: Artboard, action: Action): Artboard => {
 
 type Dispatch = (action: Action) => void;
 
-const createActions = (dispatch: Dispatch): ArtboardsActions => ({
+const createActions = (dispatch: Dispatch): ArtboardActions => ({
   changeArtboard(artboard: Artboard) {
     dispatch({
       type: actionType.CHANGE_ARTBOARD,

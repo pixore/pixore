@@ -15,7 +15,7 @@ export interface Stats {
   left: number;
 }
 
-export interface ArtboardsActions {
+export interface ArtboardActions {
   changeArtboard: (artboard: Artboard) => void;
   changeLayer: (layer: string) => void;
   changeFrame: (frame: string) => void;
