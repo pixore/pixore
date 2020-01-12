@@ -20,6 +20,7 @@ const useWelcomeWindow = (autoOpen = false) => {
       state: getWindowPosition(),
       config: {
         backdrop: true,
+        resizable: false,
       },
     });
   }, [openWindow]);

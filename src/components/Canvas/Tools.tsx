@@ -107,15 +107,6 @@ const Tools: React.FC = () => {
     });
   };
 
-  React.useEffect(() => {
-    if (colorPickerId) {
-      const onDone = () => {};
-
-      emitter.on(colorPickerId, onDone);
-      return () => emitter.off(colorPickerId, onDone);
-    }
-  }, [colorPickerId, emitter]);
-
   return (
     <>
       <Container>

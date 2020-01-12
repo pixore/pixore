@@ -36,8 +36,6 @@ const Window: React.FC<PropTypes> = (props) => {
   const { children, state, id, config, name } = props;
   const isWelcome = name === Windows.Welcome;
   const { dragable, backdrop, resizable } = config;
-  const withBackdrop = isWelcome ? true : backdrop;
-  const isResizeable = isWelcome ? false : resizable;
 
   const header = dragable ? (
     <Header>
@@ -63,11 +61,11 @@ const Window: React.FC<PropTypes> = (props) => {
   return (
     <Context.Provider value={value}>
       <Win
-        withBackdrop={withBackdrop}
+        withBackdrop={backdrop}
         minState={minState}
         initialState={state}
         onRequestedClose={onRequestedClose}
-        isResizeable={isResizeable}
+        isResizeable={resizable}
       >
         <Panel header={header}>{children}</Panel>
       </Win>
