@@ -18,6 +18,9 @@ const useWelcomeWindow = (autoOpen = false) => {
   const openWelcomeWindow = React.useCallback(() => {
     openWindow(Windows.Welcome, {
       state: getWindowPosition(),
+      config: {
+        backdrop: true,
+      },
     });
   }, [openWindow]);
 

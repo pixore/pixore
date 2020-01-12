@@ -33,7 +33,7 @@ const Header = styled(DragArea)`
 
 const Window: React.FC<PropTypes> = (props) => {
   const { closeWindow } = useWindowsActions();
-  const { children, state, id, config } = props;
+  const { children, state, id, config, name } = props;
   const isWelcome = name === Windows.Welcome;
   const { dragable, backdrop, resizable } = config;
   const withBackdrop = isWelcome ? true : backdrop;
