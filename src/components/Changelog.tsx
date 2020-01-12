@@ -42,6 +42,13 @@ const Changelog: React.FC = () => {
             <li>Fix the preview while using the pen with transparent</li>
           </ul>
         </li>
+        <li>
+          <h4>0.4.0 (2020-01-12)</h4>
+          <ul>
+            <li>Brand color picker</li>
+            <li>Style improvements</li>
+          </ul>
+        </li>
       </ul>
 
       <p style={{ textAlign: 'center' }}>
