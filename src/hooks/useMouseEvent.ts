@@ -1,4 +1,5 @@
 import React from 'react';
+import throttle from 'lodash.throttle';
 
 interface UseMouseEventOptions {
   onMouseDown?: React.MouseEventHandler;
@@ -14,20 +15,20 @@ const useMouseEvent = (options: UseMouseEventOptions) => {
       onMouseDown(event);
     }
 
-    const mouseMoveHandler = (event: MouseEvent) => {
+    const mouseMoveHandler = throttle((event: MouseEvent) => {
       if (onMouseMove) {
         onMouseMove(event);
       }
-    };
+    }, 100);
 
-    const mouseUpHandler = (event: MouseEvent) => {
+    const mouseUpHandler = throttle((event: MouseEvent) => {
       if (onMouseUp) {
         onMouseUp(event);
       }
 
       window.removeEventListener('mousemove', mouseMoveHandler);
       window.removeEventListener('mouseup', mouseUpHandler);
-    };
+    }, 10);
 
     window.addEventListener('mousemove', mouseMoveHandler);
     window.addEventListener('mouseup', mouseUpHandler);

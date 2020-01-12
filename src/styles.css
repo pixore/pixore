@@ -23,11 +23,11 @@ button span {
   font-size: 0.8rem;
 }
 
-[data-reach-slider-orientation='horizontal'] {
+/* [data-reach-slider-orientation='horizontal'] {
   width: 100%;
-  padding-left: 0;
-  padding-right: 0;
-}
+  padding: 0;
+  margin: 
+} */
 
 * {
   -webkit-touch-callout: none;

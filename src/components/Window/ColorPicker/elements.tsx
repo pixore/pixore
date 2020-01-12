@@ -34,7 +34,7 @@ const RoundPicker = styled.div`
   width: 8px;
   border: 2px solid white;
   box-shadow: 0 0 3px black;
-  transform: translate(-5px, -5px);
+  transform: translate(-5px, 5px);
   pointer-events: none;
 `;
 
@@ -50,7 +50,7 @@ const HueBarPicker = styled.div`
   ${barPicker}
   height: 8px;
   width: 100%;
-  transform: scaleX(1.2) translate(0, -5px);
+  transform: scaleX(1.2) translate(0, 5px);
 `;
 
 const AlphaBarPicker = styled.div`

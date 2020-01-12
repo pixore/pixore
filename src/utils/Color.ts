@@ -1,29 +1,31 @@
-export interface Color {
+// NOTE: these are types instead of this issue
+// https://github.com/microsoft/TypeScript/issues/15300
+export type Color = {
   red: number;
   green: number;
   blue: number;
   alpha: number;
-}
+};
 
-export interface HSLColor {
+export type HSLColor = {
   hue: number;
   saturation: number;
   lightness: number;
   alpha: number;
-}
+};
 
-export interface HSVColor {
+export type HSVColor = {
   hue: number;
   saturation: number;
   value: number;
   alpha: number;
-}
+};
 
 const create = (
   red: number,
   green: number,
   blue: number,
-  alpha = 1,
+  alpha = 100,
 ): Color => ({
   red,
   green,
@@ -35,7 +37,7 @@ const createHsl = (
   hue: number,
   saturation: number,
   lightness: number,
-  alpha = 1,
+  alpha = 100,
 ): HSLColor => ({
   hue,
   saturation,
@@ -47,7 +49,7 @@ const createHsv = (
   hue: number,
   saturation: number,
   value: number,
-  alpha = 1,
+  alpha = 100,
 ) => ({
   hue,
   saturation,
@@ -249,7 +251,7 @@ const black = () => create(0, 0, 0);
 const transparent = () => create(0, 0, 0, 0);
 const isTransparent = (color: Color | HSLColor) => color.alpha === 0;
 const toString = ({ red, green, blue, alpha }: Color) =>
-  `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+  `rgba(${red}, ${green}, ${blue}, ${alpha / 100})`;
 const isEqual = (color1: Color, color2: Color) =>
   color1 === color2 ||
   (color1.red === color2.red &&

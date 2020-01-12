@@ -2,13 +2,7 @@ import React from 'react';
 import { useEmitter } from '../../Editor';
 import { useWindow } from '../Context';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs';
-import Vector from '../../../utils/vector';
-import {
-  Slider,
-  SliderTrack,
-  SliderTrackHighlight,
-  SliderHandle,
-} from '@reach/slider';
+import { useUpdaters } from './useUpdaters';
 import {
   NewColor,
   Container,
@@ -30,26 +24,9 @@ import {
   WhiteToTransparentLayer,
   SaturationAndValuePicker,
 } from './elements';
-import {
-  fromHsv,
-  toHsl,
-  toHsv,
-  toString,
-  pureHue,
-  HSVColor,
-  Color,
-} from '../../../utils/Color';
+import { toHsl, toHsv, toString, pureHue, Color } from '../../../utils/Color';
 import { useMouseEvent } from '../../../hooks/useMouseEvent';
-
-const getValueBetween = (value: number, max: number, min = 0) => {
-  if (value < min) {
-    value = 0;
-  } else if (value > max) {
-    return max;
-  }
-
-  return value;
-};
+import ColorValue from './ColorValue';
 
 interface MouseEvent {
   clientX: number;
@@ -62,15 +39,18 @@ export interface PropTypes {
 
 const ColorPicker: React.FC<PropTypes> = (props) => {
   const { color } = props;
-  const svPickerRef = React.useRef<HTMLDivElement>();
-  const huePickerRef = React.useRef<HTMLDivElement>();
-  const alphaPickerRef = React.useRef<HTMLDivElement>();
+  const [tabIndex, setTabIndex] = React.useState(0);
   const addColorRef = React.useRef<HTMLInputElement>();
   const { id, onRequestedClose } = useWindow();
   const emitter = useEmitter();
   const [rgb, setRgb] = React.useState(color);
-  const [hsv, setHsv] = React.useState(toHsv(rgb));
-  const [hsl, setHsl] = React.useState(toHsl(rgb));
+  const [hsv, setHsv] = React.useState(() => toHsv(rgb));
+  const [hsl, setHsl] = React.useState(() => toHsl(rgb));
+  const { updaters, alphaPickerRef, huePickerRef, svPickerRef } = useUpdaters(
+    setHsv,
+    setRgb,
+    setHsl,
+  );
 
   const newColorWithFullAlpha = pureHue(hsv);
 
@@ -86,35 +66,10 @@ const ColorPicker: React.FC<PropTypes> = (props) => {
     emitter.emit(id, {});
     onRequestedClose();
   };
-  const updateHsv = (newHsv: HSVColor) => {
-    const newRgb = fromHsv(newHsv);
-    setHsv(newHsv);
-    setRgb(newRgb);
-    setHsl(toHsl(rgb));
-  };
-
-  const updateSV = ({ x, y }: Vector) => {
-    const { current: element } = svPickerRef;
-    if (!element) {
-      return;
-    }
-    const { top, left, width, height } = element.getBoundingClientRect();
-    const realX = getValueBetween(x - left, width);
-    const realY = getValueBetween(y - top, height);
-
-    const saturation = (realX * 100) / width;
-    const value = 100 - (realY * 100) / height;
-    const newHsv = {
-      ...hsv,
-      saturation,
-      value,
-    };
-    updateHsv(newHsv);
-  };
 
   const handlerMouseEventSV = (event: MouseEvent) => {
     const { clientX, clientY } = event;
-    updateSV({
+    updaters.sv({
       x: clientX,
       y: clientY,
     });
@@ -125,26 +80,9 @@ const ColorPicker: React.FC<PropTypes> = (props) => {
     onMouseMove: handlerMouseEventSV,
   });
 
-  const updateHue = (y: number) => {
-    const { current: element } = huePickerRef;
-    if (!element) {
-      return;
-    }
-
-    const { top, height } = element.getBoundingClientRect();
-    const realY = getValueBetween(y - top, height);
-    const hue = 360 - (360 * ((realY * 100) / height)) / 100;
-    const newHsv = {
-      ...hsv,
-      hue,
-    };
-
-    updateHsv(newHsv);
-  };
-
   const handlerMouseEventHue = (event: MouseEvent) => {
     const { clientY } = event;
-    updateHue(clientY);
+    updaters.hue(clientY);
   };
 
   const mouseEventHue = useMouseEvent({
@@ -152,26 +90,9 @@ const ColorPicker: React.FC<PropTypes> = (props) => {
     onMouseMove: handlerMouseEventHue,
   });
 
-  const updateAlpha = (x: number) => {
-    const { current: element } = alphaPickerRef;
-    if (!element) {
-      return;
-    }
-
-    const { left, width } = element.getBoundingClientRect();
-    const realX = getValueBetween(x - left, width);
-    const alpha = realX / width;
-    const newHsv = {
-      ...hsv,
-      alpha,
-    };
-
-    updateHsv(newHsv);
-  };
-
   const handlerMouseEventAlpha = (event: MouseEvent) => {
     const { clientX } = event;
-    updateAlpha(clientX);
+    updaters.alpha(clientX);
   };
 
   const mouseEventAlpha = useMouseEvent({
@@ -190,7 +111,7 @@ const ColorPicker: React.FC<PropTypes> = (props) => {
               <BlackToTransparentLayer />
               <RoundPicker
                 style={{
-                  top: `${100 - hsv.value}%`,
+                  bottom: `${hsv.value}%`,
                   left: `${hsv.saturation}%`,
                 }}
               />
@@ -198,7 +119,7 @@ const ColorPicker: React.FC<PropTypes> = (props) => {
             <HuePicker ref={huePickerRef} {...mouseEventHue}>
               <HueBarPicker
                 style={{
-                  top: `${100 - (hsv.hue * 100) / 360}%`,
+                  bottom: `${(hsv.hue * 100) / 360}%`,
                 }}
               />
             </HuePicker>
@@ -210,7 +131,7 @@ const ColorPicker: React.FC<PropTypes> = (props) => {
           >
             <AlphaBarPicker
               style={{
-                left: `${hsv.alpha * 100}%`,
+                left: `${hsv.alpha}%`,
               }}
             />
           </AlphaPicker>
@@ -221,7 +142,7 @@ const ColorPicker: React.FC<PropTypes> = (props) => {
             <NewColor val={rgb} />
           </ColorsContainer>
           <ColorRepresentations>
-            <Tabs>
+            <Tabs onChange={setTabIndex}>
               <TabList>
                 <Tab>HSV</Tab>
                 <Tab>HSL</Tab>
@@ -229,64 +150,106 @@ const ColorPicker: React.FC<PropTypes> = (props) => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <Slider min={0} max={360} value={hsv.hue}>
-                    <SliderTrack>
-                      <SliderTrackHighlight />
-                      <SliderHandle />
-                    </SliderTrack>
-                  </Slider>
-                  <Slider min={0} max={100} value={hsv.saturation}>
-                    <SliderTrack>
-                      <SliderTrackHighlight />
-                      <SliderHandle />
-                    </SliderTrack>
-                  </Slider>
-                  <Slider min={0} max={100} value={hsv.value}>
-                    <SliderTrack>
-                      <SliderTrackHighlight />
-                      <SliderHandle />
-                    </SliderTrack>
-                  </Slider>
+                  {tabIndex === 0 && (
+                    <>
+                      <ColorValue
+                        value={hsv.hue}
+                        updateValue={updaters.hsvProperty}
+                        name="hue"
+                        min={0}
+                        max={360}
+                      />
+                      <ColorValue
+                        value={hsv.saturation}
+                        updateValue={updaters.hsvProperty}
+                        name="saturation"
+                        min={0}
+                        max={100}
+                      />
+                      <ColorValue
+                        value={hsv.value}
+                        updateValue={updaters.hsvProperty}
+                        name="value"
+                        min={0}
+                        max={100}
+                      />
+                      <ColorValue
+                        value={hsv.alpha}
+                        updateValue={updaters.hsvProperty}
+                        name="alpha"
+                        min={0}
+                        max={100}
+                      />
+                    </>
+                  )}
                 </TabPanel>
                 <TabPanel>
-                  <Slider min={0} max={360} value={hsl.hue}>
-                    <SliderTrack>
-                      <SliderTrackHighlight />
-                      <SliderHandle />
-                    </SliderTrack>
-                  </Slider>
-                  <Slider min={0} max={100} value={hsl.saturation}>
-                    <SliderTrack>
-                      <SliderTrackHighlight />
-                      <SliderHandle />
-                    </SliderTrack>
-                  </Slider>
-                  <Slider min={0} max={100} value={hsl.lightness}>
-                    <SliderTrack>
-                      <SliderTrackHighlight />
-                      <SliderHandle />
-                    </SliderTrack>
-                  </Slider>
+                  {tabIndex === 1 && (
+                    <>
+                      <ColorValue
+                        value={hsl.hue}
+                        updateValue={updaters.hslProperty}
+                        name="hue"
+                        min={0}
+                        max={360}
+                      />
+                      <ColorValue
+                        value={hsl.saturation}
+                        updateValue={updaters.hslProperty}
+                        name="saturation"
+                        min={0}
+                        max={100}
+                      />
+                      <ColorValue
+                        value={hsl.lightness}
+                        updateValue={updaters.hslProperty}
+                        name="lightness"
+                        min={0}
+                        max={100}
+                      />
+                      <ColorValue
+                        value={hsl.alpha}
+                        updateValue={updaters.hslProperty}
+                        name="alpha"
+                        min={0}
+                        max={100}
+                      />
+                    </>
+                  )}
                 </TabPanel>
                 <TabPanel>
-                  <Slider min={0} max={255} value={rgb.red}>
-                    <SliderTrack>
-                      <SliderTrackHighlight />
-                      <SliderHandle />
-                    </SliderTrack>
-                  </Slider>
-                  <Slider min={0} max={255} value={rgb.green}>
-                    <SliderTrack>
-                      <SliderTrackHighlight />
-                      <SliderHandle />
-                    </SliderTrack>
-                  </Slider>
-                  <Slider min={0} max={255} value={rgb.blue}>
-                    <SliderTrack>
-                      <SliderTrackHighlight />
-                      <SliderHandle />
-                    </SliderTrack>
-                  </Slider>
+                  {tabIndex === 2 && (
+                    <>
+                      <ColorValue
+                        value={rgb.red}
+                        updateValue={updaters.rgbProperty}
+                        name="red"
+                        min={0}
+                        max={255}
+                      />
+                      <ColorValue
+                        value={rgb.green}
+                        updateValue={updaters.rgbProperty}
+                        name="green"
+                        min={0}
+                        max={255}
+                      />
+                      <ColorValue
+                        value={rgb.blue}
+                        updateValue={updaters.rgbProperty}
+                        name="blue"
+                        min={0}
+                        max={255}
+                      />
+                      <ColorValue
+                        value={rgb.alpha}
+                        updateValue={updaters.rgbProperty}
+                        name="alpha"
+                        min={0}
+                        max={100}
+                      />
+                    </>
+                  )}
                 </TabPanel>
               </TabPanels>
             </Tabs>
