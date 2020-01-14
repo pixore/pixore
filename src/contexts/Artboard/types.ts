@@ -1,3 +1,5 @@
+import { Color } from '../../utils/Color';
+
 export enum actionType {
   CHANGE_ARTBOARD,
   CHANGE_FRAME,
@@ -13,25 +15,25 @@ export interface Stats {
   left: number;
 }
 
-export interface ArtboardsActions {
+export interface ArtboardActions {
   changeArtboard: (artboard: Artboard) => void;
   changeLayer: (layer: string) => void;
   changeFrame: (frame: string) => void;
-  changePrimaryColor: (color: string) => void;
-  changeSecondaryColor: (color: string) => void;
+  changePrimaryColor: (color: Color) => void;
+  changeSecondaryColor: (color: Color) => void;
   changeTool: (tool: string) => void;
 }
 
 export interface Artboard {
   id: string;
-  primaryColor: string;
-  secondaryColor: string;
+  primaryColor: Color;
+  secondaryColor: Color;
   layer: string;
   frame: string;
   tool: string;
 }
 
-type Payload = Artboard | string;
+export type Payload = Artboard | string | Color;
 
 export interface Action {
   type: actionType;

@@ -25,14 +25,14 @@ const Line = styled.span`
   background: #2e3440;
 `;
 
-const ItemSeparator = styled(Reach.MenuItem)`
+const ItemSeparator = styled.div`
   padding: 5px 0;
   pointer-events: none;
 `;
 
 const MenuItemSeparator = () => {
   return (
-    <ItemSeparator aria-disabled disabled onSelect={notImplemented}>
+    <ItemSeparator>
       <Line />
     </ItemSeparator>
   );

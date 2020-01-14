@@ -20,7 +20,7 @@ const globalStyle = css`
 
   .px-window {
     background: #434c5e;
-    border-radius: 10px;
+    border-radius: 3px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
     border: 1px solid #2e3440;
   }

@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/pixore/pixore/compare/v0.3.0...v0.4.0) (2020-01-12)
+
+
+### Features
+
+* **color:** add missing functionality in the color picker ([0af38ae](https://github.com/pixore/pixore/commit/0af38ae11c6ba6b8bfd9b53eea5cfdad90927d95))
+* **color:** add support for hsv ([3b79443](https://github.com/pixore/pixore/commit/3b79443ed190222da0f5392925f24e9ffea5cda8))
+* **color:** changes selected color using the color picker ([4430d93](https://github.com/pixore/pixore/commit/4430d9398ad4461c03a0d1070c312e647100c101))
+* **color:** create basic color picker structure ([e31cae5](https://github.com/pixore/pixore/commit/e31cae5ff0f83684e202bf0e4defdff01297615c))
+* **color:** create Color type ([988b612](https://github.com/pixore/pixore/commit/988b6120deb865d3a86a3859bc43ece287ffce2a))
+* **color:** create fullAlpha and pureHue functions ([a3c8e3c](https://github.com/pixore/pixore/commit/a3c8e3cf65891c7bf6de8ec660728463e30fc196))
+* **color:** create isEqual function to compare colors ([8614ed9](https://github.com/pixore/pixore/commit/8614ed91c24730de3ef052f16bf11b0095648060))
+* **colors:** use new color type ([ce0c522](https://github.com/pixore/pixore/commit/ce0c522e87ec06d428a3254d065244659b7fa529))
+* **components:** create CenterButton component ([6b9f7d9](https://github.com/pixore/pixore/commit/6b9f7d97ff0a366e698bb4ea9a7a071363d08cf6))
+* **context:** create windows context ([1169f99](https://github.com/pixore/pixore/commit/1169f99b79e5383f5fc3d65dd8d2008338f601a1))
+* **editor:** add a global event emitter ([4e81d94](https://github.com/pixore/pixore/commit/4e81d94b06b2279f54b5ce20df88883cae7d9bc6))
+* **hooks:** create useMouseEvent hooks ([5007718](https://github.com/pixore/pixore/commit/5007718cc778c04bac5770adddfd608da71fa0fd))
+* **palette:** create ColorPicker component placeholder ([f7918de](https://github.com/pixore/pixore/commit/f7918de28f6d295c46041c73cc2c5d7a3fbe0d2d))
+* **palette:** implement palette context ([f0b5000](https://github.com/pixore/pixore/commit/f0b500038b8a227623e720c8f03673ffcc6ca7d7))
+* **palette:** import styles ([397c04c](https://github.com/pixore/pixore/commit/397c04c369e1f6203057e4556c11d76db0e18bb4))
+* **palette:** improve way of showing which colors are selected ([1ee0d5b](https://github.com/pixore/pixore/commit/1ee0d5b042b57f15b9cd81d410f9cd43dead5c44))
+* **palettes:** create Palettes and Palette contexts ([85126b8](https://github.com/pixore/pixore/commit/85126b8f3a4ce7413040d269fa986f67ad3c9387))
+* **tools:** create tools component ([35c50d6](https://github.com/pixore/pixore/commit/35c50d6fda9fe5113875c40aad10ac0a9d8ce7b4))
+* **utils:** create numberIsBetween function ([a89e9cb](https://github.com/pixore/pixore/commit/a89e9cbd192a997fdf9c10c59b8325f52afe4f0d))
+* **welcome:** implement welcome window using the context windows ([19c95cc](https://github.com/pixore/pixore/commit/19c95ccc7aec3a6aacc3c044e82778a9d5834fc7))
+* **windows:** make the windows dragable ([cf27a37](https://github.com/pixore/pixore/commit/cf27a37eaa67e6d202f87fa3b5013ab9f3eadae8))
+* **windows:** make the windows more configurable ([5a913fe](https://github.com/pixore/pixore/commit/5a913fed6277b2b32ee5a13d1e0f8c774ecd9791))
+
+
+### Bug Fixes
+
+* **a11y:** use the correct id in labels ([0b26501](https://github.com/pixore/pixore/commit/0b26501bb3bd806fbb4b587cf77a445984746e9c))
+
 ## [0.3.0](https://github.com/pixore/pixore/compare/v0.2.0...v0.3.0) (2019-12-17)
 
 

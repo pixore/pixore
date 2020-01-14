@@ -8,6 +8,7 @@ import Background from './CanvasLayers/Background';
 import { useSprite } from '../contexts/Sprite';
 import { HeadlessPanel } from './Panel';
 import { usePlayAndPause } from '../hooks/usePlayAndPause';
+import CenterButton from './CenterButton';
 
 const Float = styled.div`
   display: inline-block;
@@ -15,20 +16,11 @@ const Float = styled.div`
   top: 0;
   left: 0;
   padding: 2px;
-  border-radius: 6px;
+  border-radius: 3px;
   background: rgba(0, 0, 0, 0.5);
 `;
 
-interface PropTypes {
-  width: number;
-  height: number;
-  isPlaying: boolean;
-  scale: number;
-  x: number;
-  y: number;
-}
-
-const Preview: React.FC<PropTypes> = () => {
+const Preview: React.FC = () => {
   const { stats } = useContainer();
   const sprite = useSprite();
   const canvas = useCanvas(stats);
@@ -54,7 +46,7 @@ const Preview: React.FC<PropTypes> = () => {
       <Float>
         <PanelSelect />
         {button}
-        <button onClick={onCenter}>center</button>
+        <CenterButton onClick={onCenter} />
       </Float>
     </HeadlessPanel>
   );

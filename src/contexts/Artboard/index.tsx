@@ -1,6 +1,6 @@
 import React from 'react';
 import invariant from 'invariant';
-import { Artboard, ArtboardsActions } from './types';
+import { Artboard, ArtboardActions } from './types';
 import { reducer, createActions } from './reducer';
 import { useArtboards } from '../Artboards';
 
@@ -34,7 +34,7 @@ const defaultValueActions = {
 };
 
 const ArtboardStateContext = React.createContext<Artboard>(defaultValueState);
-const ArtboardActionsContext = React.createContext<ArtboardsActions>(
+const ArtboardActionsContext = React.createContext<ArtboardActions>(
   defaultValueActions,
 );
 
