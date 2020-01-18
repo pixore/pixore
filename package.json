@@ -29,6 +29,7 @@
     "@pixore/subdivide": "^0.0.8",
     "@pixore/window": "^0.1.0",
     "@reach/menu-button": "^0.7.2",
+    "@reach/portal": "^0.7.2",
     "@reach/slider": "^0.7.2",
     "@reach/tabs": "^0.7.2",
     "@reach/visually-hidden": "^0.7.2",
@@ -36,7 +37,9 @@
     "invariant": "^2.2.4",
     "lodash.throttle": "^4.1.1",
     "next": "^9.1.7",
+    "prop-types": "^15.7.2",
     "react": "^16.9.0",
+    "react-contextmenu": "^2.13.0",
     "react-dom": "^16.9.0",
     "tiny-emitter": "^2.1.0"
   },
