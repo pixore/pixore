@@ -3,55 +3,65 @@ import { Sprite } from '../types';
 type Context = CanvasRenderingContext2D;
 
 interface Contexts {
-  [key: string]:
-    | {
-        [key: string]: Context;
-      }
-    | Context;
+  [spriteId: string]: {
+    [frameId: string]: {
+      [layerId: string]: Context;
+    };
+  };
 }
 
 const contexts: Contexts = {};
 
-const getContext = (frame: string, layer: string, sprite: Sprite): Context => {
-  if (!contexts[frame]) {
-    contexts[frame] = {};
+const removeContextsByLayer = (spriteId: string, layerId: string) => {
+  const contextsBySprite = contexts[spriteId];
+  if (!contextsBySprite) {
+    return;
   }
 
-  let context = contexts[frame][layer];
+  Object.keys(contextsBySprite).forEach((frameId) => {
+    Reflect.deleteProperty(contextsBySprite[frameId], layerId);
+  });
+};
+
+const removeContextsByFrame = (spriteId: string, frameId: string) => {
+  const contextsBySprite = contexts[spriteId];
+  if (!contextsBySprite) {
+    return;
+  }
+
+  Reflect.deleteProperty(contextsBySprite, frameId);
+};
+
+const getContext = (
+  sprite: Sprite,
+  frameId: string,
+  layerId: string,
+): Context => {
+  const { width, height, id } = sprite;
+  if (!contexts[id]) {
+    contexts[id] = {};
+  }
+
+  if (!contexts[id][frameId]) {
+    contexts[id][frameId] = {};
+  }
+
+  let context = contexts[id][frameId][layerId];
 
   if (context) {
     return context;
   }
 
-  const { width, height } = sprite;
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
 
   context = canvas.getContext('2d');
 
-  contexts[frame][layer] = context;
+  contexts[id][frameId][layerId] = context;
 
   return context;
 };
-
-const getContextById = (id: string): Context => {
-  const context = contexts[id];
-  if (context instanceof CanvasRenderingContext2D) {
-    return context;
-  }
-};
-
-const saveContext = (id: string, context: Context) => {
-  contexts[id] = context;
-};
-
-const MAIN_CONTEXT_ID = 'MAIN_CONTEXT_ID';
-
-const saveMainContext = (context: Context) =>
-  saveContext(MAIN_CONTEXT_ID, context);
-
-const getMainContext = () => getContextById(MAIN_CONTEXT_ID);
 
 function mirrorContext(originContext: Context, destinationContext: Context) {
   const { canvas: originCanvas } = originContext;
@@ -73,4 +83,9 @@ function mirrorContext(originContext: Context, destinationContext: Context) {
   );
 }
 
-export { getContext, getMainContext, saveMainContext, mirrorContext };
+export {
+  getContext,
+  mirrorContext,
+  removeContextsByFrame,
+  removeContextsByLayer,
+};

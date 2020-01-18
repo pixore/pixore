@@ -22,12 +22,13 @@ const reducer = (state: Sprite, action: Action): Sprite => {
         ...state,
         layers: layers.concat(payload as string),
       };
-    case actionType.ADD_FRAME:
+    case actionType.ADD_FRAME: {
       const { frames } = state;
       return {
         ...state,
         frames: frames.concat(payload as string),
       };
+    }
     case actionType.CREATE_NEW_VERSION:
       const { version = 0 } = state;
 
@@ -35,6 +36,20 @@ const reducer = (state: Sprite, action: Action): Sprite => {
         ...state,
         version: version + 1,
       };
+    case actionType.REMOVE_FRAME: {
+      const { frames } = state;
+      return {
+        ...state,
+        frames: frames.filter((id) => id !== payload),
+      };
+    }
+    case actionType.REMOVE_LAYER: {
+      const { layers } = state;
+      return {
+        ...state,
+        layers: layers.filter((id) => id !== payload),
+      };
+    }
     default:
       return state;
   }
@@ -61,12 +76,13 @@ const createActions = (
       payload: sprite,
     });
   },
-  addNewLayerToSprite({ name }) {
+  addNewLayerToSprite({ name, spriteId }) {
     const { addLayer } = layersActions;
     const id = getNewId();
     addLayer({
       id,
       name,
+      spriteId,
     });
 
     dispatch({
@@ -76,11 +92,12 @@ const createActions = (
 
     return id;
   },
-  addNewFrameToSprite() {
+  addNewFrameToSprite(spriteId) {
     const { addFrame } = framesActions;
     const id = getNewId();
     addFrame({
       id,
+      spriteId,
     });
     dispatch({
       type: actionType.ADD_FRAME,
@@ -93,6 +110,26 @@ const createActions = (
     dispatch({
       type: actionType.CREATE_NEW_VERSION,
     });
+  },
+  removeFrameFromSprite(frameId) {
+    const { removeFrame } = framesActions;
+    dispatch({
+      type: actionType.REMOVE_FRAME,
+      payload: frameId,
+    });
+    removeFrame(frameId);
+  },
+  removeLayerFromSprite(layerId) {
+    const { removeLayer } = layersActions;
+
+    dispatch({
+      type: actionType.REMOVE_LAYER,
+      payload: layerId,
+    });
+
+    setTimeout(() => {
+      removeLayer(layerId);
+    }, 100);
   },
 });
 

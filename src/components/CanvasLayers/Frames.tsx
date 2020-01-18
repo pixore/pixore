@@ -58,7 +58,7 @@ const Frames: React.FC<PropTypes> = (props) => {
     imageSmoothingDisabled(context);
 
     layers.forEach((layer) => {
-      const layerContext = getContext(sprite.frames[frame], layer, sprite);
+      const layerContext = getContext(sprite, sprite.frames[frame], layer);
       context.drawImage(
         layerContext.canvas,
         0,

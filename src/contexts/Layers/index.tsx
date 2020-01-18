@@ -9,6 +9,9 @@ const defaultValueActions = {
   addLayer(_layer) {
     invariant(false, 'Context not implemented');
   },
+  removeLayer(_id) {
+    invariant(false, 'Context not implemented');
+  },
 };
 
 const LayersContext = React.createContext<LayersState>(defaultValueState);

@@ -27,6 +27,12 @@ const defaultValueActions = {
   createNewVersion() {
     invariant(false, 'Context not implemented');
   },
+  removeFrameFromSprite(frameId) {
+    invariant(false, 'Context not implemented');
+  },
+  removeLayerFromSprite(layerId) {
+    invariant(false, 'Context not implemented');
+  },
 };
 
 const SpriteStateContext = React.createContext<Sprite>(defaultValueState);

@@ -52,13 +52,14 @@ const Bootstrap: React.FC<PropTypes> = (props) => {
   if (sprite.layers.length === 0) {
     addNewLayerToSprite({
       name: 'Layer 1',
+      spriteId: sprite.id,
     });
 
     return null;
   }
 
   if (sprite.frames.length === 0) {
-    addNewFrameToSprite();
+    addNewFrameToSprite(sprite.id);
 
     return null;
   }

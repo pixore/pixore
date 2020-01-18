@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { useSpriteActions, useSprite } from '../contexts/Sprite';
-import { useLayers } from '../contexts/Layers';
-import { useArtboard, useArtboardActions } from '../contexts/Artboard';
-import Panel from './Panel';
+import { useLayers } from '../../contexts/Layers';
+import { useSpriteActions, useSprite } from '../../contexts/Sprite';
+import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
+import Cell from './Cell';
+import Panel from '../Panel';
+import Layer from './Layer';
+import Frame from './Frame';
 
 interface SelectedProps {
   isActive: boolean;
@@ -14,29 +17,9 @@ const SelectedLayer = styled.tr`
   ${({ isActive }: SelectedProps) => isActive && `background: #5e81ac;`}
 `;
 
-const Td = styled.td`
-  text-align: center;
-  height: 26px;
-  padding: 0 8px;
-  border-radius: 3px;
-  &:hover {
-    background: #5e81ac;
-  }
-`;
-
 const SelectedFrame = SelectedLayer.withComponent('col');
 
-const SelectedCell = styled(Td)`
-  width: 26px;
-  ${({ isActive }: SelectedProps) =>
-    isActive &&
-    `background: #81A1C1;
-    &:hover {
-      background: #81A1C1;
-    }`};
-`;
-
-const FramesAndLayers = () => {
+const Sequencer = () => {
   const { changeFrame, changeLayer } = useArtboardActions();
   const sprite = useSprite();
   const artboard = useArtboard();
@@ -44,19 +27,15 @@ const FramesAndLayers = () => {
   const { addNewFrameToSprite, addNewLayerToSprite } = useSpriteActions();
 
   const onNewFrame = () => {
-    const frame = addNewFrameToSprite();
+    const frame = addNewFrameToSprite(sprite.id);
     changeFrame(frame);
-  };
-
-  const onSelectFrameAndLayer = (frame: string, layer: string) => {
-    changeFrame(frame);
-    changeLayer(layer);
   };
 
   const onNewLayer = () => {
     const length = Object.keys(layers).length + 1;
     const layer = addNewLayerToSprite({
       name: `Layer ${length}`,
+      spriteId: sprite.id,
     });
 
     changeLayer(layer);
@@ -80,22 +59,33 @@ const FramesAndLayers = () => {
         <tbody>
           <tr>
             <td />
-            {sprite.frames.map((frame, index) => (
-              <Td key={frame} onClick={() => changeFrame(frame)}>
-                {index + 1}
-              </Td>
+            {sprite.frames.map((frame, index, arr) => (
+              <Frame
+                key={frame}
+                frame={frame}
+                index={index}
+                next={index === sprite.frames.length ? arr[0] : arr[index + 1]}
+                onClick={() => changeFrame(frame)}
+              />
             ))}
           </tr>
-          {sprite.layers.map((layer) => (
+          {sprite.layers.map((layer, index, arr) => (
             <SelectedLayer isActive={layer === artboard.layer} key={layer}>
-              <Td onClick={() => changeLayer(layer)}>{layers[layer].name}</Td>
+              <Layer
+                index={index}
+                layer={layer}
+                name={layers[layer].name}
+                next={index === sprite.frames.length ? arr[0] : arr[index + 1]}
+                onClick={() => changeLayer(layer)}
+              />
               {sprite.frames.map((frame) => (
-                <SelectedCell
+                <Cell
+                  key={frame}
                   isActive={
                     frame === artboard.frame && layer === artboard.layer
                   }
-                  key={frame}
-                  onClick={() => onSelectFrameAndLayer(frame, layer)}
+                  frame={frame}
+                  layer={layer}
                 />
               ))}
             </SelectedLayer>
@@ -106,4 +96,4 @@ const FramesAndLayers = () => {
   );
 };
 
-export default FramesAndLayers;
+export default Sequencer;

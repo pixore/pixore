@@ -137,7 +137,7 @@ const paint = (
   const height = sprite.height * scale;
 
   const color = getColor(artboard, clickType);
-  const layerContext = getContext(frame, layer, sprite);
+  const layerContext = getContext(sprite, frame, layer);
 
   paintOrClear(layerContext, cord, color);
   paintOrClear(tempContext, cord, color);

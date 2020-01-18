@@ -6,6 +6,8 @@ export enum actionType {
   ADD_LAYER,
   ADD_FRAME,
   CREATE_NEW_VERSION,
+  REMOVE_LAYER,
+  REMOVE_FRAME,
 }
 
 export type Payload = Sprite | string;
@@ -18,7 +20,9 @@ export interface Action {
 export interface SpriteActions {
   changeName: (name: string) => void;
   changeSprite: (sprite: Sprite) => void;
-  addNewLayerToSprite: (newLayer: { name: string }) => string;
-  addNewFrameToSprite: () => string;
+  addNewLayerToSprite: (newLayer: { name: string; spriteId: string }) => string;
+  addNewFrameToSprite: (spriteId: string) => string;
+  removeLayerFromSprite: (layerId: string) => void;
+  removeFrameFromSprite: (frameId: string) => void;
   createNewVersion: () => void;
 }

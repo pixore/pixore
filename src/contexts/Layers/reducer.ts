@@ -1,14 +1,36 @@
-import { LayersState, LayersActions, Action, actionType } from './types';
+import { LayersState, LayersActions, Action, actionType, Layer } from './types';
+import { removeContextsByLayer } from '../../utils/contexts';
 
 const reducer = (state: LayersState, action: Action): LayersState => {
   const { type, payload } = action;
   switch (type) {
-    case actionType.ADD_LAYER:
-      const { id } = payload;
+    case actionType.ADD_LAYER: {
+      const layer = payload as Layer;
       return {
         ...state,
-        [id]: payload,
+        [layer.id]: layer,
       };
+    }
+    case actionType.REMOVE_LAYER: {
+      const id = payload as string;
+      const layer = state[id];
+
+      if (!layer) {
+        console.warn(`Trying to remove a unknown layer: ${id}`);
+
+        return state;
+      }
+
+      const newState = {
+        ...state,
+      };
+
+      removeContextsByLayer(layer.spriteId, id);
+
+      Reflect.deleteProperty(newState, id);
+
+      return newState;
+    }
     default:
       return state;
   }
@@ -16,13 +38,16 @@ const reducer = (state: LayersState, action: Action): LayersState => {
 
 type Dispatch = (action: Action) => void;
 const createActions = (dispatch: Dispatch): LayersActions => ({
-  addLayer({ id, name }) {
+  addLayer(layer) {
     dispatch({
       type: actionType.ADD_LAYER,
-      payload: {
-        id,
-        name,
-      },
+      payload: layer,
+    });
+  },
+  removeLayer(id) {
+    dispatch({
+      type: actionType.REMOVE_LAYER,
+      payload: id,
     });
   },
 });

@@ -9,6 +9,9 @@ const defaultValueActions = {
   addFrame(_frame) {
     invariant(false, 'Context not implemented');
   },
+  removeFrame(_id) {
+    invariant(false, 'Context not implemented');
+  },
 };
 
 const FramesContext = React.createContext<FramesState>(defaultValueState);

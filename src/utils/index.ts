@@ -82,6 +82,7 @@ const isTransparent = (value: string): boolean => {
 };
 
 const preventDefault = (event: React.MouseEvent) => event.preventDefault();
+const stopPropagation = (event: React.MouseEvent) => event.stopPropagation();
 
 const round1 = (num: number) => {
   return Number(num.toFixed(1));
@@ -114,6 +115,7 @@ export {
   round1,
   getScaleAndPosition,
   preventDefault,
+  stopPropagation,
   getTransparentPattern,
   getStringTransparentPattern,
   clean,
