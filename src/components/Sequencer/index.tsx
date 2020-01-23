@@ -70,7 +70,7 @@ const Sequencer = () => {
               <Layer
                 index={index}
                 layer={layer}
-                name={layers[layer].ref.state.context.name}
+                name={layers[layer].name}
                 next={index === arr.length - 1 ? arr[0] : arr[index + 1]}
                 onClick={() => changeLayer(layer)}
               />

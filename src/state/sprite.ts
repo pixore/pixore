@@ -1,9 +1,6 @@
-import { Machine, assign, spawn, Interpreter } from 'xstate';
-import { layerMachine, LayerInterpreter } from './layer';
-import { frameMachine, FrameInterpreter } from './frame';
+import { Machine, assign, Interpreter } from 'xstate';
 
 import { ItemMap, addItem, removeItem, isLastItem } from '../utils/object';
-import { Ref } from '../utils/state';
 import { createId } from '../utils';
 
 interface SpriteState {
@@ -13,11 +10,17 @@ interface SpriteState {
   };
 }
 
-type LayerRef = Ref<LayerInterpreter>;
-type FrameRef = Ref<FrameInterpreter>;
+interface FrameContext {
+  id: string;
+}
 
-type FrameMap = ItemMap<FrameRef>;
-type LayerMap = ItemMap<LayerRef>;
+interface LayerContex {
+  id: string;
+  name: string;
+}
+
+type FrameMap = ItemMap<FrameContext>;
+type LayerMap = ItemMap<LayerContex>;
 
 export interface SpriteContext {
   id: string;
@@ -50,24 +53,12 @@ export type SpriteInterpreter = Interpreter<
 const addLayer = (layers: LayerMap, id: string, name: string) => {
   return addItem(layers, id, {
     id,
-    ref: spawn(
-      layerMachine.withContext({
-        id,
-        name,
-      }),
-    ) as LayerInterpreter,
+    name,
   });
 };
 
 const addFrame = (frames: FrameMap, id: string) => {
-  return addItem(frames, id, {
-    id,
-    ref: spawn(
-      frameMachine.withContext({
-        id,
-      }),
-    ) as FrameInterpreter,
-  });
+  return addItem(frames, id, { id });
 };
 
 export const defaultContext = {
@@ -148,7 +139,6 @@ const spriteMachine = Machine<SpriteContext, SpriteState, SpriteEvent>({
 
             const layer = context.layers[id];
             if (layer) {
-              layer.ref.send('DELETED');
               const layers = removeItem(context.layers, id);
 
               return {
@@ -168,7 +158,6 @@ const spriteMachine = Machine<SpriteContext, SpriteState, SpriteEvent>({
 
             const frame = context.frames[id];
             if (frame) {
-              frame.ref.send('DELETED');
               const frames = removeItem(context.frames, id);
               return {
                 frames,

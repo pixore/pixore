@@ -22,8 +22,6 @@ const Frame: React.FC<PropTypes> = (props) => {
   const onRemove = (event: React.MouseEvent) => {
     stopPropagation(event);
 
-    console.log(next, frame);
-
     if (next) {
       changeFrame(next);
       deleteFrame(frame);
