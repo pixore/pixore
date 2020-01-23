@@ -15,16 +15,18 @@ interface PropTypes {
 
 const Frame: React.FC<PropTypes> = (props) => {
   const { frame, index, onClick, next } = props;
-  const { removeFrameFromSprite } = useSpriteActions();
+  const { deleteFrame } = useSpriteActions();
   const { changeFrame } = useArtboardActions();
   const id = `frame-${index}`;
 
   const onRemove = (event: React.MouseEvent) => {
     stopPropagation(event);
 
+    console.log(next, frame);
+
     if (next) {
       changeFrame(next);
-      removeFrameFromSprite(frame);
+      deleteFrame(frame);
     }
   };
 

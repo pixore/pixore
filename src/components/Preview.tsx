@@ -26,7 +26,7 @@ const Preview: React.FC = () => {
   const canvas = useCanvas(stats);
   const { button, isPlaying } = usePlayAndPause(
     true,
-    sprite.frames.length === 1,
+    sprite.frameList.length === 1,
   );
 
   const onCenter = () => {

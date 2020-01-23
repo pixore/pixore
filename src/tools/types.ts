@@ -1,5 +1,5 @@
 import { Artboard, ArtboardActions } from '../contexts/Artboard';
-import { SpriteActions } from '../contexts/Sprite';
+import { SpriteActions, SpriteContext } from '../state/sprite';
 import Vector from '../utils/vector';
 import { Sprite, CanvasStats, HookCanvas } from '../types';
 
@@ -11,7 +11,7 @@ export enum Click {
 
 export interface Context {
   artboard: Artboard;
-  sprite: Sprite;
+  sprite: Sprite | SpriteContext;
   mainContext: CanvasRenderingContext2D;
   previewContext: CanvasRenderingContext2D;
   lastDrag?: Vector;

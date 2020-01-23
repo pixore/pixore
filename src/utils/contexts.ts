@@ -1,4 +1,5 @@
 import { Sprite } from '../types';
+import { SpriteContext } from '../state/sprite';
 
 type Context = CanvasRenderingContext2D;
 
@@ -33,7 +34,7 @@ const removeContextsByFrame = (spriteId: string, frameId: string) => {
 };
 
 const getContext = (
-  sprite: Sprite,
+  sprite: Sprite | SpriteContext,
   frameId: string,
   layerId: string,
 ): Context => {

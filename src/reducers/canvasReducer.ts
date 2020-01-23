@@ -1,5 +1,6 @@
 import { getScaleAndPosition } from '../utils';
 import { Size, Canvas, Dispatch, Sprite } from '../types';
+import { SpriteContext } from '../state/sprite';
 
 export interface CanvasUpdate {
   x?: number;
@@ -20,7 +21,7 @@ export interface Stats {
 }
 
 export interface CanvasActions {
-  center: (stats: Stats, sprite: Sprite) => void;
+  center: (stats: Stats, sprite: Sprite | SpriteContext) => void;
   update: (payload: Canvas) => void;
 }
 

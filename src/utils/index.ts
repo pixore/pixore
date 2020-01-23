@@ -2,6 +2,14 @@ import { Size, Stats } from '../types';
 let transparentPattern: HTMLCanvasElement;
 let stringTransparentPatter: string;
 
+let id = 0;
+const createId = () => {
+  const newId = String(id);
+
+  id = id + 1;
+  return newId;
+};
+
 declare global {
   interface CanvasRenderingContext2D {
     msImageSmoothingEnabled: boolean;
@@ -125,4 +133,5 @@ export {
   getNewId,
   isTransparent,
   toggleState,
+  createId,
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { useLayers } from '../../contexts/Layers';
 import { useSpriteActions, useSprite } from '../../contexts/Sprite';
 import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
 import Cell from './Cell';
@@ -23,20 +22,17 @@ const Sequencer = () => {
   const { changeFrame, changeLayer } = useArtboardActions();
   const sprite = useSprite();
   const artboard = useArtboard();
-  const layers = useLayers();
-  const { addNewFrameToSprite, addNewLayerToSprite } = useSpriteActions();
+  const { frameList, layerList, layers } = sprite;
+  const { createFrame, createLayer } = useSpriteActions();
 
   const onNewFrame = () => {
-    const frame = addNewFrameToSprite(sprite.id);
+    const frame = createFrame();
     changeFrame(frame);
   };
 
   const onNewLayer = () => {
-    const length = Object.keys(layers).length + 1;
-    const layer = addNewLayerToSprite({
-      name: `Layer ${length}`,
-      spriteId: sprite.id,
-    });
+    const length = layerList.length + 1;
+    const layer = createLayer(`Layer ${length}`);
 
     changeLayer(layer);
   };
@@ -52,33 +48,33 @@ const Sequencer = () => {
       <table>
         <colgroup>
           <col />
-          {sprite.frames.map((frame) => (
+          {frameList.map((frame) => (
             <SelectedFrame isActive={frame === artboard.frame} key={frame} />
           ))}
         </colgroup>
         <tbody>
           <tr>
             <td />
-            {sprite.frames.map((frame, index, arr) => (
+            {frameList.map((frame, index, arr) => (
               <Frame
                 key={frame}
                 frame={frame}
                 index={index}
-                next={index === sprite.frames.length ? arr[0] : arr[index + 1]}
+                next={index === arr.length - 1 ? arr[0] : arr[index + 1]}
                 onClick={() => changeFrame(frame)}
               />
             ))}
           </tr>
-          {sprite.layers.map((layer, index, arr) => (
+          {layerList.map((layer, index, arr) => (
             <SelectedLayer isActive={layer === artboard.layer} key={layer}>
               <Layer
                 index={index}
                 layer={layer}
-                name={layers[layer].name}
-                next={index === sprite.frames.length ? arr[0] : arr[index + 1]}
+                name={layers[layer].ref.state.context.name}
+                next={index === arr.length - 1 ? arr[0] : arr[index + 1]}
                 onClick={() => changeLayer(layer)}
               />
-              {sprite.frames.map((frame) => (
+              {sprite.frameList.map((frame) => (
                 <Cell
                   key={frame}
                   isActive={

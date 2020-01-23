@@ -15,7 +15,7 @@ interface PropTypes {
 }
 
 const Layer: React.FC<PropTypes> = (props) => {
-  const { removeLayerFromSprite } = useSpriteActions();
+  const { deleteLayer } = useSpriteActions();
   const { changeLayer } = useArtboardActions();
   const { layer, name, index, onClick, next } = props;
   const id = `layer-${index}`;
@@ -24,7 +24,7 @@ const Layer: React.FC<PropTypes> = (props) => {
     stopPropagation(event);
     if (next) {
       changeLayer(next);
-      removeLayerFromSprite(layer);
+      deleteLayer(layer);
     }
   };
 

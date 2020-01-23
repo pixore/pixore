@@ -42,10 +42,10 @@ const Canvas: React.FC = () => {
   const canvas = useCanvas(stats);
   const { onWheel } = canvas;
   const { layer, tool: toolName } = artboard;
-  const { layers } = sprite;
+  const { layerList } = sprite;
   const { isPlaying, button } = usePlayAndPause(
     false,
-    sprite.frames.length === 1,
+    sprite.frameList.length === 1,
   );
 
   const listenerContextRef = React.useRef<ListenerContext>({
@@ -80,9 +80,12 @@ const Canvas: React.FC = () => {
     canvas.center(stats, sprite);
   };
 
-  const indexOfCurrentLayer = layers.indexOf(layer);
-  const layersBelow = layers.slice(0, indexOfCurrentLayer);
-  const layersAbove = layers.slice(indexOfCurrentLayer + 1, layers.length);
+  const indexOfCurrentLayer = layerList.indexOf(layer);
+  const layersBelow = layerList.slice(0, indexOfCurrentLayer);
+  const layersAbove = layerList.slice(
+    indexOfCurrentLayer + 1,
+    layerList.length,
+  );
 
   // TODO while zooming in/out if the users try to paint
   // an error happen, therefore painting should be blocked while

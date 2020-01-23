@@ -46,8 +46,8 @@ const addEventListener = (contextRef: Context) => {
 
   const onMouseUpPainting = () => {
     const { spriteActions } = contextRef.current;
-    const { createNewVersion } = spriteActions;
-    createNewVersion();
+    const { createVersion } = spriteActions;
+    createVersion();
     $window
       .off('mouseup', onMouseUpPainting)
       .off('mousemove', onMouseMovePainting);
