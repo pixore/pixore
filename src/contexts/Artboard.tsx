@@ -1,18 +1,16 @@
 import React from 'react';
 import invariant from 'invariant';
-import { Artboard, ArtboardActions } from './types';
-import { reducer, createActions } from './reducer';
-import { useArtboards } from '../Artboards';
-
-const defaultValueState = undefined;
+import { useArtboardService } from './Artboards';
+import { useStateContext } from '../hooks/useStateContext';
+import {
+  createArtboardActions,
+  ArtboardContext,
+  defaultContext,
+  ArtboardActions,
+} from '../state/artboard';
+import { useCurrentSprite } from './Sprites';
 
 const defaultValueActions = {
-  center(_payload) {
-    invariant(false, 'Context not implemented');
-  },
-  changePosition(_payload) {
-    invariant(false, 'Context not implemented');
-  },
   changeArtboard(_artboard) {
     invariant(false, 'Context not implemented');
   },
@@ -33,7 +31,9 @@ const defaultValueActions = {
   },
 };
 
-const ArtboardStateContext = React.createContext<Artboard>(defaultValueState);
+const ArtboardStateContext = React.createContext<ArtboardContext>(
+  defaultContext,
+);
 const ArtboardActionsContext = React.createContext<ArtboardActions>(
   defaultValueActions,
 );
@@ -46,16 +46,25 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
-  const artboards = useArtboards();
-  const [state, dispatch] = React.useReducer(reducer, defaultValueState);
-  const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
-  const { changeArtboard } = actions;
+  const service = useArtboardService();
+  const { layerList, frameList } = useCurrentSprite();
+  const state = useStateContext(service);
+  const actions = React.useMemo(() => createArtboardActions(service), [
+    service,
+  ]);
 
-  const artboardIds = React.useMemo(() => Object.keys(artboards), [artboards]);
-  if (!state && artboardIds.length !== 0) {
-    const artboard = artboards[artboardIds[0]];
-    changeArtboard(artboard);
-  }
+  const { layer, frame } = state;
+
+  React.useEffect(() => {
+    if (!layerList.includes(layer)) {
+      actions.changeLayer(layerList[0]);
+    }
+  }, [actions, layerList, layer]);
+  React.useEffect(() => {
+    if (!frameList.includes(frame)) {
+      actions.changeFrame(frameList[0]);
+    }
+  }, [actions, frameList, frame]);
 
   const { children } = props;
   return (
@@ -67,5 +76,4 @@ const Provider: React.FC<ProviderProps> = (props) => {
   );
 };
 
-export * from './types';
 export { Provider, useArtboard, useArtboardActions };

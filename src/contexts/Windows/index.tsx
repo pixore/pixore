@@ -7,7 +7,6 @@ const defaultState = {};
 const defaultActions = {
   openWindow() {
     invariant(false, 'Context not implemented');
-    return 'id';
   },
   closeWindow() {
     invariant(false, 'Context not implemented');

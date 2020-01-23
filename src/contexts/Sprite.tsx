@@ -5,8 +5,9 @@ import {
   defaultContext,
   SpriteActions,
   createSpriteActions,
-} from '../../state/sprite';
-import { useCurrentSprite } from '../Sprites';
+} from '../state/sprite';
+import { useSpriteService } from './Sprites';
+import { useStateContext } from '../hooks/useStateContext';
 
 const defaultValueActions = {
   changeName(_name) {
@@ -14,19 +15,17 @@ const defaultValueActions = {
   },
   createLayer(_newLayer) {
     invariant(false, 'Context not implemented');
-    return '';
   },
   createFrame() {
     invariant(false, 'Context not implemented');
-    return '';
   },
   createVersion() {
     invariant(false, 'Context not implemented');
   },
-  deleteFrame(frameId) {
+  deleteFrame(_frameId) {
     invariant(false, 'Context not implemented');
   },
-  deleteLayer(layerId) {
+  deleteLayer(_layerId) {
     invariant(false, 'Context not implemented');
   },
 };
@@ -45,13 +44,8 @@ interface ProviderProps {
 
 const Provider: React.FC<ProviderProps> = (props) => {
   const { children } = props;
-  const service = useCurrentSprite();
-  const [state, setState] = React.useState(service.state.context);
-  React.useEffect(() => {
-    service.onChange(setState);
-
-    return () => service.off(setState);
-  }, [service]);
+  const service = useSpriteService();
+  const state = useStateContext(service);
 
   const actions = React.useMemo(() => createSpriteActions(service), [service]);
 

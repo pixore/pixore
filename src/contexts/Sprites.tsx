@@ -6,7 +6,8 @@ import {
   createSpritesActions,
   SpritesActions,
   SpritesContext as SpritesContextMachine,
-} from '../../state/sprites';
+} from '../state/sprites';
+import { useStateContext } from '../hooks/useStateContext';
 
 const defaultState = {
   sprites: {},
@@ -27,10 +28,12 @@ const SpritesActionsContext = React.createContext<SpritesActions>(
 
 const useSpritesActions = () => React.useContext(SpritesActionsContext);
 const useSprites = () => React.useContext(SpritesContext);
-const useCurrentSprite = () => {
+const useSpriteService = () => {
   const { sprites, currentSprite } = useSprites();
   return sprites[currentSprite].ref;
 };
+
+const useCurrentSprite = () => useSpriteService().state.context;
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -38,12 +41,7 @@ interface ProviderProps {
 
 const Provider: React.FC<ProviderProps> = (props) => {
   const [service] = React.useState(() => interpret(spritesMachine).start());
-  const [state, setState] = React.useState(service.state.context);
-  React.useEffect(() => {
-    service.onChange(setState);
-
-    return () => service.off(setState);
-  }, [service]);
+  const state = useStateContext(service);
 
   const { children } = props;
   const actions = React.useMemo(() => createSpritesActions(service), [service]);
@@ -57,4 +55,10 @@ const Provider: React.FC<ProviderProps> = (props) => {
   );
 };
 
-export { Provider, useSpritesActions, useSprites, useCurrentSprite };
+export {
+  Provider,
+  useSpritesActions,
+  useSprites,
+  useCurrentSprite,
+  useSpriteService,
+};

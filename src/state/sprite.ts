@@ -83,9 +83,10 @@ const spriteMachine = Machine<SpriteContext, SpriteState, SpriteEvent>({
         '': {
           target: 'painting',
           actions: assign((context) => {
-            const id = createId();
-            const layers = addLayer({}, id, 'Layer 1');
-            const frames = addFrame({}, id);
+            const frameId = createId();
+            const layerId = createId();
+            const layers = addLayer({}, layerId, 'Layer 1');
+            const frames = addFrame({}, frameId);
             return {
               ...context,
               layers,

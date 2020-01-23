@@ -58,7 +58,7 @@ const Tools: React.FC = () => {
   const { primaryColor, secondaryColor } = useArtboard();
   const { changePrimaryColor, changeSecondaryColor } = useArtboardActions();
   const { openWindow } = useWindowsActions();
-  const [colorPickerId, setColorPickerId] = React.useState();
+  const [, setColorPickerId] = React.useState();
 
   const changeColor = (
     event: React.MouseEvent,
