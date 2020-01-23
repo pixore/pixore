@@ -61,7 +61,7 @@ const addFrame = (frames: FrameMap, id: string) => {
   return addItem(frames, id, { id });
 };
 
-export const defaultContext = {
+export const defaultContext: SpriteContext = {
   id: '1',
   frames: {},
   layers: {},
@@ -174,16 +174,7 @@ const spriteMachine = Machine<SpriteContext, SpriteState, SpriteEvent>({
   },
 });
 
-export interface SpriteActions {
-  changeName: (name: string) => void;
-  createLayer: (name: string) => string;
-  createFrame: () => string;
-  deleteLayer: (layerId: string) => void;
-  deleteFrame: (frameId: string) => void;
-  createVersion: () => void;
-}
-
-const createSpriteActions = (service: SpriteInterpreter): SpriteActions => ({
+const createSpriteActions = (service: SpriteInterpreter) => ({
   changeName(name: string) {
     service.send({
       type: 'RENAME',

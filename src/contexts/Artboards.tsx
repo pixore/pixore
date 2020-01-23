@@ -1,25 +1,15 @@
 import React from 'react';
-import invariant from 'invariant';
 import { interpret } from 'xstate';
 import {
-  ArtboardsActions,
-  ArtboardsContext as ArtboardsContextMachine,
   defaultContext,
   artboardsMachine,
   createArtboardsActions,
 } from '../state/artboards';
 import { useStateContext } from '../hooks/useStateContext';
-const defaultActions = {
-  createArtboard(_artboard) {
-    invariant(false, 'Context not implemented');
-  },
-};
-const ArtboardsContext = React.createContext<ArtboardsContextMachine>(
-  defaultContext,
-);
-const ArtboardsActionsContext = React.createContext<ArtboardsActions>(
-  defaultActions,
-);
+
+const defaultActions = createArtboardsActions(interpret(artboardsMachine));
+const ArtboardsContext = React.createContext(defaultContext);
+const ArtboardsActionsContext = React.createContext(defaultActions);
 
 const useArtboardsActions = () => React.useContext(ArtboardsActionsContext);
 const useArtboards = () => React.useContext(ArtboardsContext);

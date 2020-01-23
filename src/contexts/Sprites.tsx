@@ -1,30 +1,16 @@
 import React from 'react';
 import { interpret } from 'xstate';
-import invariant from 'invariant';
 import {
   spritesMachine,
   createSpritesActions,
-  SpritesActions,
-  SpritesContext as SpritesContextMachine,
+  defaultContext,
 } from '../state/sprites';
 import { useStateContext } from '../hooks/useStateContext';
 
-const defaultState = {
-  sprites: {},
-  spriteList: [],
-  currentSprite: '1',
-};
+const defaultActions = createSpritesActions(interpret(spritesMachine));
 
-const defaultActions = {
-  createSprite(_sprite) {
-    invariant(false, 'Context not implemented');
-  },
-};
-
-const SpritesContext = React.createContext<SpritesContextMachine>(defaultState);
-const SpritesActionsContext = React.createContext<SpritesActions>(
-  defaultActions,
-);
+const SpritesContext = React.createContext(defaultContext);
+const SpritesActionsContext = React.createContext(defaultActions);
 
 const useSpritesActions = () => React.useContext(SpritesActionsContext);
 const useSprites = () => React.useContext(SpritesContext);

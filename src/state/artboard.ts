@@ -29,7 +29,7 @@ export type ArtboardInterpreter = Interpreter<
   ArtboardEvent
 >;
 
-export const defaultContext = {
+export const defaultContext: ArtboardContext = {
   id: 'no',
   tool: 'pen',
   primaryColor: black(),
@@ -75,42 +75,32 @@ const artboardMachine = Machine<ArtboardContext, ArtboardState, ArtboardEvent>({
   },
 });
 
-export interface ArtboardActions {
-  changeLayer: (layer: string) => void;
-  changeFrame: (frame: string) => void;
-  changePrimaryColor: (color: Color) => void;
-  changeSecondaryColor: (color: Color) => void;
-  changeTool: (tool: string) => void;
-}
-
-const createArtboardActions = (
-  service: ArtboardInterpreter,
-): ArtboardActions => ({
-  changeLayer(layer) {
+const createArtboardActions = (service: ArtboardInterpreter) => ({
+  changeLayer(layer: string) {
     return service.send({
       type: 'CHANGE_LAYER',
       layer,
     });
   },
-  changeFrame(frame) {
+  changeFrame(frame: string) {
     service.send({
       type: 'CHANGE_FRAME',
       frame,
     });
   },
-  changePrimaryColor(color) {
+  changePrimaryColor(color: Color) {
     service.send({
       type: 'CHANGE_PRIMARY_COLOR',
       color,
     });
   },
-  changeSecondaryColor(color) {
+  changeSecondaryColor(color: Color) {
     service.send({
       type: 'CHANGE_SECONDARY_COLOR',
       color,
     });
   },
-  changeTool(tool) {
+  changeTool(tool: string) {
     service.send({
       type: 'CHANGE_TOOL',
       tool,

@@ -1,42 +1,18 @@
 import React from 'react';
-import invariant from 'invariant';
+import { interpret } from 'xstate';
 import { useArtboardService } from './Artboards';
 import { useStateContext } from '../hooks/useStateContext';
 import {
   createArtboardActions,
-  ArtboardContext,
   defaultContext,
-  ArtboardActions,
+  artboardMachine,
 } from '../state/artboard';
 import { useCurrentSprite } from './Sprites';
 
-const defaultValueActions = {
-  changeArtboard(_artboard) {
-    invariant(false, 'Context not implemented');
-  },
-  changeLayer(_layer) {
-    invariant(false, 'Context not implemented');
-  },
-  changeFrame(_frame) {
-    invariant(false, 'Context not implemented');
-  },
-  changePrimaryColor(_color) {
-    invariant(false, 'Context not implemented');
-  },
-  changeSecondaryColor(_color) {
-    invariant(false, 'Context not implemented');
-  },
-  changeTool(_tool) {
-    invariant(false, 'Context not implemented');
-  },
-};
+const defaultValueActions = createArtboardActions(interpret(artboardMachine));
 
-const ArtboardStateContext = React.createContext<ArtboardContext>(
-  defaultContext,
-);
-const ArtboardActionsContext = React.createContext<ArtboardActions>(
-  defaultValueActions,
-);
+const ArtboardStateContext = React.createContext(defaultContext);
+const ArtboardActionsContext = React.createContext(defaultValueActions);
 
 const useArtboardActions = () => React.useContext(ArtboardActionsContext);
 const useArtboard = () => React.useContext(ArtboardStateContext);

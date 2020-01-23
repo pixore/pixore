@@ -49,7 +49,7 @@ export type SpritesInterpreter = Interpreter<
   SpritesEvent
 >;
 
-const defaultContext = {
+export const defaultContext: SpritesContext = {
   sprites: {},
   spriteList: [],
   currentSprite: '',
@@ -94,12 +94,8 @@ const spritesMachine = Machine<SpritesContext, SpritesState, SpritesEvent>({
   },
 });
 
-export interface SpritesActions {
-  createSprite: (sprite: NewSprite) => string;
-}
-
 const createSpritesActions = (service: SpritesInterpreter) => ({
-  createSprite(sprite: NewSprite) {
+  createSprite(sprite: NewSprite): string {
     const { context } = service.send({
       type: 'CREATE_SPRITE',
       ...sprite,

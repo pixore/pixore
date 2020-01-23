@@ -49,7 +49,7 @@ export type ArtboardsInterpreter = Interpreter<
   ArtboardsEvent
 >;
 
-export const defaultContext = {
+export const defaultContext: ArtboardsContext = {
   artboards: {},
   spriteList: [],
   currentArtboard: '',
@@ -98,12 +98,8 @@ const artboardsMachine = Machine<
   },
 });
 
-export interface ArtboardsActions {
-  createArtboard: (artboard: NewArtboard) => string;
-}
-
 const createArtboardsActions = (service: ArtboardsInterpreter) => ({
-  createArtboard(artboard: NewArtboard) {
+  createArtboard(artboard: NewArtboard): string {
     const { context } = service.send({
       type: 'CREATE_ARTBOARD',
       ...artboard,

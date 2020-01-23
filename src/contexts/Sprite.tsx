@@ -1,39 +1,17 @@
 import React from 'react';
-import invariant from 'invariant';
 import {
-  SpriteContext,
   defaultContext,
-  SpriteActions,
   createSpriteActions,
+  spriteMachine,
 } from '../state/sprite';
 import { useSpriteService } from './Sprites';
 import { useStateContext } from '../hooks/useStateContext';
+import { interpret } from 'xstate';
 
-const defaultValueActions = {
-  changeName(_name) {
-    invariant(false, 'Context not implemented');
-  },
-  createLayer(_newLayer) {
-    invariant(false, 'Context not implemented');
-  },
-  createFrame() {
-    invariant(false, 'Context not implemented');
-  },
-  createVersion() {
-    invariant(false, 'Context not implemented');
-  },
-  deleteFrame(_frameId) {
-    invariant(false, 'Context not implemented');
-  },
-  deleteLayer(_layerId) {
-    invariant(false, 'Context not implemented');
-  },
-};
+const defaultValueActions = createSpriteActions(interpret(spriteMachine));
 
-const SpriteStateContext = React.createContext<SpriteContext>(defaultContext);
-const SpriteActionsContext = React.createContext<SpriteActions>(
-  defaultValueActions,
-);
+const SpriteStateContext = React.createContext(defaultContext);
+const SpriteActionsContext = React.createContext(defaultValueActions);
 
 const useSpriteActions = () => React.useContext(SpriteActionsContext);
 const useSprite = () => React.useContext(SpriteStateContext);
