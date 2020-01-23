@@ -18,7 +18,7 @@ const Td = styled.td`
   text-align: center;
   height: 26px;
   padding: 0 8px;
-  border-radius: 10px;
+  border-radius: 3px;
   &:hover {
     background: #5e81ac;
   }
@@ -44,7 +44,8 @@ const FramesAndLayers = () => {
   const { addNewFrameToSprite, addNewLayerToSprite } = useSpriteActions();
 
   const onNewFrame = () => {
-    addNewFrameToSprite();
+    const frame = addNewFrameToSprite();
+    changeFrame(frame);
   };
 
   const onSelectFrameAndLayer = (frame: string, layer: string) => {

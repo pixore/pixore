@@ -33,6 +33,22 @@ const Changelog: React.FC = () => {
             <li>Add a small padding to the default size of the canvas</li>
           </ul>
         </li>
+        <li>
+          <h4>0.3.0 (2019-12-17)</h4>
+          <ul>
+            <li>Brand new Preview panel</li>
+            <li>Improve layout sizes</li>
+            <li>Improve Sequencer styles</li>
+            <li>Fix the preview while using the pen with transparent</li>
+          </ul>
+        </li>
+        <li>
+          <h4>0.4.0 (2020-01-12)</h4>
+          <ul>
+            <li>Brand color picker</li>
+            <li>Style improvements</li>
+          </ul>
+        </li>
       </ul>
 
       <p style={{ textAlign: 'center' }}>

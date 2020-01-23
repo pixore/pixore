@@ -1,5 +1,6 @@
 import { Size, Stats } from '../types';
 let transparentPattern: HTMLCanvasElement;
+let stringTransparentPatter: string;
 
 declare global {
   interface CanvasRenderingContext2D {
@@ -38,6 +39,16 @@ const getTransparentPattern = () => {
   transparentPattern = context.canvas;
 
   return transparentPattern;
+};
+
+const getStringTransparentPattern = (): string => {
+  if (stringTransparentPatter) {
+    return stringTransparentPatter;
+  }
+
+  stringTransparentPatter = getTransparentPattern().toDataURL('image/png');
+
+  return stringTransparentPatter;
 };
 
 const clean = (context: CanvasRenderingContext2D) => {
@@ -97,15 +108,19 @@ const getScaleAndPosition = (stats: Stats, size: Size) => {
   };
 };
 
+const toggleState = (state: boolean) => !state;
+
 export {
   round1,
   getScaleAndPosition,
   preventDefault,
   getTransparentPattern,
+  getStringTransparentPattern,
   clean,
   imageSmoothing,
   imageSmoothingDisabled,
   getIdByReference,
   getNewId,
   isTransparent,
+  toggleState,
 };

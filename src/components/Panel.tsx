@@ -37,6 +37,7 @@ const Content = styled.div`
   border-left: 2px #2e3440 solid;
   border-right: 2px #2e3440 solid;
   padding: 4px;
+  position: relative;
   border-bottom-left-radius: ${radius}px;
   border-bottom-right-radius: ${radius}px;
 `;
@@ -51,4 +52,17 @@ const Panel: React.FC<PropTypes> = (props) => {
   );
 };
 
+const HeadlessPanel = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #2e3440;
+  border-radius: 10px;
+  background: #3b4252;
+  overflow: hidden;
+`;
+
+export { HeadlessPanel };
 export default Panel;

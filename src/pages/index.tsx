@@ -1,3 +1,5 @@
+import '@reach/slider/styles.css';
+import '@reach/tabs/styles.css';
 import '../styles.css';
 import React from 'react';
 import Subdivide, { Config, LayoutState } from '@pixore/subdivide';
@@ -9,7 +11,6 @@ import Head from '../components/Head';
 import GlobalStyle from '../components/GlobalStyle';
 import Bootstrap from '../components/Bootstrap';
 import PanelMaster from '../components/PanelMaster';
-import WelcomeWindow from '../components/WelcomeWindow';
 
 const IndexPage = () => {
   return (
@@ -17,7 +18,6 @@ const IndexPage = () => {
       <Bootstrap>
         <Head />
         <GlobalStyle />
-        <WelcomeWindow />
         <Header />
         <Config.Provider initialState={defaultLayout as LayoutState}>
           <Subdivide top={25} component={PanelMaster} />

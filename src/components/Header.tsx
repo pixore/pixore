@@ -6,13 +6,17 @@ import {
   notImplemented,
   MenuItemSeparator,
 } from './MenuButton';
-
 import ProjectName from './ProjectName';
+import { useWelcomeWindow } from '../hooks/useWelcomeWindow';
+import Windows from './Window/Windows';
 
 const Header = () => {
+  const { openWelcomeWindow } = useWelcomeWindow(true);
+
   return (
     <div>
       <ProjectName />
+      <Windows />
       <Menu>
         <MenuButton>File</MenuButton>
         <MenuList>
@@ -59,6 +63,12 @@ const Header = () => {
           <MenuItemSeparator />
           <MenuItem onSelect={notImplemented}>Default</MenuItem>
           <MenuItem onSelect={notImplemented}>Animation</MenuItem>
+        </MenuList>
+      </Menu>
+      <Menu>
+        <MenuButton>Help</MenuButton>
+        <MenuList>
+          <MenuItem onSelect={openWelcomeWindow}>Welcome</MenuItem>
         </MenuList>
       </Menu>
     </div>

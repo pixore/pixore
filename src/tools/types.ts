@@ -1,4 +1,4 @@
-import { Artboard, ArtboardsActions } from '../contexts/Artboard';
+import { Artboard, ArtboardActions } from '../contexts/Artboard';
 import { SpriteActions } from '../contexts/Sprite';
 import Vector from '../utils/vector';
 import { Sprite, CanvasStats, HookCanvas } from '../types';
@@ -15,7 +15,7 @@ export interface Context {
   mainContext: CanvasRenderingContext2D;
   previewContext: CanvasRenderingContext2D;
   lastDrag?: Vector;
-  artboardActions: ArtboardsActions;
+  artboardActions: ArtboardActions;
   spriteActions: SpriteActions;
   clickType?: number;
   canvas: CanvasStats & HookCanvas;

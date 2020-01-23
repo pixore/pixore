@@ -4,9 +4,10 @@ import { Key } from '../contexts/Modifiers';
 import { getModifierState } from '../utils/keyboard';
 import { manageEvents as $ } from '../utils/dom/events';
 import Vector from '../utils/vector';
-import { round1, isTransparent, clean } from '../utils';
+import { round1, clean } from '../utils';
 import { calculatePosition } from '../utils/canvas';
 import { Artboard } from '../contexts/Artboard';
+import { isTransparent, toString, Color } from '../utils/Color';
 
 type RemovePanning = () => void;
 type RemovePreview = () => void;
@@ -102,18 +103,18 @@ const addPanning = (contextRef: ContextRef): RemovePanning => {
   };
 };
 
-const getColor = (artboard: Artboard, clickType: number): string => {
+const getColor = (artboard: Artboard, clickType: number): Color => {
   const { primaryColor, secondaryColor } = artboard;
 
   return clickType === Click.LEFT ? primaryColor : secondaryColor;
 };
 
-const paintOrClear = (context: Context2D, cord: Vector, color: string) => {
+const paintOrClear = (context: Context2D, cord: Vector, color: Color) => {
   const { x, y } = cord;
   if (isTransparent(color)) {
     context.clearRect(x, y, 1, 1);
   } else {
-    context.fillStyle = color;
+    context.fillStyle = toString(color);
     context.fillRect(x, y, 1, 1);
   }
 };
