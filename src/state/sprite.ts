@@ -1,5 +1,5 @@
 import { Machine, assign, Interpreter } from 'xstate';
-
+import { Frame, Layer } from '../types';
 import { ItemMap, addItem, removeItem, isLastItem } from '../utils/object';
 import { createId } from '../utils';
 
@@ -10,19 +10,10 @@ interface SpriteState {
   };
 }
 
-interface FrameContext {
-  id: string;
-}
+type FrameMap = ItemMap<Frame>;
+type LayerMap = ItemMap<Layer>;
 
-interface LayerContex {
-  id: string;
-  name: string;
-}
-
-type FrameMap = ItemMap<FrameContext>;
-type LayerMap = ItemMap<LayerContex>;
-
-export interface SpriteContext {
+export interface Sprite {
   id: string;
   frames: FrameMap;
   layers: LayerMap;
@@ -44,11 +35,7 @@ type SpriteEvent =
   | { type: 'DELETE_LAYER'; id: string }
   | { type: 'DELETE_FRAME'; id: string };
 
-export type SpriteInterpreter = Interpreter<
-  SpriteContext,
-  SpriteState,
-  SpriteEvent
->;
+export type SpriteInterpreter = Interpreter<Sprite, SpriteState, SpriteEvent>;
 
 const addLayer = (layers: LayerMap, id: string, name: string) => {
   return addItem(layers, id, {
@@ -61,7 +48,7 @@ const addFrame = (frames: FrameMap, id: string) => {
   return addItem(frames, id, { id });
 };
 
-export const defaultContext: SpriteContext = {
+export const defaultContext: Sprite = {
   id: '1',
   frames: {},
   layers: {},
@@ -73,7 +60,7 @@ export const defaultContext: SpriteContext = {
   name: 'New sprite',
 };
 
-const spriteMachine = Machine<SpriteContext, SpriteState, SpriteEvent>({
+const spriteMachine = Machine<Sprite, SpriteState, SpriteEvent>({
   id: 'sprite',
   initial: 'setup',
   context: defaultContext,
@@ -212,5 +199,7 @@ const createSpriteActions = (service: SpriteInterpreter) => ({
     });
   },
 });
+
+export type SpriteActions = ReturnType<typeof createSpriteActions>;
 
 export { spriteMachine, createSpriteActions };

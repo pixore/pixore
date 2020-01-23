@@ -3,7 +3,7 @@ import {
   ArtboardInterpreter,
   artboardMachine,
   defaultContext as spriteDefaultContext,
-  ArtboardContext,
+  Artboard,
 } from './artboard';
 import { Ref } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
@@ -12,7 +12,7 @@ import { createId } from '../utils';
 type ArtboardRef = Ref<ArtboardInterpreter>;
 type ArtboardMap = ItemMap<ArtboardRef>;
 
-export interface ArtboardsContext {
+export interface Artboards {
   artboards: ArtboardMap;
   spriteList: string[];
   currentArtboard: string;
@@ -39,27 +39,23 @@ const addArtboard = (artboards: ArtboardMap, id: string, data: NewArtboard) => {
   });
 };
 
-export type NewArtboard = Partial<Omit<ArtboardContext, 'id'>>;
+export type NewArtboard = Partial<Omit<Artboard, 'id'>>;
 type NewArtboardEvent = { type: 'CREATE_ARTBOARD' } & NewArtboard;
 type ArtboardsEvent = NewArtboardEvent;
 
 export type ArtboardsInterpreter = Interpreter<
-  ArtboardsContext,
+  Artboards,
   ArtboardsState,
   ArtboardsEvent
 >;
 
-export const defaultContext: ArtboardsContext = {
+export const defaultContext: Artboards = {
   artboards: {},
   spriteList: [],
   currentArtboard: '',
 };
 
-const artboardsMachine = Machine<
-  ArtboardsContext,
-  ArtboardsState,
-  ArtboardsEvent
->({
+const artboardsMachine = Machine<Artboards, ArtboardsState, ArtboardsEvent>({
   id: 'artboards',
   initial: 'setup',
   context: defaultContext,

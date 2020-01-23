@@ -3,7 +3,7 @@ import {
   SpriteInterpreter,
   spriteMachine,
   defaultContext as spriteDefaultContext,
-  SpriteContext,
+  Sprite,
 } from './sprite';
 import { Ref } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
@@ -12,7 +12,7 @@ import { createId } from '../utils';
 type SpriteRef = Ref<SpriteInterpreter>;
 type SpriteMap = ItemMap<SpriteRef>;
 
-export interface SpritesContext {
+export interface Sprites {
   sprites: SpriteMap;
   spriteList: string[];
   currentSprite: string;
@@ -39,23 +39,23 @@ const addSprite = (sprites: SpriteMap, id: string, data: NewSprite) => {
   });
 };
 
-export type NewSprite = Partial<Omit<SpriteContext, 'id'>>;
+export type NewSprite = Partial<Omit<Sprite, 'id'>>;
 type NewSpriteEvent = { type: 'CREATE_SPRITE' } & NewSprite;
 type SpritesEvent = NewSpriteEvent;
 
 export type SpritesInterpreter = Interpreter<
-  SpritesContext,
+  Sprites,
   SpritesState,
   SpritesEvent
 >;
 
-export const defaultContext: SpritesContext = {
+export const defaultContext: Sprites = {
   sprites: {},
   spriteList: [],
   currentSprite: '',
 };
 
-const spritesMachine = Machine<SpritesContext, SpritesState, SpritesEvent>({
+const spritesMachine = Machine<Sprites, SpritesState, SpritesEvent>({
   id: 'sprites',
   initial: 'setup',
   context: defaultContext,

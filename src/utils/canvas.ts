@@ -1,5 +1,5 @@
-import { CanvasStats, Sprite } from '../types';
-import { SpriteContext } from '../state/sprite';
+import { CanvasStats } from '../types';
+import { Sprite } from '../state/sprite';
 
 const { floor } = Math;
 
@@ -19,7 +19,7 @@ const calculatePosition = (
   return { x, y };
 };
 
-const validCord = (sprite: Sprite | SpriteContext, cord: Cord) => {
+const validCord = (sprite: Sprite, cord: Cord) => {
   return (
     cord.x >= 0 &&
     cord.x < sprite.width &&

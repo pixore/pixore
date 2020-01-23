@@ -6,7 +6,7 @@ import { manageEvents as $ } from '../utils/dom/events';
 import Vector from '../utils/vector';
 import { round1, clean } from '../utils';
 import { calculatePosition } from '../utils/canvas';
-import { ArtboardContext } from '../state/artboard';
+import { Artboard } from '../state/artboard';
 import { isTransparent, toString, Color } from '../utils/Color';
 
 type RemovePanning = () => void;
@@ -103,7 +103,7 @@ const addPanning = (contextRef: ContextRef): RemovePanning => {
   };
 };
 
-const getColor = (artboard: ArtboardContext, clickType: number): Color => {
+const getColor = (artboard: Artboard, clickType: number): Color => {
   const { primaryColor, secondaryColor } = artboard;
 
   return clickType === Click.LEFT ? primaryColor : secondaryColor;

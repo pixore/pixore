@@ -1,4 +1,5 @@
 import React from 'react';
+import { interpret } from 'xstate';
 import {
   defaultContext,
   createSpriteActions,
@@ -6,7 +7,6 @@ import {
 } from '../state/sprite';
 import { useSpriteService } from './Sprites';
 import { useStateContext } from '../hooks/useStateContext';
-import { interpret } from 'xstate';
 
 const defaultValueActions = createSpriteActions(interpret(spriteMachine));
 

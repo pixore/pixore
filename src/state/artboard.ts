@@ -1,7 +1,7 @@
 import { Machine, Interpreter, assign } from 'xstate';
 import { Color, transparent, black } from '../utils/Color';
 
-export interface ArtboardContext {
+export interface Artboard {
   id: string;
   primaryColor: Color;
   secondaryColor: Color;
@@ -24,12 +24,12 @@ type ArtboardEvent =
   | { type: 'CHANGE_TOOL'; tool: string };
 
 export type ArtboardInterpreter = Interpreter<
-  ArtboardContext,
+  Artboard,
   ArtboardState,
   ArtboardEvent
 >;
 
-export const defaultContext: ArtboardContext = {
+export const defaultContext: Artboard = {
   id: 'no',
   tool: 'pen',
   primaryColor: black(),
@@ -38,7 +38,7 @@ export const defaultContext: ArtboardContext = {
   layer: 'no',
 };
 
-const artboardMachine = Machine<ArtboardContext, ArtboardState, ArtboardEvent>({
+const artboardMachine = Machine<Artboard, ArtboardState, ArtboardEvent>({
   id: 'artboard',
   initial: 'init',
   context: defaultContext,
@@ -107,5 +107,7 @@ const createArtboardActions = (service: ArtboardInterpreter) => ({
     });
   },
 });
+
+export type ArtboardActions = ReturnType<typeof createArtboardActions>;
 
 export { artboardMachine, createArtboardActions };
