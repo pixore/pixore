@@ -5,9 +5,10 @@ export interface Artboard {
   id: string;
   primaryColor: Color;
   secondaryColor: Color;
-  layer: string;
-  frame: string;
+  layerId: string;
+  frameId: string;
   tool: string;
+  paletteId: string;
 }
 
 interface ArtboardState {
@@ -17,11 +18,12 @@ interface ArtboardState {
 }
 
 type ArtboardEvent =
-  | { type: 'CHANGE_FRAME'; frame: string }
-  | { type: 'CHANGE_LAYER'; layer: string }
+  | { type: 'CHANGE_FRAME'; frameId: string }
+  | { type: 'CHANGE_LAYER'; layerId: string }
   | { type: 'CHANGE_PRIMARY_COLOR'; color: Color }
   | { type: 'CHANGE_SECONDARY_COLOR'; color: Color }
-  | { type: 'CHANGE_TOOL'; tool: string };
+  | { type: 'CHANGE_TOOL'; tool: string }
+  | { type: 'CHANGE_PALETTE'; paletteId: string };
 
 export type ArtboardInterpreter = Interpreter<
   Artboard,
@@ -34,8 +36,9 @@ export const defaultContext: Artboard = {
   tool: 'pen',
   primaryColor: black(),
   secondaryColor: transparent(),
-  frame: 'no',
-  layer: 'no',
+  frameId: 'no',
+  layerId: 'no',
+  paletteId: 'no',
 };
 
 const artboardMachine = Machine<Artboard, ArtboardState, ArtboardEvent>({
@@ -46,13 +49,13 @@ const artboardMachine = Machine<Artboard, ArtboardState, ArtboardEvent>({
     init: {
       on: {
         CHANGE_FRAME: {
-          actions: assign((context, { frame }) => ({
-            frame,
+          actions: assign((context, { frameId }) => ({
+            frameId,
           })),
         },
         CHANGE_LAYER: {
-          actions: assign((context, { layer }) => ({
-            layer,
+          actions: assign((context, { layerId }) => ({
+            layerId,
           })),
         },
         CHANGE_TOOL: {
@@ -70,22 +73,27 @@ const artboardMachine = Machine<Artboard, ArtboardState, ArtboardEvent>({
             secondaryColor: color,
           })),
         },
+        CHANGE_PALETTE: {
+          actions: assign((context, { paletteId }) => ({
+            paletteId,
+          })),
+        },
       },
     },
   },
 });
 
 const createArtboardActions = (service: ArtboardInterpreter) => ({
-  changeLayer(layer: string) {
+  changeLayer(layerId: string) {
     return service.send({
       type: 'CHANGE_LAYER',
-      layer,
+      layerId,
     });
   },
-  changeFrame(frame: string) {
+  changeFrame(frameId: string) {
     service.send({
       type: 'CHANGE_FRAME',
-      frame,
+      frameId,
     });
   },
   changePrimaryColor(color: Color) {
@@ -104,6 +112,12 @@ const createArtboardActions = (service: ArtboardInterpreter) => ({
     service.send({
       type: 'CHANGE_TOOL',
       tool,
+    });
+  },
+  changePalette(paletteId: string) {
+    service.send({
+      type: 'CHANGE_PALETTE',
+      paletteId,
     });
   },
 });

@@ -8,6 +8,7 @@ import {
   artboardMachine,
 } from '../state/artboard';
 import { useCurrentSprite } from './Sprites';
+import { usePalettes } from './Palettes';
 
 const defaultValueActions = createArtboardActions(interpret(artboardMachine));
 
@@ -24,23 +25,34 @@ interface ProviderProps {
 const Provider: React.FC<ProviderProps> = (props) => {
   const service = useArtboardService();
   const { layerList, frameList } = useCurrentSprite();
+  const { paletteList } = usePalettes();
   const state = useStateContext(service);
   const actions = React.useMemo(() => createArtboardActions(service), [
     service,
   ]);
 
-  const { layer, frame } = state;
+  const { layerId, frameId, paletteId } = state;
 
   React.useEffect(() => {
-    if (!layerList.includes(layer)) {
+    if (!paletteList.includes(paletteId)) {
+      actions.changePalette(paletteList[0]);
+    }
+  }, [actions, paletteList, paletteId]);
+
+  React.useEffect(() => {
+    if (!layerList.includes(layerId)) {
       actions.changeLayer(layerList[0]);
     }
-  }, [actions, layerList, layer]);
+  }, [actions, layerList, layerId]);
   React.useEffect(() => {
-    if (!frameList.includes(frame)) {
+    if (!frameList.includes(frameId)) {
       actions.changeFrame(frameList[0]);
     }
-  }, [actions, frameList, frame]);
+  }, [actions, frameList, frameId]);
+
+  if (layerId === 'no' || frameId === 'no' || paletteId === 'no') {
+    return null;
+  }
 
   const { children } = props;
   return (

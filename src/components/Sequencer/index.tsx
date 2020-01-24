@@ -49,7 +49,7 @@ const Sequencer = () => {
         <colgroup>
           <col />
           {frameList.map((frame) => (
-            <SelectedFrame isActive={frame === artboard.frame} key={frame} />
+            <SelectedFrame isActive={frame === artboard.frameId} key={frame} />
           ))}
         </colgroup>
         <tbody>
@@ -66,7 +66,7 @@ const Sequencer = () => {
             ))}
           </tr>
           {layerList.map((layer, index, arr) => (
-            <SelectedLayer isActive={layer === artboard.layer} key={layer}>
+            <SelectedLayer isActive={layer === artboard.layerId} key={layer}>
               <Layer
                 index={index}
                 layer={layer}
@@ -78,7 +78,7 @@ const Sequencer = () => {
                 <Cell
                   key={frame}
                   isActive={
-                    frame === artboard.frame && layer === artboard.layer
+                    frame === artboard.frameId && layer === artboard.layerId
                   }
                   frame={frame}
                   layer={layer}

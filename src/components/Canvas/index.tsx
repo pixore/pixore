@@ -41,7 +41,7 @@ const Canvas: React.FC = () => {
   const spriteActions = useSpriteActions();
   const canvas = useCanvas(stats);
   const { onWheel } = canvas;
-  const { layer, tool: toolName } = artboard;
+  const { layerId, tool: toolName } = artboard;
   const { layerList } = sprite;
   const { isPlaying, button } = usePlayAndPause(
     false,
@@ -80,7 +80,7 @@ const Canvas: React.FC = () => {
     canvas.center(stats, sprite);
   };
 
-  const indexOfCurrentLayer = layerList.indexOf(layer);
+  const indexOfCurrentLayer = layerList.indexOf(layerId);
   const layersBelow = layerList.slice(0, indexOfCurrentLayer);
   const layersAbove = layerList.slice(
     indexOfCurrentLayer + 1,
@@ -106,7 +106,7 @@ const Canvas: React.FC = () => {
           <FrameLayers
             data-id="current-layer"
             ref={setMainRef}
-            layers={[layer]}
+            layers={[layerId]}
             {...canvas}
           />
           <FrameLayers

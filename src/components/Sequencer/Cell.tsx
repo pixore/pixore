@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import { Td } from './elements';
 import { useArtboardActions } from '../../contexts/Artboard';
-// import {} from '../../'
 import { stopPropagation, clean } from '../../utils';
 import { getContext } from '../../utils/contexts';
 import { useSprite } from '../../contexts/Sprite';

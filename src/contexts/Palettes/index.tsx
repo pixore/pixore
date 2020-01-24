@@ -1,44 +1,67 @@
 import React from 'react';
-import invariant from 'invariant';
-import { reducer, createActions } from './reducer';
-import { PalettesActions, PalettesState } from './types';
+import { interpret } from 'xstate';
+import { useStateContext } from '../../hooks/useStateContext';
+import {
+  palettesMachine,
+  createPalettesActions,
+  defaultContext,
+} from '../../state/palettes';
+import { createPaletteActions } from '../../state/palette';
 
-const defaultState = {};
-const defaultActions = {
-  addPalette(_payload) {
-    invariant(false, 'Context not implemented');
-  },
-  removePalette(_payload) {
-    invariant(false, 'Context not implemented');
-  },
-  updatePalette(_payload) {
-    invariant(false, 'Context not implemented');
-  },
-};
-const PalettesContext = React.createContext<PalettesState>(defaultState);
-const PalettesActionsContext = React.createContext<PalettesActions>(
-  defaultActions,
-);
+const defaultActions = createPalettesActions(interpret(palettesMachine));
+const PalettesContext = React.createContext(defaultContext);
+const PalettesActionsContext = React.createContext(defaultActions);
 
 const usePalettesActions = () => React.useContext(PalettesActionsContext);
 const usePalettes = () => React.useContext(PalettesContext);
+const usePaletteService = (id: string) => {
+  const { palettes } = usePalettes();
+  const paletteRef = palettes[id];
+  if (paletteRef) {
+    return paletteRef.ref;
+  }
+};
+const usePalette = (id: string) => {
+  const service = usePaletteService(id);
+  if (service) {
+    return service.state.context;
+  }
+};
+const usePaletteActions = (id: string) => {
+  const service = usePaletteService(id);
+  if (service) {
+    // yes, this creates the actions every time
+    // TODO: check if it's needed memoize createPaletteActions
+    return createPaletteActions(service);
+  }
+};
 
 interface ProviderProps {
   children: React.ReactNode;
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
-  const [palettes, dispatch] = React.useReducer(reducer, defaultState);
   const { children } = props;
-  const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
+  const [service] = React.useState(() => interpret(palettesMachine).start());
+  const actions = React.useMemo(() => createPalettesActions(service), [
+    service,
+  ]);
+  const state = useStateContext(service);
 
   return (
     <PalettesActionsContext.Provider value={actions}>
-      <PalettesContext.Provider value={palettes}>
+      <PalettesContext.Provider value={state}>
         {children}
       </PalettesContext.Provider>
     </PalettesActionsContext.Provider>
   );
 };
 
-export { Provider, usePalettes, usePalettesActions };
+export {
+  Provider,
+  usePalettes,
+  usePalettesActions,
+  usePalette,
+  usePaletteService,
+  usePaletteActions,
+};

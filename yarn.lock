@@ -1964,7 +1964,7 @@
   dependencies:
     prop-types "^15.7.2"
 
-"@reach/menu-button@^0.7.3":
+"@reach/menu-button@^0.7.2":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@reach/menu-button/-/menu-button-0.7.3.tgz#9e3ac0ce59b1ff81624518199b739265aca9a79f"
   integrity sha512-/Th8xQkYOP4rgbbDcOU4x4VsIrIOtx36G3qXCZ1kaJvchTDvf5mQQVTGCiEDt2Knw0aqsAi3lKmJ8/klpg7A3Q==
@@ -1997,7 +1997,7 @@
   dependencies:
     "@reach/component-component" "^0.6.2"
 
-"@reach/portal@^0.7.3":
+"@reach/portal@^0.7.2", "@reach/portal@^0.7.3":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.7.3.tgz#6120abf36207bab702d7528e784c9c0e60459903"
   integrity sha512-kpXoCgY4dku1fy9JdqSX/u+fbvqx5YX420wdEmBY8mnguEtbCEI9uanVMUdfN9dnKO7ZvSqs33edYVYYCVKa9A==
@@ -2010,7 +2010,7 @@
     "@reach/observe-rect" "^1.0.5"
     prop-types "^15.7.2"
 
-"@reach/slider@^0.7.3":
+"@reach/slider@^0.7.2":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@reach/slider/-/slider-0.7.3.tgz#b726606727393188f8258174428a95d5aa1bd509"
   integrity sha512-pAkamGa91VCNjsubcq6LLZEWB6Iy0/SAW5WQNL3ISdUlHFWACf9N+QY7MXLNflsAAA9M609+2I++w3hMVx2y5w==
@@ -2019,7 +2019,7 @@
     "@reach/utils" "^0.7.3"
     warning "^4.0.3"
 
-"@reach/tabs@^0.7.3":
+"@reach/tabs@^0.7.2":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@reach/tabs/-/tabs-0.7.3.tgz#b2edb5f215c9434dcd87fce420f91c44ba5962b2"
   integrity sha512-5GyW7SnjASM9wS4KvfElt1v4WxqLttGM+jEt4LPWz+eg/4kolpF3x0g3UNo+lvC1TXtC/ein2ZZ24p/e7sPo0w==
@@ -2034,7 +2034,7 @@
   resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.7.3.tgz#b387aeeb7d3e10da361fd1c07f0392935730c25d"
   integrity sha512-7TZ2PQYeDHc/D9iT8wN6OL9AGlhfk3SvFmyF6H6EiuDeOZ+oJ5xivk5KQcS1h/HVNs226bcIGqpXltcdTiUMtw==
 
-"@reach/visually-hidden@^0.7.3":
+"@reach/visually-hidden@^0.7.2":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@reach/visually-hidden/-/visually-hidden-0.7.3.tgz#cb2b51ce8dcd7da980a2cb4581057298dc6e2e10"
   integrity sha512-1WNbl1OEr923R36zopBpFODhknoUzY6EtFQYp2nApf8pn2LKyrK2hgQlfl+KOKISuzXgTNoSWTGDtW6glGPA8g==
@@ -2186,6 +2186,11 @@
   integrity sha512-gnBXM8rP1mnCgT1uE2z8SnpFTKRWReJlhbZLZkOLq/CH1ifvTNwjIVtXvsywTy1dwVklf+y/MB0Eh6FOa94yrg==
   dependencies:
     next "*"
+
+"@types/node@^13.5.0":
+  version "13.5.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.5.0.tgz#4e498dbf355795a611a87ae5ef811a8660d42662"
+  integrity sha512-Onhn+z72D2O2Pb2ql2xukJ55rglumsVo1H6Fmyi8mlU9SvKdBk/pUSUAiBY/d9bAOF7VVWajX3sths/+g6ZiAQ==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"

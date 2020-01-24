@@ -32,7 +32,7 @@ const FrameLayers: React.FC<PropTypes> = (props, ref) => {
       return;
     }
 
-    const { frame } = artboard;
+    const { frameId } = artboard;
     const width = sprite.width * scale;
     const height = sprite.height * scale;
 
@@ -40,7 +40,7 @@ const FrameLayers: React.FC<PropTypes> = (props, ref) => {
     imageSmoothingDisabled(context);
 
     layers.forEach((layer) => {
-      const layerContext = getContext(sprite, frame, layer);
+      const layerContext = getContext(sprite, frameId, layer);
       context.drawImage(
         layerContext.canvas,
         0,

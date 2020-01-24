@@ -3,7 +3,9 @@ import styled from '@emotion/styled';
 import PaletteColor from './PaletteColor';
 import Panel from '../Panel';
 import { transparent } from '../../utils/Color';
-import { usePalette, Palette as PaletteType } from '../../contexts/Palette';
+import { Palette as PaletteType } from '../../state/palette';
+import { useArtboard } from '../../contexts/Artboard';
+import { usePalette } from '../../contexts/Palettes';
 
 const ColorsContainers = styled.div`
   margin: 4px;
@@ -34,7 +36,8 @@ const emptyPalette: PaletteType = {
 };
 
 const Palette: React.FC = () => {
-  const palette = usePalette() || emptyPalette;
+  const { paletteId } = useArtboard();
+  const palette = usePalette(paletteId) || emptyPalette;
 
   return (
     <Panel>

@@ -131,13 +131,13 @@ const paint = (
     clickType,
     canvas,
   } = contextRef.current;
-  const { frame, layer } = artboard;
+  const { frameId, layerId } = artboard;
   const { scale, x, y } = canvas;
   const width = sprite.width * scale;
   const height = sprite.height * scale;
 
   const color = getColor(artboard, clickType);
-  const layerContext = getContext(sprite, frame, layer);
+  const layerContext = getContext(sprite, frameId, layerId);
 
   paintOrClear(layerContext, cord, color);
   paintOrClear(tempContext, cord, color);

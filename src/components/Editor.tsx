@@ -7,7 +7,6 @@ import * as Artboard from '../contexts/Artboard';
 import * as Modifiers from '../contexts/Modifiers';
 import * as Windows from '../contexts/Windows';
 import * as Palettes from '../contexts/Palettes';
-import * as Palette from '../contexts/Palette';
 
 interface EditorProps {
   children: React.ReactNode;
@@ -27,17 +26,15 @@ const Editor: React.FC<EditorProps> = (props) => {
   return (
     <Modifiers.Provider>
       <Palettes.Provider>
-        <Palette.Provider>
-          <Sprites.Provider>
-            <Sprite.Provider>
-              <Artboards.Provider>
-                <Artboard.Provider>
-                  <Windows.Provider>{children}</Windows.Provider>
-                </Artboard.Provider>
-              </Artboards.Provider>
-            </Sprite.Provider>
-          </Sprites.Provider>
-        </Palette.Provider>
+        <Sprites.Provider>
+          <Sprite.Provider>
+            <Artboards.Provider>
+              <Artboard.Provider>
+                <Windows.Provider>{children}</Windows.Provider>
+              </Artboard.Provider>
+            </Artboards.Provider>
+          </Sprite.Provider>
+        </Sprites.Provider>
       </Palettes.Provider>
     </Modifiers.Provider>
   );
