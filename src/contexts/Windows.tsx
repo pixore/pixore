@@ -4,8 +4,8 @@ import {
   defaultContext,
   createWindowsActions,
   windowsMachine,
-} from '../../state/windows';
-import { useStateContext } from '../../hooks/useStateContext';
+} from '../state/windows';
+import { useStateContext } from '../hooks/useStateContext';
 
 const defaultActions = createWindowsActions(interpret(windowsMachine));
 
