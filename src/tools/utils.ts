@@ -1,6 +1,6 @@
 import { ContextRef, Click } from './types';
 import { getContext } from '../utils/contexts';
-import { Key } from '../contexts/Modifiers';
+import { Key } from '../state/modifiers';
 import { getModifierState } from '../utils/keyboard';
 import { manageEvents as $ } from '../utils/dom/events';
 import Vector from '../utils/vector';

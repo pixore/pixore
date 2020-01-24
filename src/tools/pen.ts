@@ -1,5 +1,5 @@
 import { calculatePosition, validCord } from '../utils/canvas';
-import { Key } from '../contexts/Modifiers';
+import { Key } from '../state/modifiers';
 import { manageEvents as $ } from '../utils/dom/events';
 import { getModifierState } from '../utils/keyboard';
 import Vector from '../utils/vector';

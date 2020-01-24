@@ -5,8 +5,8 @@ import {
   createModifiersActions,
   defaultContext,
   Key,
-} from '../../state/modifiers';
-import { useStateContext } from '../../hooks/useStateContext';
+} from '../state/modifiers';
+import { useStateContext } from '../hooks/useStateContext';
 
 const ModifiersContext = React.createContext(defaultContext);
 
@@ -51,5 +51,4 @@ const Provider: React.FC<ProviderProps> = (props) => {
   );
 };
 
-export * from './types';
 export { Provider, useModifiers, useModifier };
