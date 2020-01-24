@@ -1,10 +1,14 @@
 import React from 'react';
-import { reducer, createActions } from './reducer';
-import { Key, ModifiersState } from './types';
+import { interpret } from 'xstate';
+import {
+  modifiersMachine,
+  createModifiersActions,
+  defaultContext,
+  Key,
+} from '../../state/modifiers';
+import { useStateContext } from '../../hooks/useStateContext';
 
-const defaultValueState = {};
-
-const ModifiersContext = React.createContext<ModifiersState>(defaultValueState);
+const ModifiersContext = React.createContext(defaultContext);
 
 const useModifiers = () => React.useContext(ModifiersContext);
 const useModifier = (key: Key) => useModifiers()[key];
@@ -14,9 +18,13 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
-  const [state, dispatch] = React.useReducer(reducer, defaultValueState);
   const { children } = props;
-  const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
+  const [service] = React.useState(() => interpret(modifiersMachine).start());
+  const actions = React.useMemo(() => createModifiersActions(service), [
+    service,
+  ]);
+
+  const state = useStateContext(service);
 
   React.useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
