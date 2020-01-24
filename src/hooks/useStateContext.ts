@@ -8,7 +8,11 @@ const useStateContext = <C, S, E extends EventObject>(
   React.useEffect(() => {
     service.onChange(setState);
 
-    return () => service.off(setState);
+    setState(service.state.context);
+    return () => {
+      service.off(setState);
+      service.stop();
+    };
   }, [service]);
 
   return state;

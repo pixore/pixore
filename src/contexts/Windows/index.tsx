@@ -1,22 +1,16 @@
 import React from 'react';
-import invariant from 'invariant';
-import { WindowsActions, WindowsState } from './types';
-import { reducer, createActions } from './reducer';
+import { interpret } from 'xstate';
+import {
+  defaultContext,
+  createWindowsActions,
+  windowsMachine,
+} from '../../state/windows';
+import { useStateContext } from '../../hooks/useStateContext';
 
-const defaultState = {};
-const defaultActions = {
-  openWindow() {
-    invariant(false, 'Context not implemented');
-  },
-  closeWindow() {
-    invariant(false, 'Context not implemented');
-  },
-};
+const defaultActions = createWindowsActions(interpret(windowsMachine));
 
-const WindowsStateContext = React.createContext<WindowsState>(defaultState);
-const WindowsActionsContext = React.createContext<WindowsActions>(
-  defaultActions,
-);
+const WindowsStateContext = React.createContext(defaultContext);
+const WindowsActionsContext = React.createContext(defaultActions);
 
 const useWindowsActions = () => React.useContext(WindowsActionsContext);
 const useWindowsState = () => React.useContext(WindowsStateContext);
@@ -26,13 +20,14 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
-  const [windows, dispatch] = React.useReducer(reducer, defaultState);
   const { children } = props;
-  const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
+  const [service] = React.useState(() => interpret(windowsMachine).start());
+  const actions = React.useMemo(() => createWindowsActions(service), [service]);
+  const state = useStateContext(service);
 
   return (
     <WindowsActionsContext.Provider value={actions}>
-      <WindowsStateContext.Provider value={windows}>
+      <WindowsStateContext.Provider value={state}>
         {children}
       </WindowsStateContext.Provider>
     </WindowsActionsContext.Provider>

@@ -7,7 +7,7 @@ import CloseButton from './CloseButton';
 import { Windows } from '../../types';
 import { useWindowsActions } from '../../contexts/Windows';
 import { Context } from './Context';
-import { WindowConfig } from 'src/contexts/Windows/types.js';
+import { WindowConfig } from '../../state/windows';
 
 interface PropTypes {
   state: WindowState;

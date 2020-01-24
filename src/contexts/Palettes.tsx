@@ -1,12 +1,12 @@
 import React from 'react';
 import { interpret } from 'xstate';
-import { useStateContext } from '../../hooks/useStateContext';
+import { useStateContext } from '../hooks/useStateContext';
 import {
   palettesMachine,
   createPalettesActions,
   defaultContext,
-} from '../../state/palettes';
-import { createPaletteActions } from '../../state/palette';
+} from '../state/palettes';
+import { createPaletteActions } from '../state/palette';
 
 const defaultActions = createPalettesActions(interpret(palettesMachine));
 const PalettesContext = React.createContext(defaultContext);

@@ -17,10 +17,11 @@ const windowsComponents = {
 };
 
 const Windows = () => {
-  const windows = useWindowsState();
+  const { windowList, windows } = useWindowsState();
+
   return (
     <>
-      {Object.keys(windows).map((id) => {
+      {windowList.map((id) => {
         const window = windows[id];
         const { props, name } = window;
         const Panel = windowsComponents[name];
