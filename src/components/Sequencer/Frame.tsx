@@ -1,6 +1,6 @@
 import React from 'react';
 import { Td } from './elements';
-import Portal from '@reach/portal';
+import Portal from '../Portal';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import { stopPropagation } from '../../utils';
 import { useSpriteActions } from '../../contexts/Sprite';

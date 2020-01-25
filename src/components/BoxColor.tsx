@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { Color, toString } from '../utils/Color';
-import { getTransparentBackground, getBackgroundColor } from '../utils/css';
+import { getBackgroundColor } from '../utils/css';
 
 type Value = number | string;
 
@@ -46,7 +46,7 @@ const Button = styled.button<ButtonPropTypes>`
   border: 0;
   border-radius: 0;
   background-size: 30px;
-  ${getTransparentBackground()}
+  background-image: url('/transparent.png');
   ${getSize}
 
   &::before {
@@ -63,12 +63,19 @@ const Button = styled.button<ButtonPropTypes>`
 type PropTypes = {
   val: Color;
   size?: Size;
-} & Omit<React.HTMLProps<HTMLButtonElement>, 'size'>;
+  onContextMenu?: React.MouseEventHandler;
+  onClick?: React.MouseEventHandler;
+};
 
 const BoxColor: React.FC<PropTypes> = (props) => {
-  const { val, size = 30 } = props;
+  const { val, size = 30, onClick, onContextMenu } = props;
   return (
-    <Button {...props} size={size} type="button">
+    <Button
+      val={val}
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+      size={size}
+    >
       color {toString(val)}
     </Button>
   );

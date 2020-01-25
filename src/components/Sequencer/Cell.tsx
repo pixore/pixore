@@ -1,6 +1,7 @@
 import React from 'react';
-import Portal from '@reach/portal';
+import Portal from '../Portal';
 import styled from '@emotion/styled';
+import { css } from '@emotion/core';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import { Td } from './elements';
 import { useArtboardActions } from '../../contexts/Artboard';
@@ -16,10 +17,12 @@ const StyledCell = styled(Td)`
   width: 26px;
   ${({ isActive }: SelectedProps) =>
     isActive &&
-    `background: #81A1C1;
-  &:hover {
-    background: #81A1C1;
-  }`};
+    css`
+      background: #81a1c1;
+      &:hover {
+        background: #81a1c1;
+      }
+    `};
 `;
 
 interface PropTypes {

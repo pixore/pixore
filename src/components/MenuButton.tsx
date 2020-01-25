@@ -2,6 +2,7 @@ import '@reach/menu-button/styles.css';
 import React from 'react';
 import styled from '@emotion/styled';
 import * as Reach from '@reach/menu-button';
+import { useIsMounted } from '../hooks/useIsMounted';
 
 const notImplemented = () => alert('not implemented');
 
@@ -38,4 +39,15 @@ const MenuItemSeparator = () => {
   );
 };
 
-export { MenuButton, MenuList, MenuItemSeparator, notImplemented };
+const Menu: React.FC = (props) => {
+  const { children } = props;
+  const isMounted = useIsMounted();
+
+  if (isMounted) {
+    return <Reach.Menu>{children}</Reach.Menu>;
+  }
+
+  return <>children</>;
+};
+
+export { MenuButton, MenuList, MenuItemSeparator, notImplemented, Menu };

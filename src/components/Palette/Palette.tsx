@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import PaletteColor from './PaletteColor';
 import Panel from '../Panel';
 import { transparent } from '../../utils/Color';
-import { Palette as PaletteType } from '../../state/palette';
 import { useArtboard } from '../../contexts/Artboard';
 import { usePalette } from '../../contexts/Palettes';
 
@@ -29,20 +28,16 @@ const ColorsContainers = styled.div`
   }
 `;
 
-const emptyPalette: PaletteType = {
-  colors: [],
-  id: '1',
-  name: 'empty palette',
-};
+const transparentColor = transparent();
 
 const Palette: React.FC = () => {
   const { paletteId } = useArtboard();
-  const palette = usePalette(paletteId) || emptyPalette;
+  const palette = usePalette(paletteId);
 
   return (
     <Panel>
       <ColorsContainers>
-        <PaletteColor val={transparent()} />
+        <PaletteColor val={transparentColor} />
         {palette &&
           palette.colors.map((color, index) => {
             return <PaletteColor key={index} val={color} />;

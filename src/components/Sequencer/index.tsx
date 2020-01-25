@@ -52,7 +52,7 @@ const Sequencer = () => {
             <SelectedFrame isActive={frame === artboard.frameId} key={frame} />
           ))}
         </colgroup>
-        <tbody>
+        <thead>
           <tr>
             <td />
             {frameList.map((frame, index, arr) => (
@@ -65,6 +65,8 @@ const Sequencer = () => {
               />
             ))}
           </tr>
+        </thead>
+        <tbody>
           {layerList.map((layer, index, arr) => (
             <SelectedLayer isActive={layer === artboard.layerId} key={layer}>
               <Layer
