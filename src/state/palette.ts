@@ -15,9 +15,9 @@ interface PaletteState {
 }
 
 type PaletteEvent =
-  | { type: 'ADD_COLOR'; color: Color }
-  | { type: 'REMOVE_COLOR'; color: Color }
-  | { type: 'CHANGE_COLOR'; color: Color; newColor: Color };
+  | { type: 'ADD_COLOR'; payload: Color }
+  | { type: 'REMOVE_COLOR'; payload: Color }
+  | { type: 'CHANGE_COLOR'; payload: { color: Color; newColor: Color } };
 
 export type PaletteInterpreter = Interpreter<
   Palette,
@@ -39,17 +39,17 @@ const paletteMachine = Machine<Palette, PaletteState, PaletteEvent>({
     init: {
       on: {
         ADD_COLOR: {
-          actions: assign(({ colors }, { color }) => ({
-            colors: colors.concat(color),
+          actions: assign(({ colors }, { payload }) => ({
+            colors: colors.concat(payload),
           })),
         },
         REMOVE_COLOR: {
-          actions: assign(({ colors }, { color }) => ({
-            colors: colors.filter((current) => !isEqual(color, current)),
+          actions: assign(({ colors }, { payload }) => ({
+            colors: colors.filter((current) => !isEqual(payload, current)),
           })),
         },
         CHANGE_COLOR: {
-          actions: assign(({ colors }, { color, newColor }) => ({
+          actions: assign(({ colors }, { payload: { color, newColor } }) => ({
             colors: Arr.replaceItem(colors, color, [newColor]),
           })),
         },
@@ -62,20 +62,19 @@ const createPaletteActions = (service: PaletteInterpreter) => ({
   addColor(color: Color) {
     service.send({
       type: 'ADD_COLOR',
-      color,
+      payload: color,
     });
   },
   removeColor(color: Color) {
     service.send({
       type: 'REMOVE_COLOR',
-      color,
+      payload: color,
     });
   },
   changeColor(color: Color, newColor: Color) {
     service.send({
       type: 'CHANGE_COLOR',
-      color,
-      newColor,
+      payload: { color, newColor },
     });
   },
 });

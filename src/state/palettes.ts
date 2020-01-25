@@ -39,8 +39,7 @@ const addPalette = (artboards: PaletteMap, id: string, data: NewPalette) => {
 };
 
 export type NewPalette = Partial<Omit<Palette, 'id'>>;
-type NewPaletteEvent = { type: 'CREATE_PALETTE' } & NewPalette;
-type PalettesEvent = NewPaletteEvent;
+type PalettesEvent = { type: 'CREATE_PALETTE'; payload: NewPalette };
 
 export type PalettesInterpreter = Interpreter<
   Palettes,
@@ -62,9 +61,9 @@ const palettesMachine = Machine<Palettes, PalettesState, PalettesEvent>({
       on: {
         CREATE_PALETTE: {
           target: 'init',
-          actions: assign((context, data) => {
+          actions: assign((context, { payload }) => {
             const id = createId();
-            const palettes = addPalette({}, id, data);
+            const palettes = addPalette({}, id, payload);
 
             return {
               palettes,
@@ -78,9 +77,9 @@ const palettesMachine = Machine<Palettes, PalettesState, PalettesEvent>({
     init: {
       on: {
         CREATE_PALETTE: {
-          actions: assign((context, data) => {
+          actions: assign((context, { payload }) => {
             const id = createId();
-            const palettes = addPalette(context.palettes, id, data);
+            const palettes = addPalette(context.palettes, id, payload);
             return {
               palettes,
               paletteList: Object.keys(palettes),
@@ -97,7 +96,7 @@ const createPalettesActions = (service: PalettesInterpreter) => ({
   createPalette(palette: NewPalette): string {
     const { context } = service.send({
       type: 'CREATE_PALETTE',
-      ...palette,
+      payload: palette,
     });
 
     return context.lastPaletteId;

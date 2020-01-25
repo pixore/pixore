@@ -12,10 +12,14 @@ interface ModifiersState {
   };
 }
 
-type ModifiersEvent = {
-  type: 'CHANGE_MODIFIER_STATE';
+export type ModifiersPayload = {
   key: Key;
   state: boolean;
+};
+
+type ModifiersEvent = {
+  type: 'CHANGE_MODIFIER_STATE';
+  payload: ModifiersPayload;
 };
 
 export type ModifiersInterpreter = Interpreter<
@@ -34,7 +38,7 @@ const modifiersMachine = Machine<Modifiers, ModifiersState, ModifiersEvent>({
     init: {
       on: {
         CHANGE_MODIFIER_STATE: {
-          actions: assign((context, { key, state }) => {
+          actions: assign((context, { payload: { key, state } }) => {
             return {
               ...context,
               [key]: state,
@@ -50,8 +54,10 @@ const createModifiersActions = (service: ModifiersInterpreter) => ({
   changeModifierState(key: Key, state: boolean) {
     return service.send({
       type: 'CHANGE_MODIFIER_STATE',
-      key,
-      state,
+      payload: {
+        key,
+        state,
+      },
     });
   },
 });

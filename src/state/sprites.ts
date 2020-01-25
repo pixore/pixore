@@ -40,8 +40,7 @@ const addSprite = (sprites: SpriteMap, id: string, data: NewSprite) => {
 };
 
 export type NewSprite = Partial<Omit<Sprite, 'id'>>;
-type NewSpriteEvent = { type: 'CREATE_SPRITE' } & NewSprite;
-type SpritesEvent = NewSpriteEvent;
+type SpritesEvent = { type: 'CREATE_SPRITE'; payload: NewSprite };
 
 export type SpritesInterpreter = Interpreter<
   Sprites,
@@ -64,9 +63,9 @@ const spritesMachine = Machine<Sprites, SpritesState, SpritesEvent>({
       on: {
         CREATE_SPRITE: {
           target: 'init',
-          actions: assign((context, data) => {
+          actions: assign((context, { payload }) => {
             const id = createId();
-            const sprites = addSprite({}, id, data);
+            const sprites = addSprite({}, id, payload);
             return {
               sprites,
               spriteList: Object.keys(sprites),
@@ -80,9 +79,9 @@ const spritesMachine = Machine<Sprites, SpritesState, SpritesEvent>({
     init: {
       on: {
         CREATE_SPRITE: {
-          actions: assign((context, data) => {
+          actions: assign((context, { payload }) => {
             const id = createId();
-            const sprites = addSprite(context.sprites, id, data);
+            const sprites = addSprite(context.sprites, id, payload);
             return {
               sprites,
               spriteList: Object.keys(sprites),
@@ -99,7 +98,7 @@ const createSpritesActions = (service: SpritesInterpreter) => ({
   createSprite(sprite: NewSprite): string {
     const { context } = service.send({
       type: 'CREATE_SPRITE',
-      ...sprite,
+      payload: sprite,
     });
 
     return context.lastSpriteId;

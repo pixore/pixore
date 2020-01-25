@@ -29,11 +29,11 @@ export interface Sprite {
 
 type SpriteEvent =
   | { type: 'NEW_VERSION' }
-  | { type: 'RENAME'; name: string }
+  | { type: 'RENAME'; payload: { name: string } }
   | { type: 'CREATE_FRAME' }
-  | { type: 'CREATE_LAYER'; name: string }
-  | { type: 'DELETE_LAYER'; id: string }
-  | { type: 'DELETE_FRAME'; id: string };
+  | { type: 'CREATE_LAYER'; payload: { name: string } }
+  | { type: 'DELETE_LAYER'; payload: { id: string } }
+  | { type: 'DELETE_FRAME'; payload: { id: string } };
 
 export type SpriteInterpreter = Interpreter<Sprite, SpriteState, SpriteEvent>;
 
@@ -89,7 +89,7 @@ const spriteMachine = Machine<Sprite, SpriteState, SpriteEvent>({
       on: {
         RENAME: {
           actions: assign({
-            name: (context, { name }) => name,
+            name: (context, { payload: { name } }) => name,
           }),
         },
         NEW_VERSION: {
@@ -109,7 +109,7 @@ const spriteMachine = Machine<Sprite, SpriteState, SpriteEvent>({
           }),
         },
         CREATE_LAYER: {
-          actions: assign((context, { name }) => {
+          actions: assign((context, { payload: { name } }) => {
             const id = createId();
             const layers = addLayer(context.layers, id, name);
             return {
@@ -120,7 +120,7 @@ const spriteMachine = Machine<Sprite, SpriteState, SpriteEvent>({
           }),
         },
         DELETE_LAYER: {
-          actions: assign((context, { id }) => {
+          actions: assign((context, { payload: { id } }) => {
             if (isLastItem(context.layers)) {
               return context;
             }
@@ -139,7 +139,7 @@ const spriteMachine = Machine<Sprite, SpriteState, SpriteEvent>({
           }),
         },
         DELETE_FRAME: {
-          actions: assign((context, { id }) => {
+          actions: assign((context, { payload: { id } }) => {
             if (isLastItem(context.frames)) {
               return context;
             }
@@ -165,13 +165,13 @@ const createSpriteActions = (service: SpriteInterpreter) => ({
   changeName(name: string) {
     service.send({
       type: 'RENAME',
-      name,
+      payload: { name },
     });
   },
   createLayer(name: string): string {
     const { context } = service.send({
       type: 'CREATE_LAYER',
-      name,
+      payload: { name },
     });
     return context.lastLayerId;
   },
@@ -184,13 +184,13 @@ const createSpriteActions = (service: SpriteInterpreter) => ({
   deleteLayer(id: string) {
     service.send({
       type: 'DELETE_LAYER',
-      id,
+      payload: { id },
     });
   },
   deleteFrame(id: string) {
     service.send({
       type: 'DELETE_FRAME',
-      id,
+      payload: { id },
     });
   },
   createVersion() {

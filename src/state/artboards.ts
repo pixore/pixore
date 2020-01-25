@@ -40,8 +40,8 @@ const addArtboard = (artboards: ArtboardMap, id: string, data: NewArtboard) => {
 };
 
 export type NewArtboard = Partial<Omit<Artboard, 'id'>>;
-type NewArtboardEvent = { type: 'CREATE_ARTBOARD' } & NewArtboard;
-type ArtboardsEvent = NewArtboardEvent;
+
+type ArtboardsEvent = { type: 'CREATE_ARTBOARD'; payload: NewArtboard };
 
 export type ArtboardsInterpreter = Interpreter<
   Artboards,
@@ -64,9 +64,9 @@ const artboardsMachine = Machine<Artboards, ArtboardsState, ArtboardsEvent>({
       on: {
         CREATE_ARTBOARD: {
           target: 'init',
-          actions: assign((context, data) => {
+          actions: assign((context, { payload }) => {
             const id = createId();
-            const artboards = addArtboard({}, id, data);
+            const artboards = addArtboard({}, id, payload);
             return {
               artboards,
               spriteList: Object.keys(artboards),
@@ -79,9 +79,9 @@ const artboardsMachine = Machine<Artboards, ArtboardsState, ArtboardsEvent>({
     init: {
       on: {
         CREATE_ARTBOARD: {
-          actions: assign((context, data) => {
+          actions: assign((context, { payload }) => {
             const id = createId();
-            const artboards = addArtboard(context.artboards, id, data);
+            const artboards = addArtboard(context.artboards, id, payload);
             return {
               artboards,
               spriteList: Object.keys(artboards),
@@ -98,7 +98,7 @@ const createArtboardsActions = (service: ArtboardsInterpreter) => ({
   createArtboard(artboard: NewArtboard): string {
     const { context } = service.send({
       type: 'CREATE_ARTBOARD',
-      ...artboard,
+      payload: artboard,
     });
 
     return context.lastArtboardId;

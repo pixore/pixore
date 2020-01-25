@@ -49,10 +49,12 @@ interface OpenWindowArgs {
 type WindowsEvent =
   | {
       type: 'OPEN_WINDOW';
-      name: Windows;
-      args: OpenWindowArgs;
+      payload: {
+        name: Windows;
+        args: OpenWindowArgs;
+      };
     }
-  | { type: 'CLOSE_WINDOW'; id: string };
+  | { type: 'CLOSE_WINDOW'; payload: { id: string } };
 
 export type WindowsInterpreter = Interpreter<
   WindowsContext,
@@ -73,7 +75,8 @@ const windowsMachine = Machine<WindowsContext, WindowsState, WindowsEvent>({
     init: {
       on: {
         OPEN_WINDOW: {
-          actions: assign((context, { name, args }) => {
+          actions: assign((context, { payload }) => {
+            const { name, args } = payload;
             const id = createId();
             const windows = addItem(context.windows, id, {
               name,
@@ -93,7 +96,7 @@ const windowsMachine = Machine<WindowsContext, WindowsState, WindowsEvent>({
           }),
         },
         CLOSE_WINDOW: {
-          actions: assign((context, { id }) => {
+          actions: assign((context, { payload: { id } }) => {
             const windows = {
               ...context.windows,
             };
@@ -114,8 +117,10 @@ const createWindowsActions = (service: WindowsInterpreter) => ({
   openWindow(name: Windows, args: OpenWindowArgs): string {
     const { context } = service.send({
       type: 'OPEN_WINDOW',
-      name,
-      args,
+      payload: {
+        name,
+        args,
+      },
     });
 
     return context.lastWindowId;
@@ -123,7 +128,7 @@ const createWindowsActions = (service: WindowsInterpreter) => ({
   closeWindow(id: string) {
     service.send({
       type: 'CLOSE_WINDOW',
-      id,
+      payload: { id },
     });
   },
 });
