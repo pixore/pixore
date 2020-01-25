@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from '@emotion/styled';
 import { useContainer } from '@pixore/subdivide';
 import { useSprite, useSpriteActions } from '../../contexts/Sprite';
 import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
@@ -16,16 +15,7 @@ import { usePlayAndPause } from '../../hooks/usePlayAndPause';
 import Frames from '../CanvasLayers/Frames';
 import Tools from './Tools';
 import CenterButton from '../CenterButton';
-
-const Float = styled.div`
-  display: inline-block;
-  position: absolute;
-  top: 4px;
-  left: 70px;
-  padding: 2px;
-  border-radius: 3px;
-  background: rgba(0, 0, 0, 0.5);
-`;
+import { FloatBox } from './elements';
 
 const Canvas: React.FC = () => {
   const container = useContainer();
@@ -118,11 +108,11 @@ const Canvas: React.FC = () => {
         </>
       )}
       <Mask {...canvas} />
-      <Float>
+      <FloatBox top={4} left={70}>
         <PanelSelect />
         {button}
         <CenterButton onClick={onCenter} />
-      </Float>
+      </FloatBox>
       <Tools />
     </HeadlessPanel>
   );
