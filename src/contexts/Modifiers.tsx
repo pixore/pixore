@@ -1,12 +1,11 @@
 import React from 'react';
-import { interpret } from 'xstate';
 import {
-  modifiersMachine,
   createModifiersActions,
   defaultContext,
   Key,
 } from '../state/modifiers';
 import { useStateContext } from '../hooks/useStateContext';
+import { useAppState } from './App';
 
 const ModifiersContext = React.createContext(defaultContext);
 
@@ -18,8 +17,8 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
+  const { modifiers: service } = useAppState();
   const { children } = props;
-  const [service] = React.useState(() => interpret(modifiersMachine).start());
   const actions = React.useMemo(() => createModifiersActions(service), [
     service,
   ]);

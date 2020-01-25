@@ -49,7 +49,7 @@ const addFrame = (frames: FrameMap, id: string) => {
 };
 
 export const defaultContext: Sprite = {
-  id: '1',
+  id: 'no',
   frames: {},
   layers: {},
   frameList: [],

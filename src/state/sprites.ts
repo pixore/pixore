@@ -32,8 +32,8 @@ const addSprite = (sprites: SpriteMap, id: string, data: NewSprite) => {
     ref: spawn(
       spriteMachine.withContext({
         ...spriteDefaultContext,
-        id,
         ...data,
+        id,
       }),
     ) as SpriteInterpreter,
   });
@@ -62,14 +62,15 @@ const spritesMachine = Machine<Sprites, SpritesState, SpritesEvent>({
   states: {
     setup: {
       on: {
-        '': {
+        CREATE_SPRITE: {
           target: 'init',
-          actions: assign(() => {
+          actions: assign((context, data) => {
             const id = createId();
-            const sprites = addSprite({}, id, {});
+            const sprites = addSprite({}, id, data);
             return {
               sprites,
               spriteList: Object.keys(sprites),
+              lastSpriteId: id,
               currentSprite: id,
             };
           }),

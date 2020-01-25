@@ -2,7 +2,7 @@ import { Machine, Interpreter, assign, spawn } from 'xstate';
 import {
   ArtboardInterpreter,
   artboardMachine,
-  defaultContext as spriteDefaultContext,
+  defaultContext as artboardDefaultContext,
   Artboard,
 } from './artboard';
 import { Ref } from '../utils/state';
@@ -31,9 +31,9 @@ const addArtboard = (artboards: ArtboardMap, id: string, data: NewArtboard) => {
     id,
     ref: spawn(
       artboardMachine.withContext({
-        ...spriteDefaultContext,
-        id,
+        ...artboardDefaultContext,
         ...data,
+        id,
       }),
     ) as ArtboardInterpreter,
   });
@@ -62,11 +62,11 @@ const artboardsMachine = Machine<Artboards, ArtboardsState, ArtboardsEvent>({
   states: {
     setup: {
       on: {
-        '': {
+        CREATE_ARTBOARD: {
           target: 'init',
-          actions: assign(() => {
+          actions: assign((context, data) => {
             const id = createId();
-            const artboards = addArtboard({}, id, {});
+            const artboards = addArtboard({}, id, data);
             return {
               artboards,
               spriteList: Object.keys(artboards),

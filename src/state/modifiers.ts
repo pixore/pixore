@@ -18,7 +18,7 @@ type ModifiersEvent = {
   state: boolean;
 };
 
-export type ModifierInterpreter = Interpreter<
+export type ModifiersInterpreter = Interpreter<
   Modifiers,
   ModifiersState,
   ModifiersEvent
@@ -46,7 +46,7 @@ const modifiersMachine = Machine<Modifiers, ModifiersState, ModifiersEvent>({
   },
 });
 
-const createModifiersActions = (service: ModifierInterpreter) => ({
+const createModifiersActions = (service: ModifiersInterpreter) => ({
   changeModifierState(key: Key, state: boolean) {
     return service.send({
       type: 'CHANGE_MODIFIER_STATE',

@@ -7,6 +7,7 @@ import {
   defaultContext,
 } from '../state/palettes';
 import { createPaletteActions } from '../state/palette';
+import { useAppState } from './App';
 
 const defaultActions = createPalettesActions(interpret(palettesMachine));
 const PalettesContext = React.createContext(defaultContext);
@@ -41,8 +42,8 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
+  const { palettes: service } = useAppState();
   const { children } = props;
-  const [service] = React.useState(() => interpret(palettesMachine).start());
   const actions = React.useMemo(() => createPalettesActions(service), [
     service,
   ]);

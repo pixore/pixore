@@ -6,6 +6,7 @@ import {
   defaultContext,
 } from '../state/sprites';
 import { useStateContext } from '../hooks/useStateContext';
+import { useAppState } from './App';
 
 const defaultActions = createSpritesActions(interpret(spritesMachine));
 
@@ -26,10 +27,10 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
-  const [service] = React.useState(() => interpret(spritesMachine).start());
+  const { sprites: service } = useAppState();
+  const { children } = props;
   const state = useStateContext(service);
 
-  const { children } = props;
   const actions = React.useMemo(() => createSpritesActions(service), [service]);
 
   return (

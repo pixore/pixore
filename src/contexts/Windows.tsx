@@ -6,6 +6,7 @@ import {
   windowsMachine,
 } from '../state/windows';
 import { useStateContext } from '../hooks/useStateContext';
+import { useAppState } from './App';
 
 const defaultActions = createWindowsActions(interpret(windowsMachine));
 
@@ -20,8 +21,8 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
+  const { windows: service } = useAppState();
   const { children } = props;
-  const [service] = React.useState(() => interpret(windowsMachine).start());
   const actions = React.useMemo(() => createWindowsActions(service), [service]);
   const state = useStateContext(service);
 

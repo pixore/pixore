@@ -6,6 +6,7 @@ import {
   createArtboardsActions,
 } from '../state/artboards';
 import { useStateContext } from '../hooks/useStateContext';
+import { useAppState } from './App';
 
 const defaultActions = createArtboardsActions(interpret(artboardsMachine));
 const ArtboardsContext = React.createContext(defaultContext);
@@ -19,13 +20,9 @@ const useArtboardService = () => {
 };
 const useCurrentArtboard = () => useArtboardService().state.context;
 
-interface ProviderProps {
-  children: React.ReactNode;
-}
-
-const Provider: React.FC<ProviderProps> = (props) => {
+const Provider: React.FC = (props) => {
+  const { artboards: service } = useAppState();
   const { children } = props;
-  const [service] = React.useState(() => interpret(artboardsMachine).start());
   const actions = React.useMemo(() => createArtboardsActions(service), [
     service,
   ]);

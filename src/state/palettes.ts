@@ -8,7 +8,6 @@ import {
 import { Ref } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
-import defaultPalette from '../default-palette.json';
 
 type PaletteRef = Ref<PaletteInterpreter>;
 type PaletteMap = ItemMap<PaletteRef>;
@@ -32,8 +31,8 @@ const addPalette = (artboards: PaletteMap, id: string, data: NewPalette) => {
     ref: spawn(
       paletteMachine.withContext({
         ...paletteDefaultContext,
-        id,
         ...data,
+        id,
       }),
     ) as PaletteInterpreter,
   });
@@ -61,11 +60,12 @@ const palettesMachine = Machine<Palettes, PalettesState, PalettesEvent>({
   states: {
     setup: {
       on: {
-        '': {
+        CREATE_PALETTE: {
           target: 'init',
-          actions: assign(() => {
+          actions: assign((context, data) => {
             const id = createId();
-            const palettes = addPalette({}, id, defaultPalette);
+            const palettes = addPalette({}, id, data);
+
             return {
               palettes,
               paletteList: Object.keys(palettes),
