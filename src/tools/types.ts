@@ -1,5 +1,7 @@
-import { Artboard, ArtboardActions } from '../state/artboard';
-import { SpriteActions, Sprite } from '../state/sprite';
+import { Artboard } from '../state/artboard';
+import { ArtboardActions } from '../contexts/Artboard';
+import { Sprite } from '../state/sprite';
+import { SpriteActions } from '../contexts/Sprite';
 import Vector from '../utils/vector';
 import { CanvasStats, Canvas, Stats } from '../types';
 

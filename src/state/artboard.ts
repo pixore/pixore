@@ -1,5 +1,6 @@
 import { Machine, Interpreter, assign } from 'xstate';
 import { Color, transparent, black } from '../utils/Color';
+import { Actions, A } from '../utils/state';
 
 export interface Artboard {
   id: string;
@@ -18,12 +19,12 @@ interface ArtboardState {
 }
 
 type ArtboardEvent =
-  | { type: 'CHANGE_FRAME'; payload: { frameId: string } }
-  | { type: 'CHANGE_LAYER'; payload: { layerId: string } }
-  | { type: 'CHANGE_PRIMARY_COLOR'; payload: Color }
-  | { type: 'CHANGE_SECONDARY_COLOR'; payload: Color }
-  | { type: 'CHANGE_TOOL'; payload: { tool: string } }
-  | { type: 'CHANGE_PALETTE'; payload: { paletteId: string } };
+  | A<Actions.CHANGE_FRAME, { frameId: string }>
+  | A<Actions.CHANGE_LAYER, { layerId: string }>
+  | A<Actions.CHANGE_PRIMARY_COLOR, Color>
+  | A<Actions.CHANGE_SECONDARY_COLOR, Color>
+  | A<Actions.CHANGE_TOOL, { tool: string }>
+  | A<Actions.CHANGE_PALETTE, { paletteId: string }>;
 
 export type ArtboardInterpreter = Interpreter<
   Artboard,
@@ -83,45 +84,4 @@ const artboardMachine = Machine<Artboard, ArtboardState, ArtboardEvent>({
   },
 });
 
-const createArtboardActions = (service: ArtboardInterpreter) => ({
-  changeLayer(layerId: string) {
-    return service.send({
-      type: 'CHANGE_LAYER',
-      payload: { layerId },
-    });
-  },
-  changeFrame(frameId: string) {
-    service.send({
-      type: 'CHANGE_FRAME',
-      payload: { frameId },
-    });
-  },
-  changePrimaryColor(color: Color) {
-    service.send({
-      type: 'CHANGE_PRIMARY_COLOR',
-      payload: color,
-    });
-  },
-  changeSecondaryColor(color: Color) {
-    service.send({
-      type: 'CHANGE_SECONDARY_COLOR',
-      payload: color,
-    });
-  },
-  changeTool(tool: string) {
-    service.send({
-      type: 'CHANGE_TOOL',
-      payload: { tool },
-    });
-  },
-  changePalette(paletteId: string) {
-    service.send({
-      type: 'CHANGE_PALETTE',
-      payload: { paletteId },
-    });
-  },
-});
-
-export type ArtboardActions = ReturnType<typeof createArtboardActions>;
-
-export { artboardMachine, createArtboardActions };
+export { artboardMachine };

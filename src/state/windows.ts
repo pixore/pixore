@@ -3,6 +3,7 @@ import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 import { WindowState as WinState } from '@pixore/window';
 import { Windows } from '../types';
+import { Actions, A } from '../utils/state';
 
 export interface WindowConfig {
   dragable: boolean;
@@ -40,21 +41,21 @@ interface WindowsState {
   };
 }
 
-interface OpenWindowArgs {
+export interface OpenWindowArgs {
   props?: unknown;
   state: WinState;
   config?: PartialWindowConfig;
 }
 
 type WindowsEvent =
-  | {
-      type: 'OPEN_WINDOW';
-      payload: {
+  | A<
+      Actions.OPEN_WINDOW,
+      {
         name: Windows;
         args: OpenWindowArgs;
-      };
-    }
-  | { type: 'CLOSE_WINDOW'; payload: { id: string } };
+      }
+    >
+  | A<Actions.CLOSE_WINDOW, { id: string }>;
 
 export type WindowsInterpreter = Interpreter<
   WindowsContext,
@@ -113,24 +114,4 @@ const windowsMachine = Machine<WindowsContext, WindowsState, WindowsEvent>({
   },
 });
 
-const createWindowsActions = (service: WindowsInterpreter) => ({
-  openWindow(name: Windows, args: OpenWindowArgs): string {
-    const { context } = service.send({
-      type: 'OPEN_WINDOW',
-      payload: {
-        name,
-        args,
-      },
-    });
-
-    return context.lastWindowId;
-  },
-  closeWindow(id: string) {
-    service.send({
-      type: 'CLOSE_WINDOW',
-      payload: { id },
-    });
-  },
-});
-
-export { windowsMachine, createWindowsActions };
+export { windowsMachine };

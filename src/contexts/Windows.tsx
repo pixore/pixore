@@ -1,14 +1,19 @@
 import React from 'react';
 import { interpret } from 'xstate';
-import {
-  defaultContext,
-  createWindowsActions,
-  windowsMachine,
-} from '../state/windows';
+import { defaultContext } from '../state/windows';
 import { useStateContext } from '../hooks/useStateContext';
-import { useAppState } from './App';
+import { useAppState, useActions } from './App';
+import { AppActions, createAppActions } from '../state/actions';
+import { appMachine } from '../state/app';
 
-const defaultActions = createWindowsActions(interpret(windowsMachine));
+const createWindowsActions = ({ openWindow, closeWindow }: AppActions) => ({
+  openWindow,
+  closeWindow,
+});
+
+const defaultActions = createWindowsActions(
+  createAppActions(interpret(appMachine)),
+);
 
 const WindowsStateContext = React.createContext(defaultContext);
 const WindowsActionsContext = React.createContext(defaultActions);
@@ -22,8 +27,11 @@ interface ProviderProps {
 
 const Provider: React.FC<ProviderProps> = (props) => {
   const { windows: service } = useAppState();
+  const appActions = useActions();
   const { children } = props;
-  const actions = React.useMemo(() => createWindowsActions(service), [service]);
+  const actions = React.useMemo(() => createWindowsActions(appActions), [
+    appActions,
+  ]);
   const state = useStateContext(service);
 
   return (

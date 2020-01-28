@@ -1,11 +1,11 @@
-import { Machine, Interpreter, assign, spawn } from 'xstate';
+import { Machine, Interpreter, assign, spawn, sendParent } from 'xstate';
 import {
   PaletteInterpreter,
   paletteMachine,
   defaultContext as paletteDefaultContext,
   Palette,
 } from './palette';
-import { Ref } from '../utils/state';
+import { Ref, Actions, A } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 
@@ -39,7 +39,9 @@ const addPalette = (artboards: PaletteMap, id: string, data: NewPalette) => {
 };
 
 export type NewPalette = Partial<Omit<Palette, 'id'>>;
-type PalettesEvent = { type: 'CREATE_PALETTE'; payload: NewPalette };
+type PalettesEvent =
+  | A<Actions.CREATE_PALETTE, NewPalette>
+  | A<Actions.PUSH_ACTION, NewPalette>;
 
 export type PalettesInterpreter = Interpreter<
   Palettes,
@@ -87,20 +89,12 @@ const palettesMachine = Machine<Palettes, PalettesState, PalettesEvent>({
             };
           }),
         },
+        PUSH_ACTION: {
+          actions: sendParent((context, event) => event),
+        },
       },
     },
   },
 });
 
-const createPalettesActions = (service: PalettesInterpreter) => ({
-  createPalette(palette: NewPalette): string {
-    const { context } = service.send({
-      type: 'CREATE_PALETTE',
-      payload: palette,
-    });
-
-    return context.lastPaletteId;
-  },
-});
-
-export { palettesMachine, createPalettesActions };
+export { palettesMachine };

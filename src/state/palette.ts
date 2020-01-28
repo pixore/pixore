@@ -1,6 +1,7 @@
 import { Machine, Interpreter, assign } from 'xstate';
 import Arr from '@pixore/subdivide/dist/utils/Arr';
 import { Color, isEqual } from '../utils/Color';
+import { Actions, A } from '../utils/state';
 
 export interface Palette {
   id: string;
@@ -15,9 +16,9 @@ interface PaletteState {
 }
 
 type PaletteEvent =
-  | { type: 'ADD_COLOR'; payload: Color }
-  | { type: 'REMOVE_COLOR'; payload: Color }
-  | { type: 'CHANGE_COLOR'; payload: { color: Color; newColor: Color } };
+  | A<Actions.ADD_COLOR, Color>
+  | A<Actions.REMOVE_COLOR, Color>
+  | A<Actions.CHANGE_COLOR, { color: Color; newColor: Color }>;
 
 export type PaletteInterpreter = Interpreter<
   Palette,
@@ -58,27 +59,4 @@ const paletteMachine = Machine<Palette, PaletteState, PaletteEvent>({
   },
 });
 
-const createPaletteActions = (service: PaletteInterpreter) => ({
-  addColor(color: Color) {
-    service.send({
-      type: 'ADD_COLOR',
-      payload: color,
-    });
-  },
-  removeColor(color: Color) {
-    service.send({
-      type: 'REMOVE_COLOR',
-      payload: color,
-    });
-  },
-  changeColor(color: Color, newColor: Color) {
-    service.send({
-      type: 'CHANGE_COLOR',
-      payload: { color, newColor },
-    });
-  },
-});
-
-export type PaletteActions = ReturnType<typeof createPaletteActions>;
-
-export { paletteMachine, createPaletteActions };
+export { paletteMachine };

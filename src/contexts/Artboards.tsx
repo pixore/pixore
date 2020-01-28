@@ -1,14 +1,19 @@
 import React from 'react';
 import { interpret } from 'xstate';
-import {
-  defaultContext,
-  artboardsMachine,
-  createArtboardsActions,
-} from '../state/artboards';
+import { defaultContext } from '../state/artboards';
 import { useStateContext } from '../hooks/useStateContext';
-import { useAppState } from './App';
+import { useAppState, useActions } from './App';
+import { AppActions, createAppActions } from '../state/actions';
+import { appMachine } from '../state/app';
 
-const defaultActions = createArtboardsActions(interpret(artboardsMachine));
+const createArtboardsActions = ({ createArtboard }: AppActions) => ({
+  createArtboard,
+});
+
+const defaultActions = createArtboardsActions(
+  createAppActions(interpret(appMachine)),
+);
+
 const ArtboardsContext = React.createContext(defaultContext);
 const ArtboardsActionsContext = React.createContext(defaultActions);
 
@@ -22,9 +27,10 @@ const useCurrentArtboard = () => useArtboardService().state.context;
 
 const Provider: React.FC = (props) => {
   const { artboards: service } = useAppState();
+  const appActions = useActions();
   const { children } = props;
-  const actions = React.useMemo(() => createArtboardsActions(service), [
-    service,
+  const actions = React.useMemo(() => createArtboardsActions(appActions), [
+    appActions,
   ]);
 
   const state = useStateContext(service);

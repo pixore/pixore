@@ -5,7 +5,7 @@ import {
   defaultContext as artboardDefaultContext,
   Artboard,
 } from './artboard';
-import { Ref } from '../utils/state';
+import { Ref, Actions, A } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 
@@ -41,7 +41,7 @@ const addArtboard = (artboards: ArtboardMap, id: string, data: NewArtboard) => {
 
 export type NewArtboard = Partial<Omit<Artboard, 'id'>>;
 
-type ArtboardsEvent = { type: 'CREATE_ARTBOARD'; payload: NewArtboard };
+type ArtboardsEvent = A<Actions.CREATE_ARTBOARD, NewArtboard>;
 
 export type ArtboardsInterpreter = Interpreter<
   Artboards,
@@ -94,15 +94,4 @@ const artboardsMachine = Machine<Artboards, ArtboardsState, ArtboardsEvent>({
   },
 });
 
-const createArtboardsActions = (service: ArtboardsInterpreter) => ({
-  createArtboard(artboard: NewArtboard): string {
-    const { context } = service.send({
-      type: 'CREATE_ARTBOARD',
-      payload: artboard,
-    });
-
-    return context.lastArtboardId;
-  },
-});
-
-export { artboardsMachine, createArtboardsActions };
+export { artboardsMachine };

@@ -2,6 +2,7 @@ import { Machine, assign, Interpreter } from 'xstate';
 import { Frame, Layer } from '../types';
 import { ItemMap, addItem, removeItem, isLastItem } from '../utils/object';
 import { createId } from '../utils';
+import { Actions, A, action, ActionConfig } from '../utils/state';
 
 interface SpriteState {
   states: {
@@ -28,12 +29,14 @@ export interface Sprite {
 }
 
 type SpriteEvent =
-  | { type: 'NEW_VERSION' }
-  | { type: 'RENAME'; payload: { name: string } }
-  | { type: 'CREATE_FRAME' }
-  | { type: 'CREATE_LAYER'; payload: { name: string } }
-  | { type: 'DELETE_LAYER'; payload: { id: string } }
-  | { type: 'DELETE_FRAME'; payload: { id: string } };
+  | A<Actions.NEW_VERSION>
+  | A<Actions.RENAME, { name: string }>
+  | A<Actions.CREATE_FRAME>
+  | A<Actions.CREATE_LAYER, { name: string }>
+  | A<Actions.DELETE_LAYER, { id: string }>
+  | A<Actions.DELETE_FRAME, { id: string }>
+  | A<Actions.RESTORE_FRAME, { id: string }>
+  | A<Actions.RESTORE_LAYER, { id: string; name: string }>;
 
 export type SpriteInterpreter = Interpreter<Sprite, SpriteState, SpriteEvent>;
 
@@ -58,6 +61,13 @@ export const defaultContext: Sprite = {
   width: 30,
   height: 30,
   name: 'New sprite',
+};
+
+const config: ActionConfig<keyof Sprite> = {
+  updateListProperties: [
+    ['frames', 'frameList'],
+    ['layers', 'layerList'],
+  ],
 };
 
 const spriteMachine = Machine<Sprite, SpriteState, SpriteEvent>({
@@ -98,108 +108,66 @@ const spriteMachine = Machine<Sprite, SpriteState, SpriteEvent>({
           }),
         },
         CREATE_FRAME: {
-          actions: assign((context) => {
+          actions: action((context) => {
             const id = createId();
-            const frames = addFrame(context.frames, id);
             return {
-              frames,
-              frameList: Object.keys(frames),
+              frames: addFrame(context.frames, id),
               lastFrameId: id,
             };
-          }),
+          }, config),
         },
         CREATE_LAYER: {
-          actions: assign((context, { payload: { name } }) => {
+          actions: action((context, { payload: { name } }) => {
             const id = createId();
-            const layers = addLayer(context.layers, id, name);
             return {
-              layers,
-              layerList: Object.keys(layers),
+              layers: addLayer(context.layers, id, name),
               lastLayerId: id,
             };
-          }),
+          }, config),
         },
         DELETE_LAYER: {
-          actions: assign((context, { payload: { id } }) => {
-            if (isLastItem(context.layers)) {
-              return context;
+          actions: action((context, { payload: { id } }) => {
+            if (isLastItem(context.layers) || !context.layers[id]) {
+              return;
             }
 
-            const layer = context.layers[id];
-            if (layer) {
-              const layers = removeItem(context.layers, id);
-
-              return {
-                layers,
-                layerList: Object.keys(layers),
-              };
-            }
-
-            return context;
-          }),
+            return {
+              layers: removeItem(context.layers, id),
+            };
+          }, config),
         },
         DELETE_FRAME: {
-          actions: assign((context, { payload: { id } }) => {
-            if (isLastItem(context.frames)) {
-              return context;
+          actions: action((context, { payload: { id } }) => {
+            if (isLastItem(context.frames) || !context.frames[id]) {
+              return;
             }
 
-            const frame = context.frames[id];
-            if (frame) {
-              const frames = removeItem(context.frames, id);
-              return {
-                frames,
-                frameList: Object.keys(frames),
-              };
-            }
-
-            return context;
-          }),
+            return {
+              frames: removeItem(context.frames, id),
+            };
+          }, config),
+        },
+        RESTORE_FRAME: {
+          actions: action(
+            (context, { payload: { id } }) => ({
+              frames: addFrame(context.frames, id),
+              lastFrameId: id,
+            }),
+            config,
+          ),
+        },
+        RESTORE_LAYER: {
+          actions: action(
+            (context, { payload: { id, name } }) => ({
+              layers: addLayer(context.layers, id, name),
+              lastLayerId: id,
+            }),
+            config,
+          ),
         },
       },
     },
   },
 });
 
-const createSpriteActions = (service: SpriteInterpreter) => ({
-  changeName(name: string) {
-    service.send({
-      type: 'RENAME',
-      payload: { name },
-    });
-  },
-  createLayer(name: string): string {
-    const { context } = service.send({
-      type: 'CREATE_LAYER',
-      payload: { name },
-    });
-    return context.lastLayerId;
-  },
-  createFrame(): string {
-    const { context } = service.send({
-      type: 'CREATE_FRAME',
-    });
-    return context.lastFrameId;
-  },
-  deleteLayer(id: string) {
-    service.send({
-      type: 'DELETE_LAYER',
-      payload: { id },
-    });
-  },
-  deleteFrame(id: string) {
-    service.send({
-      type: 'DELETE_FRAME',
-      payload: { id },
-    });
-  },
-  createVersion() {
-    service.send({
-      type: 'NEW_VERSION',
-    });
-  },
-});
-
-export type SpriteActions = ReturnType<typeof createSpriteActions>;
-
-export { spriteMachine, createSpriteActions };
+export { spriteMachine };

@@ -1,15 +1,26 @@
 import React from 'react';
 import { interpret } from 'xstate';
 import { useStateContext } from '../hooks/useStateContext';
-import {
-  palettesMachine,
-  createPalettesActions,
-  defaultContext,
-} from '../state/palettes';
-import { createPaletteActions } from '../state/palette';
-import { useAppState } from './App';
+import { defaultContext } from '../state/palettes';
+import { useAppState, useActions } from './App';
+import { AppActions, createAppActions } from '../state/actions';
+import { appMachine } from '../state/app';
+import curry from 'lodash.curry';
 
-const defaultActions = createPalettesActions(interpret(palettesMachine));
+const createPalettesActions = ({ createPalette }: AppActions) => ({
+  createPalette,
+});
+
+const createPaletteActions = (actions: AppActions, paletteId: string) => ({
+  addColor: curry(actions.addColor)(paletteId),
+  removeColor: curry(actions.removeColor)(paletteId),
+  changeColor: curry(actions.changeColor)(paletteId),
+});
+
+const defaultActions = createPalettesActions(
+  createAppActions(interpret(appMachine)),
+);
+
 const PalettesContext = React.createContext(defaultContext);
 const PalettesActionsContext = React.createContext(defaultActions);
 
@@ -29,12 +40,11 @@ const usePalette = (id: string) => {
   }
 };
 const usePaletteActions = (id: string) => {
-  const service = usePaletteService(id);
-  if (service) {
-    // yes, this creates the actions every time
-    // TODO: check if it's needed memoize createPaletteActions
-    return createPaletteActions(service);
-  }
+  const appActions = useActions();
+  return React.useMemo(() => createPaletteActions(appActions, id), [
+    appActions,
+    id,
+  ]);
 };
 
 interface ProviderProps {
@@ -44,8 +54,9 @@ interface ProviderProps {
 const Provider: React.FC<ProviderProps> = (props) => {
   const { palettes: service } = useAppState();
   const { children } = props;
-  const actions = React.useMemo(() => createPalettesActions(service), [
-    service,
+  const appActions = useActions();
+  const actions = React.useMemo(() => createPalettesActions(appActions), [
+    appActions,
   ]);
   const state = useStateContext(service);
 

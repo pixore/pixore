@@ -1,11 +1,11 @@
-import { Machine, Interpreter, assign, spawn } from 'xstate';
+import { Machine, Interpreter, assign, spawn, sendParent } from 'xstate';
 import {
   SpriteInterpreter,
   spriteMachine,
   defaultContext as spriteDefaultContext,
   Sprite,
 } from './sprite';
-import { Ref } from '../utils/state';
+import { Ref, Actions, A } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 
@@ -40,7 +40,9 @@ const addSprite = (sprites: SpriteMap, id: string, data: NewSprite) => {
 };
 
 export type NewSprite = Partial<Omit<Sprite, 'id'>>;
-type SpritesEvent = { type: 'CREATE_SPRITE'; payload: NewSprite };
+type SpritesEvent =
+  | A<Actions.CREATE_SPRITE, NewSprite>
+  | A<Actions.PUSH_ACTION>;
 
 export type SpritesInterpreter = Interpreter<
   Sprites,
@@ -89,20 +91,12 @@ const spritesMachine = Machine<Sprites, SpritesState, SpritesEvent>({
             };
           }),
         },
+        PUSH_ACTION: {
+          actions: sendParent((context, event) => event),
+        },
       },
     },
   },
 });
 
-const createSpritesActions = (service: SpritesInterpreter) => ({
-  createSprite(sprite: NewSprite): string {
-    const { context } = service.send({
-      type: 'CREATE_SPRITE',
-      payload: sprite,
-    });
-
-    return context.lastSpriteId;
-  },
-});
-
-export { spritesMachine, createSpritesActions };
+export { spritesMachine };

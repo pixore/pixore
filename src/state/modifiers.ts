@@ -1,4 +1,5 @@
 import { Machine, Interpreter, assign } from 'xstate';
+import { Actions, A } from '../utils/state';
 
 export enum Key {
   Spacebar = ' ',
@@ -17,10 +18,7 @@ export type ModifiersPayload = {
   state: boolean;
 };
 
-type ModifiersEvent = {
-  type: 'CHANGE_MODIFIER_STATE';
-  payload: ModifiersPayload;
-};
+type ModifiersEvent = A<Actions.CHANGE_MODIFIER_STATE, ModifiersPayload>;
 
 export type ModifiersInterpreter = Interpreter<
   Modifiers,
@@ -53,7 +51,7 @@ const modifiersMachine = Machine<Modifiers, ModifiersState, ModifiersEvent>({
 const createModifiersActions = (service: ModifiersInterpreter) => ({
   changeModifierState(key: Key, state: boolean) {
     return service.send({
-      type: 'CHANGE_MODIFIER_STATE',
+      type: Actions.CHANGE_MODIFIER_STATE,
       payload: {
         key,
         state,

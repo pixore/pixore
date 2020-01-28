@@ -2015,6 +2015,13 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.3.tgz#bdfd69d61e464dcc81b25159c270d75a73c1a636"
   integrity sha512-Il2DtDVRGDcqjDtE+rF8iqg1CArehSK84HZJCT7AMITlyXRBpuPhqGLDQMowraqqu1coEaimg4ZOqggt6L6L+A==
 
+"@types/lodash.curry@^4.1.6":
+  version "4.1.6"
+  resolved "https://registry.yarnpkg.com/@types/lodash.curry/-/lodash.curry-4.1.6.tgz#f26c490c80c92d7cbaa2300d542e89781d44b1ff"
+  integrity sha512-x3ctCcmOYqRrihNNnQJW6fe/yZFCgnrIa6p80AiPQRO8Jis29bBdy1dEw1FwngoF/mCZa3Bx+33fUZvOEE635Q==
+  dependencies:
+    "@types/lodash" "*"
+
 "@types/lodash.throttle@^4.1.6":
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/@types/lodash.throttle/-/lodash.throttle-4.1.6.tgz#f5ba2c22244ee42ff6c2c49e614401a870c1009c"
@@ -2026,6 +2033,11 @@
   version "4.14.149"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
   integrity sha512-ijGqzZt/b7BfzcK9vTrS6MFljQRPn5BFWOx8oE0GYxribu6uV+aA9zZuXI1zc/etK9E8nrgdoF2+LgUw7+9tJQ==
+
+"@types/mousetrap@^1.6.3":
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/@types/mousetrap/-/mousetrap-1.6.3.tgz#3159a01a2b21c9155a3d8f85588885d725dc987d"
+  integrity sha512-13gmo3M2qVvjQrWNseqM3+cR6S2Ss3grbR2NZltgMq94wOwqJYQdgn8qzwDshzgXqMlSUtyPZjysImmktu22ew==
 
 "@types/next@^9.0.0":
   version "9.0.0"
@@ -6659,7 +6671,7 @@ lodash.camelcase@^4.3.0:
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
   integrity sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
 
-lodash.curry@4.1.1:
+lodash.curry@4.1.1, lodash.curry@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.curry/-/lodash.curry-4.1.1.tgz#248e36072ede906501d75966200a86dab8b23170"
   integrity sha1-JI42By7ekGUB11lmIAqG2riyMXA=
@@ -7050,6 +7062,11 @@ modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
+
+mousetrap@^1.6.5:
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.5.tgz#8a766d8c272b08393d5f56074e0b5ec183485bf9"
+  integrity sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==
 
 move-concurrently@^1.0.1:
   version "1.0.1"

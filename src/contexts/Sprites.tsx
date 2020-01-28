@@ -1,14 +1,18 @@
 import React from 'react';
 import { interpret } from 'xstate';
-import {
-  spritesMachine,
-  createSpritesActions,
-  defaultContext,
-} from '../state/sprites';
+import { defaultContext } from '../state/sprites';
 import { useStateContext } from '../hooks/useStateContext';
-import { useAppState } from './App';
+import { useAppState, useActions } from './App';
+import { AppActions, createAppActions } from '../state/actions';
+import { appMachine } from '../state/app';
 
-const defaultActions = createSpritesActions(interpret(spritesMachine));
+const createSpritesActions = ({ createSprite }: AppActions) => ({
+  createSprite,
+});
+
+const defaultActions = createSpritesActions(
+  createAppActions(interpret(appMachine)),
+);
 
 const SpritesContext = React.createContext(defaultContext);
 const SpritesActionsContext = React.createContext(defaultActions);
@@ -29,9 +33,12 @@ interface ProviderProps {
 const Provider: React.FC<ProviderProps> = (props) => {
   const { sprites: service } = useAppState();
   const { children } = props;
+  const appActions = useActions();
   const state = useStateContext(service);
 
-  const actions = React.useMemo(() => createSpritesActions(service), [service]);
+  const actions = React.useMemo(() => createSpritesActions(appActions), [
+    appActions,
+  ]);
 
   return (
     <SpritesActionsContext.Provider value={actions}>
