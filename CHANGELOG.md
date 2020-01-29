@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/pixore/pixore/compare/v0.4.0...v0.5.0) (2020-01-29)
+
+
+### Features
+
+* **artboards:** use xstate to manage artboards ([f520ae9](https://github.com/pixore/pixore/commit/f520ae9dbca8cfd44fc9788bade6f68fcafac7c2))
+* **history:** add undo and redu for frames and layers ([860f7cb](https://github.com/pixore/pixore/commit/860f7cb84e0c8525fe64e3cb96abb540f070e96e))
+* **history:** improve undo for deleting frames and layers ([f302d5c](https://github.com/pixore/pixore/commit/f302d5cf33dfb6d178085d71fcece29c4e1e48f9))
+* **history:** improve undo for deleting layers ([1d9c028](https://github.com/pixore/pixore/commit/1d9c028acc34cf288168654bc1ac7e903f137e5c))
+* **history:** support undo and redu for painting ([9830548](https://github.com/pixore/pixore/commit/98305481ede37d92daed6a91a44a4315ad64696a))
+* **modifiers:** implement modifiers state using xstate ([b3c08cc](https://github.com/pixore/pixore/commit/b3c08ccaf820c883389ed286373ee940aa8fd7d8))
+* **palettes:** implement palettes states using xstate ([bc5753a](https://github.com/pixore/pixore/commit/bc5753a10afd3343942631d781a787b83dd3a389))
+* **portal:** create custom portal ([ee09b40](https://github.com/pixore/pixore/commit/ee09b40e36ee51ae15954e2135fa32f4bc83649f))
+* **sprite:** remove layers and frames ([51df184](https://github.com/pixore/pixore/commit/51df1843a786b8c426b7ea306cea912b33bc2af0))
+* **state:** create app machine ([24fd73b](https://github.com/pixore/pixore/commit/24fd73b97a5f3a48c92fce1820b8c316a4cfb6ef))
+* **state:** remove frame and layer machine ([4fde9bc](https://github.com/pixore/pixore/commit/4fde9bcb19cfe6834ef067aab7c40da1de00228d))
+* **state:** use app machine to control the state ([bf8894c](https://github.com/pixore/pixore/commit/bf8894c39e2c58944afcac83cfb8d9864ee9e988))
+* **state:** use xstate ([2d6776c](https://github.com/pixore/pixore/commit/2d6776c67397631be706a52fc467652f97944ed3))
+* **welcome:** improve size and position of the welcome window ([2d347a5](https://github.com/pixore/pixore/commit/2d347a53b591fbd8b51a560120745c4de52a8654))
+* **windows:** implement windows state with xstate ([d0f3de3](https://github.com/pixore/pixore/commit/d0f3de3d9ccf570ad269d72e2af641cc8a18447d))
+
+
+### Bug Fixes
+
+* **menus:** stop use Reach.MenuItem as separator ([2e3f761](https://github.com/pixore/pixore/commit/2e3f7614da32b2d564f4488d4c1bd92fdf2dd56d))
+* **paint:** use the latest version of the artboard ([54bfc06](https://github.com/pixore/pixore/commit/54bfc066e08285e9ec6eee4eb748d78d4b6ede95))
+* **ssr:** fix usage of components using useLayoutEffect ([2f1a1fe](https://github.com/pixore/pixore/commit/2f1a1fedebf168c9d787a564a73a45a0b633c126))
+* **welcome:** fix welcome window behavior ([52b9f84](https://github.com/pixore/pixore/commit/52b9f8441a739c9836e524dac523d21af707c080))
+* **welcome:** fix welcome window behavior ([42c1f88](https://github.com/pixore/pixore/commit/42c1f883d91337197855d8876ea33efed8d952dd))
+
 ## [0.4.0](https://github.com/pixore/pixore/compare/v0.3.0...v0.4.0) (2020-01-12)
 
 

@@ -1,4 +1,4 @@
-// NOTE: these are types instead of this issue
+// NOTE: these are types instead of interfaces this issue
 // https://github.com/microsoft/TypeScript/issues/15300
 export type Color = {
   red: number;

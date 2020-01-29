@@ -1,10 +1,11 @@
 import React from 'react';
-import { Menu, MenuItem } from '@reach/menu-button';
+import { MenuItem } from '@reach/menu-button';
 import {
   MenuButton,
   MenuList,
   notImplemented,
   MenuItemSeparator,
+  Menu,
 } from './MenuButton';
 import ProjectName from './ProjectName';
 import { useWelcomeWindow } from '../hooks/useWelcomeWindow';

@@ -1,20 +1,8 @@
 import styled from '@emotion/styled';
 import { css, SerializedStyles } from '@emotion/core';
-import { getStringTransparentPattern } from '../utils';
 import { Color, toString } from './Color';
 
 let transparentBackground: SerializedStyles;
-
-const getTransparentBackground = () => {
-  if (transparentBackground || typeof document === 'undefined') {
-    return transparentBackground;
-  }
-
-  const transparent = getStringTransparentPattern();
-  return css`
-    background-image: url(${transparent});
-  `;
-};
 
 interface GetBackgroundColorArgs {
   val: Color;
@@ -29,7 +17,7 @@ const getBackgroundColor = <T extends GetBackgroundColorArgs>({ val }: T) => {
 const ColoredDiv = styled.div`
   position: relative;
   background-size: 30px;
-  ${getTransparentBackground()}
+  background-image: url('/transparent.png');
 
   &::before {
     content: '';
@@ -42,9 +30,4 @@ const ColoredDiv = styled.div`
   }
 `;
 
-export {
-  getTransparentBackground,
-  transparentBackground,
-  ColoredDiv,
-  getBackgroundColor,
-};
+export { transparentBackground, ColoredDiv, getBackgroundColor };

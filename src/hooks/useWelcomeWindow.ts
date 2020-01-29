@@ -4,11 +4,17 @@ import { useWindowsActions } from '../contexts/Windows';
 import { Windows } from '../types';
 
 const getWindowPosition = () => {
-  const height = 600;
-  const width = 600;
-  const left = Math.floor(window.innerWidth / 2 - width / 2);
-  const top = Math.floor(window.innerHeight / 2 - height / 1.8);
-  return { height, width, left, top };
+  const height = Math.min(600, window.innerHeight);
+  const width = Math.min(600, window.innerWidth);
+  const left =
+    window.innerWidth === width
+      ? 20
+      : Math.floor(window.innerWidth / 2 - width / 2);
+  const top =
+    window.innerHeight === height
+      ? 20
+      : Math.floor(window.innerHeight / 2 - height / 1.8);
+  return { height: height - 40, width: width - 40, left, top };
 };
 
 const useWelcomeWindow = (autoOpen = false) => {

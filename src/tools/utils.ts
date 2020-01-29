@@ -1,13 +1,14 @@
 import { ContextRef, Click } from './types';
 import { getContext } from '../utils/contexts';
-import { Key } from '../contexts/Modifiers';
+import { Key } from '../state/modifiers';
 import { getModifierState } from '../utils/keyboard';
 import { manageEvents as $ } from '../utils/dom/events';
 import Vector from '../utils/vector';
 import { round1, clean } from '../utils';
 import { calculatePosition } from '../utils/canvas';
-import { Artboard } from '../contexts/Artboard';
-import { isTransparent, toString, Color } from '../utils/Color';
+import { Artboard } from '../state/artboard';
+import { isTransparent, toString, Color, create } from '../utils/Color';
+import { PointUpdates } from '../actions/sprites';
 
 type RemovePanning = () => void;
 type RemovePreview = () => void;
@@ -122,7 +123,7 @@ const paintOrClear = (context: Context2D, cord: Vector, color: Color) => {
 const paint = (
   contextRef: ContextRef,
   cord: Vector,
-  tempContext: Context2D,
+  paintedPoints: PointUpdates,
 ) => {
   const {
     artboard,
@@ -131,16 +132,35 @@ const paint = (
     clickType,
     canvas,
   } = contextRef.current;
-  const { frame, layer } = artboard;
+  const { frameId, layerId } = artboard;
   const { scale, x, y } = canvas;
   const width = sprite.width * scale;
   const height = sprite.height * scale;
 
   const color = getColor(artboard, clickType);
-  const layerContext = getContext(frame, layer, sprite);
+  const layerContext = getContext(sprite, frameId, layerId);
+
+  const [red, green, blue, alpha] = layerContext.getImageData(
+    cord.x,
+    cord.y,
+    1,
+    1,
+  ).data;
+
+  if (!paintedPoints[cord.x]) {
+    paintedPoints[cord.x] = {};
+  }
+
+  if (!paintedPoints[cord.x][cord.y]) {
+    paintedPoints[cord.x][cord.y] = {
+      new: color,
+      old: create(red, green, blue, (alpha / 255) * 100),
+    };
+  } else {
+    paintedPoints[cord.x][cord.y].new = color;
+  }
 
   paintOrClear(layerContext, cord, color);
-  paintOrClear(tempContext, cord, color);
 
   clean(mainContext);
   mainContext.drawImage(

@@ -20,8 +20,8 @@ const Frames: React.FC<PropTypes> = (props) => {
   const [frame, setFrame] = React.useState(0);
   const timerRef = React.useRef(null);
   const { onRef: setRef, context } = useCanvas2DContext();
-  const numberOfFrames = sprite.frames.length;
-  const { layers } = sprite;
+  const numberOfFrames = sprite.frameList.length;
+  const { layerList } = sprite;
 
   React.useEffect(() => {
     clearInterval(timerRef.current);
@@ -57,8 +57,8 @@ const Frames: React.FC<PropTypes> = (props) => {
     clean(context);
     imageSmoothingDisabled(context);
 
-    layers.forEach((layer) => {
-      const layerContext = getContext(sprite.frames[frame], layer, sprite);
+    layerList.forEach((layer) => {
+      const layerContext = getContext(sprite, sprite.frameList[frame], layer);
       context.drawImage(
         layerContext.canvas,
         0,
@@ -71,7 +71,7 @@ const Frames: React.FC<PropTypes> = (props) => {
         height,
       );
     });
-  }, [frame, context, sprite, scale, x, y, layers]);
+  }, [frame, context, sprite, scale, x, y, layerList]);
   return <CanvasLayer ref={setRef} width={width} height={height} />;
 };
 

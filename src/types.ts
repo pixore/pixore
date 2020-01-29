@@ -1,3 +1,6 @@
+import Vector from '@pixore/subdivide/dist/utils/Vector';
+import { Color } from './utils/Color';
+
 export enum Panels {
   Canvas = 'canvas',
   Palette = 'palette',
@@ -19,26 +22,6 @@ export interface Palette {
   name: string;
 }
 
-export interface Sprite {
-  id: string;
-  name: string;
-  width: number;
-  height: number;
-  layers: string[];
-  frames: string[];
-  version?: number;
-  palette?: Palette;
-}
-
-export interface HookCanvas {
-  scale: number;
-  y: number;
-  x: number;
-  center: (stats: Stats, sprite: Sprite) => void;
-  update: (payload: Canvas) => void;
-  onWheel: (event: React.WheelEvent<HTMLDivElement>) => void;
-}
-
 export type Dispatch<T> = (action: T) => void;
 
 export interface Canvas {
@@ -58,6 +41,15 @@ export interface CanvasStats {
 export interface Size {
   width: number;
   height: number;
+}
+
+export interface Frame {
+  id: string;
+}
+
+export interface Layer {
+  id: string;
+  name: string;
 }
 
 export type Stats = DOMRect | ClientRect;

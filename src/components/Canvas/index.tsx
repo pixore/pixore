@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from '@emotion/styled';
 import { useContainer } from '@pixore/subdivide';
 import { useSprite, useSpriteActions } from '../../contexts/Sprite';
 import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
@@ -16,16 +15,7 @@ import { usePlayAndPause } from '../../hooks/usePlayAndPause';
 import Frames from '../CanvasLayers/Frames';
 import Tools from './Tools';
 import CenterButton from '../CenterButton';
-
-const Float = styled.div`
-  display: inline-block;
-  position: absolute;
-  top: 4px;
-  left: 70px;
-  padding: 2px;
-  border-radius: 3px;
-  background: rgba(0, 0, 0, 0.5);
-`;
+import { FloatBox } from './elements';
 
 const Canvas: React.FC = () => {
   const container = useContainer();
@@ -41,11 +31,11 @@ const Canvas: React.FC = () => {
   const spriteActions = useSpriteActions();
   const canvas = useCanvas(stats);
   const { onWheel } = canvas;
-  const { layer, tool: toolName } = artboard;
-  const { layers } = sprite;
+  const { layerId, tool: toolName } = artboard;
+  const { layerList } = sprite;
   const { isPlaying, button } = usePlayAndPause(
     false,
-    sprite.frames.length === 1,
+    sprite.frameList.length === 1,
   );
 
   const listenerContextRef = React.useRef<ListenerContext>({
@@ -80,9 +70,12 @@ const Canvas: React.FC = () => {
     canvas.center(stats, sprite);
   };
 
-  const indexOfCurrentLayer = layers.indexOf(layer);
-  const layersBelow = layers.slice(0, indexOfCurrentLayer);
-  const layersAbove = layers.slice(indexOfCurrentLayer + 1, layers.length);
+  const indexOfCurrentLayer = layerList.indexOf(layerId);
+  const layersBelow = layerList.slice(0, indexOfCurrentLayer);
+  const layersAbove = layerList.slice(
+    indexOfCurrentLayer + 1,
+    layerList.length,
+  );
 
   // TODO while zooming in/out if the users try to paint
   // an error happen, therefore painting should be blocked while
@@ -103,7 +96,7 @@ const Canvas: React.FC = () => {
           <FrameLayers
             data-id="current-layer"
             ref={setMainRef}
-            layers={[layer]}
+            layers={[layerId]}
             {...canvas}
           />
           <FrameLayers
@@ -115,11 +108,11 @@ const Canvas: React.FC = () => {
         </>
       )}
       <Mask {...canvas} />
-      <Float>
+      <FloatBox top={4} left={70}>
         <PanelSelect />
         {button}
         <CenterButton onClick={onCenter} />
-      </Float>
+      </FloatBox>
       <Tools />
     </HeadlessPanel>
   );

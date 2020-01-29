@@ -2,6 +2,14 @@ import { Size, Stats } from '../types';
 let transparentPattern: HTMLCanvasElement;
 let stringTransparentPatter: string;
 
+let id = 0;
+const createId = () => {
+  const newId = String(id);
+
+  id = id + 1;
+  return newId;
+};
+
 declare global {
   interface CanvasRenderingContext2D {
     msImageSmoothingEnabled: boolean;
@@ -82,6 +90,7 @@ const isTransparent = (value: string): boolean => {
 };
 
 const preventDefault = (event: React.MouseEvent) => event.preventDefault();
+const stopPropagation = (event: React.MouseEvent) => event.stopPropagation();
 
 const round1 = (num: number) => {
   return Number(num.toFixed(1));
@@ -108,12 +117,24 @@ const getScaleAndPosition = (stats: Stats, size: Size) => {
   };
 };
 
+const getNearItem = <T>(arr: T[], item: T) => {
+  const index = arr.indexOf(item);
+
+  if (index === 0) {
+    return arr[index + 1];
+  } else {
+    return arr[index - 1];
+  }
+};
+
 const toggleState = (state: boolean) => !state;
 
 export {
   round1,
+  getNearItem,
   getScaleAndPosition,
   preventDefault,
+  stopPropagation,
   getTransparentPattern,
   getStringTransparentPattern,
   clean,
@@ -123,4 +144,5 @@ export {
   getNewId,
   isTransparent,
   toggleState,
+  createId,
 };
