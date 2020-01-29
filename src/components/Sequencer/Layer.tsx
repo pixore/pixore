@@ -17,17 +17,17 @@ const Layer: React.FC<PropTypes> = (props) => {
   const { layer, name, onClick, isActive } = props;
   const { deleteLayer } = useSpriteActions();
   const { layerList } = useSprite();
-  const { selectLayer } = useArtboardActions();
+  const { deleteLayerAndSelect } = useArtboardActions();
   const index = layerList.indexOf(layer);
   const id = `layer-${index}`;
 
   const onRemove = (event: React.MouseEvent) => {
     stopPropagation(event);
 
-    deleteLayer(layer);
-
     if (isActive) {
-      selectLayer(getNearItem(layerList, layer));
+      deleteLayerAndSelect(getNearItem(layerList, layer));
+    } else {
+      deleteLayer(layer);
     }
   };
 

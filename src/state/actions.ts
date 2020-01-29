@@ -18,6 +18,7 @@ import {
   createLayerEvent,
   createAndSelectLayerEvent,
   deleteLayerEvent,
+  deleteLayerAndSelectEvent,
 } from '../actions/layers';
 import { paintSpriteEvent } from '../actions/sprites';
 import curry from 'lodash.curry';
@@ -92,6 +93,7 @@ const createAppActions = (service: AppInterpreter) => {
     deleteFrame: curry(deleteFrameEvent.action)(service),
     deleteFrameAndSelect: curry(deleteFrameAndSelectEvent.action)(service),
     deleteLayer: curry(deleteLayerEvent.action)(service),
+    deleteLayerAndSelect: curry(deleteLayerAndSelectEvent.action)(service),
     createPalette(palette: NewPalette): string {
       const { palettes } = ctx(service);
       const { context } = palettes.send({

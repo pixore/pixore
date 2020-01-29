@@ -12,6 +12,7 @@ import {
   CreateLayerActionEvent,
   SelectLayerActionEvent,
   DeleteLayerEvent,
+  DeleteLayerAndSelectEvent,
 } from '../actions/layers';
 import { PaintSpriteEvent } from '../actions/sprites';
 
@@ -53,6 +54,7 @@ export enum Actions {
   CREATE_AND_SELECT_FRAME = 'CREATE_AND_SELECT_FRAME',
   CREATE_AND_SELECT_LAYER = 'CREATE_AND_SELECT_LAYER',
   DELETE_FRAME_AND_SELECT = 'DELETE_FRAME_AND_SELECT',
+  DELETE_LAYER_AND_SELECT = 'DELETE_LAYER_AND_SELECT',
 }
 
 export interface EventActionObject<P> extends EventObject {
@@ -79,6 +81,7 @@ export type ActionEvent =
   | CreateLayerActionEvent
   | SelectLayerActionEvent
   | DeleteLayerEvent
+  | DeleteLayerAndSelectEvent
   | PaintSpriteEvent;
 
 interface ActionUpdate<C, E> {

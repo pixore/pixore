@@ -17,6 +17,7 @@ const createArtboardActions = (actions: AppActions, artboardId: string) => ({
   createAndSelectFrame: () => actions.createAndSelectFrame(artboardId),
   createAndSelectLayer: curry(actions.createAndSelectLayer)(artboardId),
   deleteFrameAndSelect: actions.deleteFrameAndSelect(artboardId),
+  deleteLayerAndSelect: actions.deleteLayerAndSelect(artboardId),
 });
 
 export type ArtboardActions = ReturnType<typeof createArtboardActions>;

@@ -42,6 +42,19 @@ export type CreateAndSelectLayerEvent = AE<
   CreateAndSelectLayerEventData
 >;
 
+export interface DeleteLayerAndSelectEventData {
+  artboardId: string;
+  layerId: string;
+  spriteId: string;
+  name: string;
+  newSelectedLayerId: string;
+}
+
+export type DeleteLayerAndSelectEvent = AE<
+  Actions.DELETE_LAYER_AND_SELECT,
+  DeleteLayerAndSelectEventData
+>;
+
 const selectLayer = (
   service: AppInterpreter,
   artboardId: string,
@@ -168,6 +181,54 @@ const reduCreateAndSelectLayer = (
   reduSelectLayer(appState, data);
 };
 
+const deleteLayerAndSelect = (
+  service: AppInterpreter,
+  artboardId: string,
+  newSelectedLayerId: string,
+) => {
+  const { layerId, spriteId } = ctx(getArtboard(service, artboardId));
+  const { layers } = ctx(getSprite(service, spriteId));
+  const { name } = layers[layerId];
+
+  deleteLayer(service, spriteId, layerId);
+  selectLayer(service, artboardId, newSelectedLayerId);
+
+  pushAction(service, {
+    type: Actions.DELETE_LAYER_AND_SELECT,
+    data: {
+      spriteId,
+      layerId,
+      name,
+      artboardId,
+      newSelectedLayerId,
+    },
+  });
+};
+
+const undoDeleteLayerAndSelect = (
+  appState: App,
+  data: DeleteLayerAndSelectEventData,
+) => {
+  const { layerId } = data;
+  undoDeleteLayer(appState, data);
+  undoSelectLayer(appState, {
+    ...data,
+    previousLayerId: layerId,
+  });
+};
+
+const reduDeleteLayerAndSelect = (
+  appState: App,
+  data: DeleteLayerAndSelectEventData,
+) => {
+  const { layerId } = data;
+  reduDeleteLayer(appState, data);
+  reduSelectLayer(appState, {
+    ...data,
+    previousLayerId: layerId,
+  });
+};
+
 const createLayerEvent = {
   action(service: AppInterpreter, spriteId: string, name: string) {
     const layerId = createLayer(service, spriteId, name);
@@ -217,9 +278,16 @@ const deleteLayerEvent = {
   redu: reduDeleteLayer,
 };
 
+const deleteLayerAndSelectEvent = {
+  action: deleteLayerAndSelect,
+  undo: undoDeleteLayerAndSelect,
+  redu: reduDeleteLayerAndSelect,
+};
+
 export {
   selectLayerEvent,
   createLayerEvent,
   createAndSelectLayerEvent,
   deleteLayerEvent,
+  deleteLayerAndSelectEvent,
 };
