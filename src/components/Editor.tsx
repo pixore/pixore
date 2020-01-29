@@ -29,13 +29,13 @@ const Editor: React.FC<EditorProps> = (props) => {
       <Modifiers.Provider>
         <Palettes.Provider>
           <Sprites.Provider>
-            <Sprite.Provider>
-              <Artboards.Provider>
-                <Artboard.Provider>
+            <Artboards.Provider>
+              <Artboard.Provider>
+                <Sprite.Provider>
                   <Windows.Provider>{children}</Windows.Provider>
-                </Artboard.Provider>
-              </Artboards.Provider>
-            </Sprite.Provider>
+                </Sprite.Provider>
+              </Artboard.Provider>
+            </Artboards.Provider>
           </Sprites.Provider>
         </Palettes.Provider>
       </Modifiers.Provider>

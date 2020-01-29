@@ -2,7 +2,7 @@ import React from 'react';
 import { interpret } from 'xstate';
 import { defaultContext } from '../state/artboards';
 import { useStateContext } from '../hooks/useStateContext';
-import { useAppState, useActions } from './App';
+import { useAppState, useAppActions } from './App';
 import { AppActions, createAppActions } from '../state/actions';
 import { appMachine } from '../state/app';
 
@@ -19,15 +19,10 @@ const ArtboardsActionsContext = React.createContext(defaultActions);
 
 const useArtboardsActions = () => React.useContext(ArtboardsActionsContext);
 const useArtboards = () => React.useContext(ArtboardsContext);
-const useArtboardService = () => {
-  const { artboards, currentArtboard } = useArtboards();
-  return artboards[currentArtboard].ref;
-};
-const useCurrentArtboard = () => useArtboardService().state.context;
 
 const Provider: React.FC = (props) => {
   const { artboards: service } = useAppState();
-  const appActions = useActions();
+  const appActions = useAppActions();
   const { children } = props;
   const actions = React.useMemo(() => createArtboardsActions(appActions), [
     appActions,
@@ -44,10 +39,4 @@ const Provider: React.FC = (props) => {
   );
 };
 
-export {
-  Provider,
-  useArtboards,
-  useArtboardsActions,
-  useCurrentArtboard,
-  useArtboardService,
-};
+export { Provider, useArtboards, useArtboardsActions };

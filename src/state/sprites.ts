@@ -1,11 +1,11 @@
-import { Machine, Interpreter, assign, spawn, sendParent } from 'xstate';
+import { Machine, Interpreter, spawn } from 'xstate';
 import {
   SpriteInterpreter,
   spriteMachine,
   defaultContext as spriteDefaultContext,
   Sprite,
 } from './sprite';
-import { Ref, Actions, A } from '../utils/state';
+import { Ref, Actions, A, ActionConfig, action } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 
@@ -15,7 +15,6 @@ type SpriteMap = ItemMap<SpriteRef>;
 export interface Sprites {
   sprites: SpriteMap;
   spriteList: string[];
-  currentSprite: string;
   lastSpriteId?: string;
 }
 
@@ -39,6 +38,10 @@ const addSprite = (sprites: SpriteMap, id: string, data: NewSprite) => {
   });
 };
 
+const config: ActionConfig<keyof Sprites> = {
+  updateListProperties: [['sprites', 'spriteList']],
+};
+
 export type NewSprite = Partial<Omit<Sprite, 'id'>>;
 type SpritesEvent =
   | A<Actions.CREATE_SPRITE, NewSprite>
@@ -53,8 +56,16 @@ export type SpritesInterpreter = Interpreter<
 export const defaultContext: Sprites = {
   sprites: {},
   spriteList: [],
-  currentSprite: '',
 };
+
+const createSprite = action((context, { payload }) => {
+  const id = createId();
+  const sprites = addSprite(context.sprites, id, payload);
+  return {
+    sprites,
+    lastSpriteId: id,
+  };
+}, config);
 
 const spritesMachine = Machine<Sprites, SpritesState, SpritesEvent>({
   id: 'sprites',
@@ -65,34 +76,14 @@ const spritesMachine = Machine<Sprites, SpritesState, SpritesEvent>({
       on: {
         CREATE_SPRITE: {
           target: 'init',
-          actions: assign((context, { payload }) => {
-            const id = createId();
-            const sprites = addSprite({}, id, payload);
-            return {
-              sprites,
-              spriteList: Object.keys(sprites),
-              lastSpriteId: id,
-              currentSprite: id,
-            };
-          }),
+          actions: createSprite,
         },
       },
     },
     init: {
       on: {
         CREATE_SPRITE: {
-          actions: assign((context, { payload }) => {
-            const id = createId();
-            const sprites = addSprite(context.sprites, id, payload);
-            return {
-              sprites,
-              spriteList: Object.keys(sprites),
-              lastSpriteId: id,
-            };
-          }),
-        },
-        PUSH_ACTION: {
-          actions: sendParent((context, event) => event),
+          actions: createSprite,
         },
       },
     },

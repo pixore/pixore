@@ -1,12 +1,12 @@
 import React from 'react';
 import curry from 'lodash.curry';
 import { interpret } from 'xstate';
-import { useArtboardService } from './Artboards';
 import { useStateContext } from '../hooks/useStateContext';
 import { defaultContext } from '../state/artboard';
 import { AppActions, createAppActions } from '../state/actions';
 import { appMachine } from '../state/app';
-import { useActions } from './App';
+import { useAppActions, useAppState } from './App';
+import { useArtboards } from './Artboards';
 
 const createArtboardActions = (actions: AppActions, artboardId: string) => ({
   changeLayer: curry(actions.selectLayer)(artboardId),
@@ -33,8 +33,10 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = (props) => {
-  const service = useArtboardService();
-  const appActions = useActions();
+  const { currentArtboardId } = useAppState();
+  const { artboards } = useArtboards();
+  const service = artboards[currentArtboardId];
+  const appActions = useAppActions();
   const state = useStateContext(service);
   const { id } = state;
   const actions = React.useMemo(() => createArtboardActions(appActions, id), [

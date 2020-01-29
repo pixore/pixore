@@ -2,7 +2,7 @@ import React from 'react';
 import { interpret } from 'xstate';
 import { defaultContext } from '../state/windows';
 import { useStateContext } from '../hooks/useStateContext';
-import { useAppState, useActions } from './App';
+import { useAppState, useAppActions } from './App';
 import { AppActions, createAppActions } from '../state/actions';
 import { appMachine } from '../state/app';
 
@@ -27,7 +27,7 @@ interface ProviderProps {
 
 const Provider: React.FC<ProviderProps> = (props) => {
   const { windows: service } = useAppState();
-  const appActions = useActions();
+  const appActions = useAppActions();
   const { children } = props;
   const actions = React.useMemo(() => createWindowsActions(appActions), [
     appActions,

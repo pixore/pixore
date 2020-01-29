@@ -1,11 +1,11 @@
-import { Machine, Interpreter, assign, spawn, sendParent } from 'xstate';
+import { Machine, Interpreter, spawn } from 'xstate';
 import {
   PaletteInterpreter,
   paletteMachine,
   defaultContext as paletteDefaultContext,
   Palette,
 } from './palette';
-import { Ref, Actions, A } from '../utils/state';
+import { Ref, Actions, A, action, ActionConfig } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 
@@ -25,6 +25,10 @@ interface PalettesState {
   };
 }
 
+const config: ActionConfig<keyof Palettes> = {
+  updateListProperties: [['palettes', 'paletteList']],
+};
+
 const addPalette = (artboards: PaletteMap, id: string, data: NewPalette) => {
   return addItem(artboards, id, {
     id,
@@ -37,6 +41,15 @@ const addPalette = (artboards: PaletteMap, id: string, data: NewPalette) => {
     ) as PaletteInterpreter,
   });
 };
+
+const createPalette = action((context, { payload }) => {
+  const id = createId();
+
+  return {
+    palettes: addPalette(context.palettes, id, payload),
+    lastPaletteId: id,
+  };
+}, config);
 
 export type NewPalette = Partial<Omit<Palette, 'id'>>;
 type PalettesEvent =
@@ -63,34 +76,14 @@ const palettesMachine = Machine<Palettes, PalettesState, PalettesEvent>({
       on: {
         CREATE_PALETTE: {
           target: 'init',
-          actions: assign((context, { payload }) => {
-            const id = createId();
-            const palettes = addPalette({}, id, payload);
-
-            return {
-              palettes,
-              paletteList: Object.keys(palettes),
-              lastPaletteId: id,
-            };
-          }),
+          actions: createPalette,
         },
       },
     },
     init: {
       on: {
         CREATE_PALETTE: {
-          actions: assign((context, { payload }) => {
-            const id = createId();
-            const palettes = addPalette(context.palettes, id, payload);
-            return {
-              palettes,
-              paletteList: Object.keys(palettes),
-              lastPaletteId: id,
-            };
-          }),
-        },
-        PUSH_ACTION: {
-          actions: sendParent((context, event) => event),
+          actions: createPalette,
         },
       },
     },

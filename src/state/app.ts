@@ -15,7 +15,7 @@ import { ModifiersInterpreter, modifiersMachine } from './modifiers';
 import { PalettesInterpreter, palettesMachine } from './palettes';
 import { WindowsInterpreter, windowsMachine } from './windows';
 import { Color } from '../utils/Color';
-import { ActionEvent, Actions } from '../utils/state';
+import { ActionEvent, Actions, ctx } from '../utils/state';
 import { createAppActions } from './actions';
 
 export interface App {
@@ -26,6 +26,7 @@ export interface App {
   windows: WindowsInterpreter;
   undoActions: ActionEvent[];
   reduActions: ActionEvent[];
+  currentArtboardId: string;
 }
 
 interface AppState {
@@ -50,14 +51,11 @@ export const defaultContext: App = {
   windows: interpret(windowsMachine),
   undoActions: [],
   reduActions: [],
+  currentArtboardId: 'no',
 };
 
 const getFirstNonTransparentColor = (colors: Color[]) => {
   return colors.find((color) => color.alpha !== 0);
-};
-
-const ctx = <C, S, E extends EventObject>(service: Interpreter<C, S, E>) => {
-  return service.state.context;
 };
 
 const appMachine = Machine<App, AppState, AppEvent>({
@@ -97,13 +95,16 @@ const appMachine = Machine<App, AppState, AppEvent>({
             const layerId = sprite.layerList[0];
             const frameId = sprite.frameList[0];
 
-            artboards.send({
+            const {
+              context: { lastArtboardId, artboards: e },
+            } = artboards.send({
               type: Actions.CREATE_ARTBOARD,
               payload: {
                 ...artboardDefaultContext,
                 paletteId,
                 layerId,
                 frameId,
+                spriteId,
                 primaryColor,
               },
             });
@@ -115,6 +116,7 @@ const appMachine = Machine<App, AppState, AppEvent>({
               modifiers,
               palettes,
               windows,
+              currentArtboardId: lastArtboardId,
             };
           }),
         },
@@ -148,7 +150,6 @@ const appMachine = Machine<App, AppState, AppEvent>({
               spriteService.send({
                 type: Actions.DELETE_FRAME,
                 payload: { id: frameId },
-                pushAction: false,
               });
             }
 
@@ -175,7 +176,6 @@ const appMachine = Machine<App, AppState, AppEvent>({
 
               spriteService.send({
                 type: Actions.RESTORE_FRAME,
-                pushAction: false,
                 payload: {
                   id: frameId,
                 },

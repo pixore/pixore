@@ -1,21 +1,20 @@
-import { Machine, Interpreter, assign, spawn } from 'xstate';
+import { Machine, Interpreter, spawn } from 'xstate';
 import {
   ArtboardInterpreter,
   artboardMachine,
   defaultContext as artboardDefaultContext,
   Artboard,
 } from './artboard';
-import { Ref, Actions, A } from '../utils/state';
+import { Ref, Actions, A, action, ActionConfig } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 
-type ArtboardRef = Ref<ArtboardInterpreter>;
-type ArtboardMap = ItemMap<ArtboardRef>;
+// type ArtboardRef = Ref<ArtboardInterpreter>;
+type ArtboardMap = ItemMap<ArtboardInterpreter>;
 
 export interface Artboards {
   artboards: ArtboardMap;
-  spriteList: string[];
-  currentArtboard: string;
+  artboardList: string[];
   lastArtboardId?: string;
 }
 
@@ -26,17 +25,22 @@ interface ArtboardsState {
   };
 }
 
+const config: ActionConfig<keyof Artboards> = {
+  updateListProperties: [['artboards', 'artboardList']],
+};
+
 const addArtboard = (artboards: ArtboardMap, id: string, data: NewArtboard) => {
-  return addItem(artboards, id, {
+  return addItem(
+    artboards,
     id,
-    ref: spawn(
+    spawn(
       artboardMachine.withContext({
         ...artboardDefaultContext,
         ...data,
         id,
       }),
     ) as ArtboardInterpreter,
-  });
+  );
 };
 
 export type NewArtboard = Partial<Omit<Artboard, 'id'>>;
@@ -51,9 +55,17 @@ export type ArtboardsInterpreter = Interpreter<
 
 export const defaultContext: Artboards = {
   artboards: {},
-  spriteList: [],
-  currentArtboard: '',
+  artboardList: [],
 };
+
+const createArtboard = action((context, { payload }) => {
+  const id = createId();
+
+  return {
+    artboards: addArtboard(context.artboards, id, payload),
+    lastArtboardId: id,
+  };
+}, config);
 
 const artboardsMachine = Machine<Artboards, ArtboardsState, ArtboardsEvent>({
   id: 'artboards',
@@ -64,30 +76,14 @@ const artboardsMachine = Machine<Artboards, ArtboardsState, ArtboardsEvent>({
       on: {
         CREATE_ARTBOARD: {
           target: 'init',
-          actions: assign((context, { payload }) => {
-            const id = createId();
-            const artboards = addArtboard({}, id, payload);
-            return {
-              artboards,
-              spriteList: Object.keys(artboards),
-              currentArtboard: id,
-            };
-          }),
+          actions: createArtboard,
         },
       },
     },
     init: {
       on: {
         CREATE_ARTBOARD: {
-          actions: assign((context, { payload }) => {
-            const id = createId();
-            const artboards = addArtboard(context.artboards, id, payload);
-            return {
-              artboards,
-              spriteList: Object.keys(artboards),
-              lastArtboardId: id,
-            };
-          }),
+          actions: createArtboard,
         },
       },
     },

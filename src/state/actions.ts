@@ -38,7 +38,7 @@ const createAppActions = (service: AppInterpreter) => {
       throw new Error(`Artboard not found, spriteId = '${artboardId}'`);
     }
 
-    return artboard.ref;
+    return artboard;
   };
 
   return {
@@ -149,14 +149,14 @@ const createAppActions = (service: AppInterpreter) => {
     selectFrame(artboardId: string, frameId: string) {
       const artboard = getArtboard(artboardId);
       artboard.send({
-        type: Actions.CHANGE_FRAME,
+        type: Actions.SELECT_FRAME,
         payload: { frameId },
       });
     },
     selectLayer(artboardId: string, layerId: string) {
       const artboard = getArtboard(artboardId);
       artboard.send({
-        type: Actions.CHANGE_LAYER,
+        type: Actions.SELECT_LAYER,
         payload: { layerId },
       });
     },

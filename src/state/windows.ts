@@ -1,9 +1,9 @@
-import { Machine, Interpreter, assign } from 'xstate';
+import { Machine, Interpreter } from 'xstate';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 import { WindowState as WinState } from '@pixore/window';
 import { Windows } from '../types';
-import { Actions, A } from '../utils/state';
+import { Actions, A, ActionConfig, action } from '../utils/state';
 
 export interface WindowConfig {
   dragable: boolean;
@@ -68,6 +68,10 @@ export const defaultContext: WindowsContext = {
   windowList: [],
 };
 
+const config: ActionConfig<keyof WindowsContext> = {
+  updateListProperties: [['windows', 'windowList']],
+};
+
 const windowsMachine = Machine<WindowsContext, WindowsState, WindowsEvent>({
   id: 'windows',
   initial: 'init',
@@ -76,28 +80,26 @@ const windowsMachine = Machine<WindowsContext, WindowsState, WindowsEvent>({
     init: {
       on: {
         OPEN_WINDOW: {
-          actions: assign((context, { payload }) => {
+          actions: action((context, { payload }) => {
             const { name, args } = payload;
             const id = createId();
-            const windows = addItem(context.windows, id, {
-              name,
-              id,
-              ...args,
-              config: {
-                ...defaultConfig,
-                ...args.config,
-              },
-            });
 
             return {
-              windows,
-              windowList: Object.keys(windows),
+              windows: addItem(context.windows, id, {
+                name,
+                id,
+                ...args,
+                config: {
+                  ...defaultConfig,
+                  ...args.config,
+                },
+              }),
               lastWindowId: id,
             };
-          }),
+          }, config),
         },
         CLOSE_WINDOW: {
-          actions: assign((context, { payload: { id } }) => {
+          actions: action((context, { payload: { id } }) => {
             const windows = {
               ...context.windows,
             };
@@ -105,9 +107,8 @@ const windowsMachine = Machine<WindowsContext, WindowsState, WindowsEvent>({
 
             return {
               windows,
-              windowList: Object.keys(windows),
             };
-          }),
+          }, config),
         },
       },
     },

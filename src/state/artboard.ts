@@ -1,6 +1,7 @@
 import { Machine, Interpreter, assign } from 'xstate';
 import { Color, transparent, black } from '../utils/Color';
 import { Actions, A } from '../utils/state';
+import { Sprite } from './sprite';
 
 export interface Artboard {
   id: string;
@@ -8,6 +9,7 @@ export interface Artboard {
   secondaryColor: Color;
   layerId: string;
   frameId: string;
+  spriteId: string;
   tool: string;
   paletteId: string;
 }
@@ -19,8 +21,9 @@ interface ArtboardState {
 }
 
 type ArtboardEvent =
-  | A<Actions.CHANGE_FRAME, { frameId: string }>
-  | A<Actions.CHANGE_LAYER, { layerId: string }>
+  | A<Actions.CHANGE_SPRITE, Sprite>
+  | A<Actions.SELECT_FRAME, { frameId: string }>
+  | A<Actions.SELECT_LAYER, { layerId: string }>
   | A<Actions.CHANGE_PRIMARY_COLOR, Color>
   | A<Actions.CHANGE_SECONDARY_COLOR, Color>
   | A<Actions.CHANGE_TOOL, { tool: string }>
@@ -37,6 +40,7 @@ export const defaultContext: Artboard = {
   tool: 'pen',
   primaryColor: black(),
   secondaryColor: transparent(),
+  spriteId: 'no',
   frameId: 'no',
   layerId: 'no',
   paletteId: 'no',
@@ -49,12 +53,22 @@ const artboardMachine = Machine<Artboard, ArtboardState, ArtboardEvent>({
   states: {
     init: {
       on: {
-        CHANGE_FRAME: {
+        CHANGE_SPRITE: {
+          actions: assign((context, { payload: sprite }) => {
+            const { id, frameList, layerList } = sprite;
+            return {
+              spriteId: id,
+              frameId: frameList[0],
+              layerId: layerList[0],
+            };
+          }),
+        },
+        SELECT_FRAME: {
           actions: assign((context, { payload: { frameId } }) => ({
             frameId,
           })),
         },
-        CHANGE_LAYER: {
+        SELECT_LAYER: {
           actions: assign((context, { payload: { layerId } }) => ({
             layerId,
           })),

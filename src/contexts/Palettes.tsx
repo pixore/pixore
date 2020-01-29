@@ -2,7 +2,7 @@ import React from 'react';
 import { interpret } from 'xstate';
 import { useStateContext } from '../hooks/useStateContext';
 import { defaultContext } from '../state/palettes';
-import { useAppState, useActions } from './App';
+import { useAppState, useAppActions } from './App';
 import { AppActions, createAppActions } from '../state/actions';
 import { appMachine } from '../state/app';
 import curry from 'lodash.curry';
@@ -40,7 +40,7 @@ const usePalette = (id: string) => {
   }
 };
 const usePaletteActions = (id: string) => {
-  const appActions = useActions();
+  const appActions = useAppActions();
   return React.useMemo(() => createPaletteActions(appActions, id), [
     appActions,
     id,
@@ -54,7 +54,7 @@ interface ProviderProps {
 const Provider: React.FC<ProviderProps> = (props) => {
   const { palettes: service } = useAppState();
   const { children } = props;
-  const appActions = useActions();
+  const appActions = useAppActions();
   const actions = React.useMemo(() => createPalettesActions(appActions), [
     appActions,
   ]);

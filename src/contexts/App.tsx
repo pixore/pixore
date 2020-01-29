@@ -11,7 +11,7 @@ const AppActionsContext = React.createContext(
   createAppActions(interpret(appMachine)),
 );
 const useAppState = () => React.useContext(AppStateContext);
-const useActions = () => React.useContext(AppActionsContext);
+const useAppActions = () => React.useContext(AppActionsContext);
 const useAppService = () => React.useContext(AppServiceContext);
 
 interface ProviderProps {
@@ -42,4 +42,4 @@ const Provider: React.FC<ProviderProps> = (props) => {
   );
 };
 
-export { Provider, useAppState, useActions, useAppService };
+export { Provider, useAppState, useAppActions, useAppService };

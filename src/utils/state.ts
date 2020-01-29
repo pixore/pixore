@@ -18,8 +18,9 @@ export enum Actions {
   DELETE_FRAME = 'DELETE_FRAME',
   CREATE_SPRITE = 'CREATE_SPRITE',
   CREATE_ARTBOARD = 'CREATE_ARTBOARD',
-  CHANGE_FRAME = 'CHANGE_FRAME',
-  CHANGE_LAYER = 'CHANGE_LAYER',
+  CHANGE_SPRITE = 'CHANGE_SPRITE',
+  SELECT_FRAME = 'SELECT_FRAME',
+  SELECT_LAYER = 'SELECT_LAYER',
   CHANGE_PRIMARY_COLOR = 'CHANGE_PRIMARY_COLOR',
   CHANGE_SECONDARY_COLOR = 'CHANGE_SECONDARY_COLOR',
   CHANGE_TOOL = 'CHANGE_TOOL',
@@ -36,7 +37,6 @@ export enum Actions {
 }
 
 export interface EventActionObject<P> extends EventObject {
-  pushAction?: boolean;
   payload?: P;
 }
 

@@ -2,11 +2,12 @@ import React from 'react';
 import { interpret } from 'xstate';
 import curry from 'lodash.curry';
 import { defaultContext } from '../state/sprite';
-import { useSpriteService } from './Sprites';
+import { useSprites } from './Sprites';
 import { appMachine } from '../state/app';
 import { AppActions, createAppActions } from '../state/actions';
 import { useStateContext } from '../hooks/useStateContext';
-import { useActions } from './App';
+import { useAppActions } from './App';
+import { useArtboard } from './Artboard';
 
 const createSpriteActions = (actions: AppActions, spriteId: string) => ({
   changeName: curry(actions.renameSprite)(spriteId),
@@ -36,8 +37,11 @@ interface ProviderProps {
 
 const Provider: React.FC<ProviderProps> = (props) => {
   const { children } = props;
-  const appActions = useActions();
-  const service = useSpriteService();
+  const { spriteId, id: artboardId } = useArtboard();
+  const { sprites } = useSprites();
+
+  const appActions = useAppActions();
+  const service = sprites[spriteId].ref;
   const state = useStateContext(service);
   const { id } = state;
 
