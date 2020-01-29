@@ -1,4 +1,18 @@
-import { EventObject, Interpreter, sendParent, assign } from 'xstate';
+import { EventObject, Interpreter, assign } from 'xstate';
+import { AppInterpreter } from '../state/app';
+import {
+  CreateAndSelectFrameEvent,
+  CreateFrameActionEvent,
+  SelectFrameActionEvent,
+  DeleteFrameEvent,
+} from '../actions/frames';
+import {
+  CreateAndSelectLayerEvent,
+  CreateLayerActionEvent,
+  SelectLayerActionEvent,
+  DeleteLayerEvent,
+} from '../actions/layers';
+
 export interface Ref<T> {
   id: string;
   ref: T;
@@ -52,46 +66,15 @@ export type AE<T, D> = {
   data: D;
 };
 
-export interface CreateFrameEventData {
-  frameId: string;
-  spriteId: string;
-}
-
-export interface CreateAndSelectFrameEventData extends CreateFrameEventData {
-  previousFrameId: string;
-  artboardId: string;
-}
-
-export type DeleteFrameEventData = CreateFrameEventData;
-
-export interface CreateLayerEventData {
-  layerId: string;
-  spriteId: string;
-  name: string;
-}
-
-export interface CreateAndSelectLayerEventData extends CreateLayerEventData {
-  previousLayerId: string;
-  artboardId: string;
-}
-
-export type DeleteLayerEventData = CreateFrameEventData;
-
-export type EventData =
-  | CreateAndSelectFrameEventData
-  | CreateFrameEventData
-  | DeleteFrameEventData
-  | CreateAndSelectLayerEventData
-  | CreateLayerEventData
-  | DeleteLayerEventData;
-
 export type ActionEvent =
-  | AE<Actions.CREATE_AND_SELECT_FRAME, CreateAndSelectFrameEventData>
-  | AE<Actions.CREATE_FRAME, CreateFrameEventData>
-  | AE<Actions.DELETE_FRAME, DeleteFrameEventData>
-  | AE<Actions.CREATE_AND_SELECT_LAYER, CreateAndSelectLayerEventData>
-  | AE<Actions.CREATE_LAYER, CreateLayerEventData>
-  | AE<Actions.DELETE_LAYER, DeleteLayerEventData>;
+  | CreateAndSelectFrameEvent
+  | CreateFrameActionEvent
+  | SelectFrameActionEvent
+  | DeleteFrameEvent
+  | CreateAndSelectLayerEvent
+  | CreateLayerActionEvent
+  | SelectLayerActionEvent
+  | DeleteLayerEvent;
 
 interface ActionUpdate<C, E> {
   (context: C, event: E): void | Partial<C>;
@@ -131,4 +114,33 @@ const action = <P, C, E extends EventActionObject<P>>(
   });
 };
 
-export { ctx, action };
+const getArtboard = (service: AppInterpreter, artboardId: string) => {
+  const { artboards } = ctx(service);
+  const artboard = ctx(artboards).artboards[artboardId];
+
+  if (!artboard) {
+    throw new Error(`Artboard not found, spriteId = '${artboardId}'`);
+  }
+
+  return artboard;
+};
+
+const getSprite = (service: AppInterpreter, spriteId: string) => {
+  const { sprites } = ctx(service);
+  const sprite = ctx(sprites).sprites[spriteId];
+
+  if (!sprite) {
+    throw new Error(`Sprite not found, spriteId = '${spriteId}'`);
+  }
+
+  return sprite.ref;
+};
+
+const pushAction = (service: AppInterpreter, payload: ActionEvent) => {
+  service.send({
+    type: Actions.PUSH_ACTION,
+    payload,
+  });
+};
+
+export { ctx, action, getArtboard, getSprite, pushAction };

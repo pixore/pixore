@@ -11,10 +11,10 @@ import { useArtboard } from './Artboard';
 
 const createSpriteActions = (actions: AppActions, spriteId: string) => ({
   changeName: curry(actions.renameSprite)(spriteId),
-  createLayer: curry(actions.createLayer)(spriteId),
+  createLayer: actions.createLayer(spriteId),
   createFrame: () => actions.createFrame(spriteId),
-  deleteLayer: curry(actions.deleteLayer)(spriteId),
-  deleteFrame: curry(actions.deleteFrame)(spriteId),
+  deleteLayer: actions.deleteLayer(spriteId),
+  deleteFrame: actions.deleteFrame(spriteId),
   paintSprite: () => actions.paintSprite(spriteId),
 });
 

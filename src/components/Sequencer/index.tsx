@@ -20,8 +20,8 @@ const SelectedFrame = SelectedLayer.withComponent('col');
 
 const Sequencer = () => {
   const {
-    changeFrame,
-    changeLayer,
+    selectFrame,
+    selectLayer,
     createAndSelectFrame,
     createAndSelectLayer,
   } = useArtboardActions();
@@ -55,26 +55,24 @@ const Sequencer = () => {
         <thead>
           <tr>
             <td />
-            {frameList.map((frame, index, arr) => (
+            {frameList.map((frame) => (
               <Frame
+                isActive={frame === artboard.frameId}
                 key={frame}
                 frame={frame}
-                index={index}
-                next={index === arr.length - 1 ? arr[0] : arr[index + 1]}
-                onClick={() => changeFrame(frame)}
+                onClick={() => selectFrame(frame)}
               />
             ))}
           </tr>
         </thead>
         <tbody>
-          {layerList.map((layer, index, arr) => (
+          {layerList.map((layer) => (
             <SelectedLayer isActive={layer === artboard.layerId} key={layer}>
               <Layer
-                index={index}
+                isActive={layer === artboard.layerId}
                 layer={layer}
                 name={layers[layer].name}
-                next={index === arr.length - 1 ? arr[0] : arr[index + 1]}
-                onClick={() => changeLayer(layer)}
+                onClick={() => selectLayer(layer)}
               />
               {sprite.frameList.map((frame) => (
                 <Cell

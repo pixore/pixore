@@ -33,13 +33,13 @@ interface PropTypes {
 
 const Cell: React.FC<PropTypes> = (props) => {
   const { frame, layer, isActive } = props;
-  const { changeFrame, changeLayer } = useArtboardActions();
+  const { selectFrame, selectLayer } = useArtboardActions();
   const sprite = useSprite();
 
   const id = `${layer}+${frame}`;
   const onSelectFrameAndLayer = () => {
-    changeFrame(frame);
-    changeLayer(layer);
+    selectFrame(frame);
+    selectLayer(layer);
   };
 
   const onClean = (event: React.MouseEvent) => {

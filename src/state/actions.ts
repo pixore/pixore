@@ -1,11 +1,24 @@
 import { AppInterpreter } from './app';
-import { ctx, Actions, ActionEvent } from '../utils/state';
+import { ctx, Actions } from '../utils/state';
 import { NewSprite } from './sprites';
 import { NewPalette } from './palettes';
 import { Color } from '../utils/Color';
 import { NewArtboard } from './artboards';
 import { Windows } from '../types';
 import { OpenWindowArgs } from './windows';
+import {
+  selectFrameEvent,
+  createFrameEvent,
+  createAndSelectFrameEvent,
+  deleteFrameEvent,
+} from '../actions/frames';
+import {
+  selectLayerEvent,
+  createLayerEvent,
+  createAndSelectLayerEvent,
+  deleteLayerEvent,
+} from '../actions/layers';
+import curry from 'lodash.curry';
 
 const createAppActions = (service: AppInterpreter) => {
   const getSprite = (spriteId: string) => {
@@ -41,48 +54,6 @@ const createAppActions = (service: AppInterpreter) => {
     return artboard;
   };
 
-  const createFrame = (spriteId: string) => {
-    const sprite = getSprite(spriteId);
-    const { context } = sprite.send({
-      type: Actions.CREATE_FRAME,
-    });
-
-    return context.lastFrameId;
-  };
-
-  const selectFrame = (artboardId: string, frameId: string) => {
-    const artboard = getArtboard(artboardId);
-    artboard.send({
-      type: Actions.SELECT_FRAME,
-      payload: { frameId },
-    });
-  };
-
-  const selectLayer = (artboardId: string, layerId: string) => {
-    const artboard = getArtboard(artboardId);
-    artboard.send({
-      type: Actions.SELECT_LAYER,
-      payload: { layerId },
-    });
-  };
-
-  const createLayer = (spriteId: string, name: string): string => {
-    const sprite = getSprite(spriteId);
-    const { context } = sprite.send({
-      type: Actions.CREATE_LAYER,
-      payload: { name },
-    });
-
-    return context.lastLayerId;
-  };
-
-  const pushAction = (payload: ActionEvent) => {
-    service.send({
-      type: Actions.PUSH_ACTION,
-      payload,
-    });
-  };
-
   return {
     undo() {
       service.send({
@@ -94,46 +65,8 @@ const createAppActions = (service: AppInterpreter) => {
         type: 'REDU',
       });
     },
-    createAndSelectFrame(artboardId: string) {
-      const { frameId: previousFrameId, spriteId } = ctx(
-        getArtboard(artboardId),
-      );
-      const frameId = createFrame(spriteId);
-
-      selectFrame(artboardId, frameId);
-
-      pushAction({
-        type: Actions.CREATE_AND_SELECT_FRAME,
-        data: {
-          previousFrameId,
-          frameId,
-          spriteId,
-          artboardId,
-        },
-      });
-
-      return frameId;
-    },
-    createAndSelectLayer(artboardId: string, name: string) {
-      const { layerId: previousLayerId, spriteId } = ctx(
-        getArtboard(artboardId),
-      );
-      const layerId = createLayer(spriteId, name);
-      selectLayer(artboardId, layerId);
-
-      pushAction({
-        type: Actions.CREATE_AND_SELECT_LAYER,
-        data: {
-          previousLayerId,
-          name,
-          layerId,
-          spriteId,
-          artboardId,
-        },
-      });
-
-      return layerId;
-    },
+    createAndSelectFrame: curry(createAndSelectFrameEvent.action)(service),
+    createAndSelectLayer: curry(createAndSelectLayerEvent.action)(service),
     createSprite(sprite: NewSprite): string {
       const { sprites } = ctx(service);
       const { context } = sprites.send({
@@ -151,28 +84,16 @@ const createAppActions = (service: AppInterpreter) => {
         payload: { name },
       });
     },
-    createFrame,
-    createLayer,
+    createFrame: curry(createFrameEvent.action)(service),
+    createLayer: curry(createLayerEvent.action)(service),
     paintSprite(spriteId: string) {
       const sprite = getSprite(spriteId);
       sprite.send({
         type: Actions.NEW_VERSION,
       });
     },
-    deleteFrame(spriteId: string, frameId: string) {
-      const sprite = getSprite(spriteId);
-      sprite.send({
-        type: Actions.DELETE_FRAME,
-        payload: { id: frameId },
-      });
-    },
-    deleteLayer(spriteId: string, layerId: string) {
-      const sprite = getSprite(spriteId);
-      sprite.send({
-        type: Actions.DELETE_LAYER,
-        payload: { id: layerId },
-      });
-    },
+    deleteFrame: curry(deleteFrameEvent.action)(service),
+    deleteLayer: curry(deleteLayerEvent.action)(service),
     createPalette(palette: NewPalette): string {
       const { palettes } = ctx(service);
       const { context } = palettes.send({
@@ -212,8 +133,8 @@ const createAppActions = (service: AppInterpreter) => {
 
       return context.lastArtboardId;
     },
-    selectFrame,
-    selectLayer,
+    selectFrame: curry(selectFrameEvent.action)(service),
+    selectLayer: curry(selectLayerEvent.action)(service),
     changePrimaryColor(artboardId: string, color: Color) {
       const artboard = getArtboard(artboardId);
       artboard.send({

@@ -117,10 +117,21 @@ const getScaleAndPosition = (stats: Stats, size: Size) => {
   };
 };
 
+const getNearItem = <T>(arr: T[], item: T) => {
+  const index = arr.indexOf(item);
+
+  if (index === 0) {
+    return arr[index + 1];
+  } else {
+    return arr[index - 1];
+  }
+};
+
 const toggleState = (state: boolean) => !state;
 
 export {
   round1,
+  getNearItem,
   getScaleAndPosition,
   preventDefault,
   stopPropagation,

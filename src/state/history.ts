@@ -1,8 +1,20 @@
 import { App } from './app';
-import { Actions, ctx } from '../utils/state';
+import { Actions } from '../utils/state';
+import {
+  selectFrameEvent,
+  createFrameEvent,
+  createAndSelectFrameEvent,
+  deleteFrameEvent,
+} from '../actions/frames';
+import {
+  selectLayerEvent,
+  createLayerEvent,
+  createAndSelectLayerEvent,
+  deleteLayerEvent,
+} from '../actions/layers';
 
 const undo = (context: App): Partial<App> => {
-  const { undoActions, reduActions, sprites, artboards } = context;
+  const { undoActions, reduActions } = context;
 
   if (undoActions.length === 0) {
     return {};
@@ -10,48 +22,32 @@ const undo = (context: App): Partial<App> => {
 
   const action = undoActions[undoActions.length - 1];
 
-  if (
-    action.type === Actions.CREATE_FRAME ||
-    action.type === Actions.CREATE_AND_SELECT_FRAME
-  ) {
-    const { spriteId, frameId } = action.data;
-    const spriteService = ctx(sprites).sprites[spriteId].ref;
-    spriteService.send({
-      type: Actions.DELETE_FRAME,
-      payload: { id: frameId },
-    });
+  switch (action.type) {
+    case Actions.SELECT_FRAME:
+      selectFrameEvent.undo(context, action.data);
+      break;
+    case Actions.CREATE_FRAME:
+      createFrameEvent.undo(context, action.data);
+      break;
+    case Actions.CREATE_AND_SELECT_FRAME:
+      createAndSelectFrameEvent.undo(context, action.data);
+      break;
+    case Actions.DELETE_FRAME:
+      deleteFrameEvent.undo(context, action.data);
+      break;
+    case Actions.SELECT_LAYER:
+      selectLayerEvent.undo(context, action.data);
+      break;
+    case Actions.CREATE_LAYER:
+      createLayerEvent.undo(context, action.data);
+      break;
+    case Actions.CREATE_AND_SELECT_LAYER:
+      createAndSelectLayerEvent.undo(context, action.data);
+      break;
+    case Actions.DELETE_LAYER:
+      deleteLayerEvent.undo(context, action.data);
+      break;
   }
-
-  if (action.type === Actions.CREATE_AND_SELECT_FRAME) {
-    const { artboardId, previousFrameId } = action.data;
-    const artboardService = ctx(artboards).artboards[artboardId];
-    artboardService.send({
-      type: Actions.SELECT_FRAME,
-      payload: { frameId: previousFrameId },
-    });
-  }
-
-  if (
-    action.type === Actions.CREATE_LAYER ||
-    action.type === Actions.CREATE_AND_SELECT_LAYER
-  ) {
-    const { spriteId, layerId } = action.data;
-    const spriteService = ctx(sprites).sprites[spriteId].ref;
-    spriteService.send({
-      type: Actions.DELETE_LAYER,
-      payload: { id: layerId },
-    });
-  }
-
-  if (action.type === Actions.CREATE_AND_SELECT_LAYER) {
-    const { artboardId, previousLayerId } = action.data;
-    const artboardService = ctx(artboards).artboards[artboardId];
-    artboardService.send({
-      type: Actions.SELECT_LAYER,
-      payload: { layerId: previousLayerId },
-    });
-  }
-
   return {
     undoActions: undoActions.slice(0, undoActions.length - 1),
     reduActions: reduActions.concat(undoActions.slice(undoActions.length - 1)),
@@ -59,60 +55,38 @@ const undo = (context: App): Partial<App> => {
 };
 
 const redu = (context: App): Partial<App> => {
-  const { undoActions, reduActions, sprites, artboards } = context;
+  const { undoActions, reduActions } = context;
   if (reduActions.length === 0) {
     return {};
   }
 
   const action = reduActions[reduActions.length - 1];
 
-  if (
-    action.type === Actions.CREATE_FRAME ||
-    action.type === Actions.CREATE_AND_SELECT_FRAME
-  ) {
-    const { spriteId, frameId } = action.data;
-    const spriteService = ctx(sprites).sprites[spriteId].ref;
-
-    spriteService.send({
-      type: Actions.RESTORE_FRAME,
-      payload: {
-        id: frameId,
-      },
-    });
-  }
-
-  if (action.type === Actions.CREATE_AND_SELECT_FRAME) {
-    const { artboardId, frameId } = action.data;
-    const artboardService = ctx(artboards).artboards[artboardId];
-    artboardService.send({
-      type: Actions.SELECT_FRAME,
-      payload: { frameId },
-    });
-  }
-
-  if (
-    action.type === Actions.CREATE_LAYER ||
-    action.type === Actions.CREATE_AND_SELECT_LAYER
-  ) {
-    const { spriteId, layerId, name } = action.data;
-    const spriteService = ctx(sprites).sprites[spriteId].ref;
-
-    spriteService.send({
-      type: Actions.RESTORE_LAYER,
-      payload: {
-        id: layerId,
-        name,
-      },
-    });
-  }
-
-  if (action.type === Actions.CREATE_AND_SELECT_LAYER) {
-    const { artboardId, layerId } = action.data;
-    const artboardService = ctx(artboards).artboards[artboardId];
-    artboardService.send({
-      type: Actions.SELECT_LAYER,
-      payload: { layerId },
-    });
+  switch (action.type) {
+    case Actions.SELECT_FRAME:
+      selectFrameEvent.redu(context, action.data);
+      break;
+    case Actions.CREATE_FRAME:
+      createFrameEvent.redu(context, action.data);
+      break;
+    case Actions.CREATE_AND_SELECT_FRAME:
+      createAndSelectFrameEvent.redu(context, action.data);
+      break;
+    case Actions.DELETE_FRAME:
+      deleteFrameEvent.redu(context, action.data);
+      break;
+    case Actions.SELECT_LAYER:
+      selectLayerEvent.redu(context, action.data);
+      break;
+    case Actions.CREATE_LAYER:
+      createLayerEvent.redu(context, action.data);
+      break;
+    case Actions.CREATE_AND_SELECT_LAYER:
+      createAndSelectLayerEvent.redu(context, action.data);
+      break;
+    case Actions.DELETE_LAYER:
+      deleteLayerEvent.redu(context, action.data);
+      break;
   }
 
   return {

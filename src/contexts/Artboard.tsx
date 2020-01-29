@@ -9,8 +9,8 @@ import { useAppActions, useAppState } from './App';
 import { useArtboards } from './Artboards';
 
 const createArtboardActions = (actions: AppActions, artboardId: string) => ({
-  changeLayer: curry(actions.selectLayer)(artboardId),
-  changeFrame: curry(actions.selectFrame)(artboardId),
+  selectLayer: actions.selectLayer(artboardId),
+  selectFrame: actions.selectFrame(artboardId),
   changePrimaryColor: curry(actions.changePrimaryColor)(artboardId),
   changeSecondaryColor: curry(actions.changeSecondaryColor)(artboardId),
   changeTool: curry(actions.changeTool)(artboardId),
