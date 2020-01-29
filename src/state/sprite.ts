@@ -29,7 +29,7 @@ export interface Sprite {
 }
 
 type SpriteEvent =
-  | A<Actions.NEW_VERSION>
+  | A<Actions.PAINT_SPRITE>
   | A<Actions.RENAME, { name: string }>
   | A<Actions.CREATE_FRAME>
   | A<Actions.CREATE_LAYER, { name: string }>
@@ -102,7 +102,7 @@ const spriteMachine = Machine<Sprite, SpriteState, SpriteEvent>({
             name: (context, { payload: { name } }) => name,
           }),
         },
-        NEW_VERSION: {
+        PAINT_SPRITE: {
           actions: assign({
             version: (context) => context.version + 1,
           }),

@@ -7,7 +7,8 @@ import Vector from '../utils/vector';
 import { round1, clean } from '../utils';
 import { calculatePosition } from '../utils/canvas';
 import { Artboard } from '../state/artboard';
-import { isTransparent, toString, Color } from '../utils/Color';
+import { isTransparent, toString, Color, create } from '../utils/Color';
+import { PointUpdates } from '../actions/sprites';
 
 type RemovePanning = () => void;
 type RemovePreview = () => void;
@@ -122,7 +123,7 @@ const paintOrClear = (context: Context2D, cord: Vector, color: Color) => {
 const paint = (
   contextRef: ContextRef,
   cord: Vector,
-  tempContext: Context2D,
+  paintedPoints: PointUpdates,
 ) => {
   const {
     artboard,
@@ -139,8 +140,27 @@ const paint = (
   const color = getColor(artboard, clickType);
   const layerContext = getContext(sprite, frameId, layerId);
 
+  const [red, green, blue, alpha] = layerContext.getImageData(
+    cord.x,
+    cord.y,
+    1,
+    1,
+  ).data;
+
+  if (!paintedPoints[cord.x]) {
+    paintedPoints[cord.x] = {};
+  }
+
+  if (!paintedPoints[cord.x][cord.y]) {
+    paintedPoints[cord.x][cord.y] = {
+      new: color,
+      old: create(red, green, blue, (alpha / 255) * 100),
+    };
+  } else {
+    paintedPoints[cord.x][cord.y].new = color;
+  }
+
   paintOrClear(layerContext, cord, color);
-  paintOrClear(tempContext, cord, color);
 
   clean(mainContext);
   mainContext.drawImage(

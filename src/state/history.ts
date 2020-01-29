@@ -12,6 +12,7 @@ import {
   createAndSelectLayerEvent,
   deleteLayerEvent,
 } from '../actions/layers';
+import { paintSpriteEvent } from '../actions/sprites';
 
 const undo = (context: App): Partial<App> => {
   const { undoActions, reduActions } = context;
@@ -46,6 +47,11 @@ const undo = (context: App): Partial<App> => {
       break;
     case Actions.DELETE_LAYER:
       deleteLayerEvent.undo(context, action.data);
+      break;
+    case Actions.PAINT_SPRITE:
+      console.log(action.data);
+
+      paintSpriteEvent.undo(context, action.data);
       break;
   }
   return {
@@ -86,6 +92,9 @@ const redu = (context: App): Partial<App> => {
       break;
     case Actions.DELETE_LAYER:
       deleteLayerEvent.redu(context, action.data);
+      break;
+    case Actions.PAINT_SPRITE:
+      paintSpriteEvent.redu(context, action.data);
       break;
   }
 

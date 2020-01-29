@@ -12,6 +12,7 @@ import {
   SelectLayerActionEvent,
   DeleteLayerEvent,
 } from '../actions/layers';
+import { PaintSpriteEvent } from '../actions/sprites';
 
 export interface Ref<T> {
   id: string;
@@ -25,7 +26,7 @@ const ctx = <C, S, E extends EventObject>(service: Interpreter<C, S, E>) => {
 export enum Actions {
   PUSH_ACTION = 'PUSH_ACTION',
   RENAME = 'RENAME',
-  NEW_VERSION = 'NEW_VERSION',
+  PAINT_SPRITE = 'PAINT_SPRITE',
   CREATE_FRAME = 'CREATE_FRAME',
   CREATE_LAYER = 'CREATE_LAYER',
   DELETE_LAYER = 'DELETE_LAYER',
@@ -74,7 +75,8 @@ export type ActionEvent =
   | CreateAndSelectLayerEvent
   | CreateLayerActionEvent
   | SelectLayerActionEvent
-  | DeleteLayerEvent;
+  | DeleteLayerEvent
+  | PaintSpriteEvent;
 
 interface ActionUpdate<C, E> {
   (context: C, event: E): void | Partial<C>;

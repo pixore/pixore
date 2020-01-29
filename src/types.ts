@@ -1,3 +1,6 @@
+import Vector from '@pixore/subdivide/dist/utils/Vector';
+import { Color } from './utils/Color';
+
 export enum Panels {
   Canvas = 'canvas',
   Palette = 'palette',

@@ -4,6 +4,7 @@ import { manageEvents as $ } from '../utils/dom/events';
 import { getModifierState } from '../utils/keyboard';
 import Vector from '../utils/vector';
 import { ContextRef } from './types';
+import { PointUpdates } from '../actions/sprites';
 import { addPanning, addPreview, paint } from './utils';
 
 type Context = ContextRef & {
@@ -14,15 +15,13 @@ type Context = ContextRef & {
 };
 
 const addEventListener = (contextRef: Context) => {
-  const { previewContext, sprite } = contextRef.current;
-  const tempContext = document.createElement('canvas').getContext('2d');
+  const { previewContext, artboard } = contextRef.current;
   const $window = $(window);
   const $previewCanvas = $(previewContext.canvas);
   const removePanning = addPanning(contextRef);
   const removePreview = addPreview(contextRef);
 
-  tempContext.canvas.width = sprite.width;
-  tempContext.canvas.height = sprite.height;
+  let points: PointUpdates = {};
 
   const onMouseMovePainting = (event: MouseEvent) => {
     const { sprite, lastPosition, canvas } = contextRef.current;
@@ -31,13 +30,22 @@ const addEventListener = (contextRef: Context) => {
     const delta = Vector.getAbsoluteDelta(lastPosition, cord);
     const importantDiff = delta.x > 1 || delta.y > 1;
 
-    if (validCord(sprite, cord) && validCord(sprite, lastPosition)) {
-      if (importantDiff) {
-        Vector.lineBetween(lastPosition, cord, (newCord) =>
-          paint(contextRef, newCord, tempContext),
-        );
-      } else if (lastPosition.y !== cord.y || lastPosition.x !== cord.x) {
-        paint(contextRef, cord, tempContext);
+    if (importantDiff) {
+      // let localLastPosition = lastPosition;
+      Vector.lineBetween(lastPosition, cord, (newCord) => {
+        if (
+          validCord(sprite, newCord) // &&
+          //(localLastPosition.y !== cord.y || localLastPosition.x !== cord.x)
+        ) {
+          paint(contextRef, newCord, points);
+          // localLastPosition = newCord;
+        }
+      });
+    } else {
+      if (validCord(sprite, cord)) {
+        if (lastPosition.y !== cord.y || lastPosition.x !== cord.x) {
+          paint(contextRef, cord, points);
+        }
       }
     }
 
@@ -47,7 +55,13 @@ const addEventListener = (contextRef: Context) => {
   const onMouseUpPainting = () => {
     const { spriteActions } = contextRef.current;
     const { paintSprite } = spriteActions;
-    paintSprite();
+    const colums = Object.keys(points);
+
+    if (colums.length > 0) {
+      paintSprite(artboard.frameId, artboard.layerId, points);
+    }
+
+    points = {};
     $window
       .off('mouseup', onMouseUpPainting)
       .off('mousemove', onMouseMovePainting);
@@ -65,7 +79,7 @@ const addEventListener = (contextRef: Context) => {
       contextRef.current.clickType = event.button;
 
       if (validCord(sprite, cord)) {
-        paint(contextRef, cord, tempContext);
+        paint(contextRef, cord, points);
       }
 
       $window
