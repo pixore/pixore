@@ -5,11 +5,10 @@ import {
   defaultContext as artboardDefaultContext,
   Artboard,
 } from './artboard';
-import { Ref, Actions, A, action, ActionConfig } from '../utils/state';
+import { Actions, A, action, ActionConfig } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 
-// type ArtboardRef = Ref<ArtboardInterpreter>;
 type ArtboardMap = ItemMap<ArtboardInterpreter>;
 
 export interface Artboards {

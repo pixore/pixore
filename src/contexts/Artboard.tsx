@@ -14,6 +14,8 @@ const createArtboardActions = (actions: AppActions, artboardId: string) => ({
   changePrimaryColor: curry(actions.changePrimaryColor)(artboardId),
   changeSecondaryColor: curry(actions.changeSecondaryColor)(artboardId),
   changeTool: curry(actions.changeTool)(artboardId),
+  createAndSelectFrame: () => actions.createAndSelectFrame(artboardId),
+  createAndSelectLayer: curry(actions.createAndSelectLayer)(artboardId),
 });
 
 export type ArtboardActions = ReturnType<typeof createArtboardActions>;

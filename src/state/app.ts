@@ -1,11 +1,4 @@
-import {
-  Machine,
-  Interpreter,
-  assign,
-  interpret,
-  spawn,
-  EventObject,
-} from 'xstate';
+import { Machine, Interpreter, assign, interpret, spawn } from 'xstate';
 import { defaultContext as artboardDefaultContext } from './artboard';
 import defaultPalette from '../default-palette.json';
 import { defaultContext as spriteDefaultContext } from './sprite';
@@ -17,6 +10,7 @@ import { WindowsInterpreter, windowsMachine } from './windows';
 import { Color } from '../utils/Color';
 import { ActionEvent, Actions, ctx } from '../utils/state';
 import { createAppActions } from './actions';
+import { undo, redu } from './history';
 
 export interface App {
   artboards: ArtboardsInterpreter;
@@ -96,7 +90,7 @@ const appMachine = Machine<App, AppState, AppEvent>({
             const frameId = sprite.frameList[0];
 
             const {
-              context: { lastArtboardId, artboards: e },
+              context: { lastArtboardId },
             } = artboards.send({
               type: Actions.CREATE_ARTBOARD,
               payload: {
@@ -125,70 +119,19 @@ const appMachine = Machine<App, AppState, AppEvent>({
     init: {
       on: {
         PUSH_ACTION: {
-          actions: assign({
-            undoActions: ({ undoActions }, { payload }) => {
-              console.log('pushing', payload.type);
-
-              return undoActions.concat(payload);
-            },
+          actions: assign((context, { payload }) => {
+            const { undoActions } = context;
+            return {
+              undoActions: undoActions.concat(payload),
+              reduActions: [],
+            };
           }),
         },
         UNDO: {
-          actions: assign((context) => {
-            const { undoActions, reduActions, sprites } = context;
-
-            if (undoActions.length === 0) {
-              return {};
-            }
-
-            const action = undoActions[undoActions.length - 1];
-            console.log('undo', action);
-
-            if (action.type === Actions.CREATE_FRAME) {
-              const { spriteId, frameId } = action.data;
-              const spriteService = ctx(sprites).sprites[spriteId].ref;
-              spriteService.send({
-                type: Actions.DELETE_FRAME,
-                payload: { id: frameId },
-              });
-            }
-
-            return {
-              undoActions: undoActions.slice(0, undoActions.length - 1),
-              reduActions: reduActions.concat(
-                undoActions.slice(undoActions.length - 1),
-              ),
-            };
-          }),
+          actions: assign(undo),
         },
         REDU: {
-          actions: assign((context) => {
-            const { undoActions, reduActions, sprites } = context;
-            if (reduActions.length === 0) {
-              return {};
-            }
-
-            const action = reduActions[reduActions.length - 1];
-
-            if (action.type === Actions.CREATE_FRAME) {
-              const { spriteId, frameId } = action.data;
-              const spriteService = ctx(sprites).sprites[spriteId].ref;
-
-              spriteService.send({
-                type: Actions.RESTORE_FRAME,
-                payload: {
-                  id: frameId,
-                },
-              });
-            }
-
-            return {
-              reduActions: reduActions.slice(0, reduActions.length - 1),
-              undoActions: undoActions.concat(
-                reduActions.slice(reduActions.length - 1),
-              ),
-            };
-          }),
+          actions: assign(redu),
         },
       },
     },

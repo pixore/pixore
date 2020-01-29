@@ -37,7 +37,7 @@ interface ProviderProps {
 
 const Provider: React.FC<ProviderProps> = (props) => {
   const { children } = props;
-  const { spriteId, id: artboardId } = useArtboard();
+  const { spriteId } = useArtboard();
   const { sprites } = useSprites();
 
   const appActions = useAppActions();

@@ -34,6 +34,8 @@ export enum Actions {
   RESTORE_FRAME = 'RESTORE_FRAME',
   RESTORE_LAYER = 'RESTORE_LAYER',
   CHANGE_MODIFIER_STATE = 'CHANGE_MODIFIER_STATE',
+  CREATE_AND_SELECT_FRAME = 'CREATE_AND_SELECT_FRAME',
+  CREATE_AND_SELECT_LAYER = 'CREATE_AND_SELECT_LAYER',
 }
 
 export interface EventActionObject<P> extends EventObject {
@@ -50,29 +52,44 @@ export type AE<T, D> = {
   data: D;
 };
 
-interface CreateFrameEventData {
+export interface CreateFrameEventData {
   frameId: string;
   spriteId: string;
 }
 
-type DeleteFrameEventData = CreateFrameEventData;
-
-interface CreateLayerEventData {
-  layerId: string;
-  spriteId: string;
+export interface CreateAndSelectFrameEventData extends CreateFrameEventData {
+  previousFrameId: string;
+  artboardId: string;
 }
 
-type DeleteLayerEventData = CreateFrameEventData;
+export type DeleteFrameEventData = CreateFrameEventData;
+
+export interface CreateLayerEventData {
+  layerId: string;
+  spriteId: string;
+  name: string;
+}
+
+export interface CreateAndSelectLayerEventData extends CreateLayerEventData {
+  previousLayerId: string;
+  artboardId: string;
+}
+
+export type DeleteLayerEventData = CreateFrameEventData;
 
 export type EventData =
+  | CreateAndSelectFrameEventData
   | CreateFrameEventData
   | DeleteFrameEventData
+  | CreateAndSelectLayerEventData
   | CreateLayerEventData
   | DeleteLayerEventData;
 
 export type ActionEvent =
+  | AE<Actions.CREATE_AND_SELECT_FRAME, CreateAndSelectFrameEventData>
   | AE<Actions.CREATE_FRAME, CreateFrameEventData>
   | AE<Actions.DELETE_FRAME, DeleteFrameEventData>
+  | AE<Actions.CREATE_AND_SELECT_LAYER, CreateAndSelectLayerEventData>
   | AE<Actions.CREATE_LAYER, CreateLayerEventData>
   | AE<Actions.DELETE_LAYER, DeleteLayerEventData>;
 

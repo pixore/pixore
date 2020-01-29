@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { useSpriteActions, useSprite } from '../../contexts/Sprite';
+import { useSprite } from '../../contexts/Sprite';
 import { useArtboard, useArtboardActions } from '../../contexts/Artboard';
 import Cell from './Cell';
 import Panel from '../Panel';
@@ -19,22 +19,22 @@ const SelectedLayer = styled.tr`
 const SelectedFrame = SelectedLayer.withComponent('col');
 
 const Sequencer = () => {
-  const { changeFrame, changeLayer } = useArtboardActions();
+  const {
+    changeFrame,
+    changeLayer,
+    createAndSelectFrame,
+    createAndSelectLayer,
+  } = useArtboardActions();
   const sprite = useSprite();
   const artboard = useArtboard();
   const { frameList, layerList, layers } = sprite;
-  const { createFrame, createLayer } = useSpriteActions();
 
   const onNewFrame = () => {
-    const frame = createFrame();
-    changeFrame(frame);
+    createAndSelectFrame();
   };
 
   const onNewLayer = () => {
-    const length = layerList.length + 1;
-    const layer = createLayer(`Layer ${length}`);
-
-    changeLayer(layer);
+    createAndSelectLayer(`Layer ${layerList.length + 1}`);
   };
 
   if (!sprite || !artboard) {
