@@ -16,7 +16,7 @@ const Frame: React.FC<PropTypes> = (props) => {
   const { frame, onClick, isActive } = props;
   const { deleteFrame } = useSpriteActions();
   const { frameList } = useSprite();
-  const { selectFrame } = useArtboardActions();
+  const { deleteFrameAndSelect } = useArtboardActions();
   const index = frameList.indexOf(frame);
   const id = `frame-${index}`;
 
@@ -26,10 +26,11 @@ const Frame: React.FC<PropTypes> = (props) => {
     if (frameList.length === 1) {
       return;
     }
-    deleteFrame(frame);
 
     if (isActive) {
-      selectFrame(getNearItem(frameList, frame));
+      deleteFrameAndSelect(getNearItem(frameList, frame));
+    } else {
+      deleteFrame(frame);
     }
   };
 

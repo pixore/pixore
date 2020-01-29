@@ -5,6 +5,7 @@ import {
   CreateFrameActionEvent,
   SelectFrameActionEvent,
   DeleteFrameEvent,
+  DeleteFrameAndSelectEvent,
 } from '../actions/frames';
 import {
   CreateAndSelectLayerEvent,
@@ -51,6 +52,7 @@ export enum Actions {
   CHANGE_MODIFIER_STATE = 'CHANGE_MODIFIER_STATE',
   CREATE_AND_SELECT_FRAME = 'CREATE_AND_SELECT_FRAME',
   CREATE_AND_SELECT_LAYER = 'CREATE_AND_SELECT_LAYER',
+  DELETE_FRAME_AND_SELECT = 'DELETE_FRAME_AND_SELECT',
 }
 
 export interface EventActionObject<P> extends EventObject {
@@ -72,6 +74,7 @@ export type ActionEvent =
   | CreateFrameActionEvent
   | SelectFrameActionEvent
   | DeleteFrameEvent
+  | DeleteFrameAndSelectEvent
   | CreateAndSelectLayerEvent
   | CreateLayerActionEvent
   | SelectLayerActionEvent

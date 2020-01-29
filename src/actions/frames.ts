@@ -41,6 +41,18 @@ export type CreateAndSelectFrameEvent = AE<
   CreateAndSelectFrameEventData
 >;
 
+export interface DeleteFrameAndSelectEventData {
+  artboardId: string;
+  frameId: string;
+  spriteId: string;
+  newSelectedFrameId: string;
+}
+
+export type DeleteFrameAndSelectEvent = AE<
+  Actions.DELETE_FRAME_AND_SELECT,
+  DeleteFrameAndSelectEventData
+>;
+
 const selectFrame = (
   service: AppInterpreter,
   artboardId: string,
@@ -156,6 +168,51 @@ const reduCreateAndSelectFrame = (
   reduSelectFrame(appState, data);
 };
 
+const deleteFrameAndSelect = (
+  service: AppInterpreter,
+  artboardId: string,
+  newSelectedFrameId: string,
+) => {
+  const { frameId, spriteId } = ctx(getArtboard(service, artboardId));
+
+  deleteFrame(service, spriteId, frameId);
+  selectFrame(service, artboardId, newSelectedFrameId);
+
+  pushAction(service, {
+    type: Actions.DELETE_FRAME_AND_SELECT,
+    data: {
+      spriteId,
+      frameId,
+      artboardId,
+      newSelectedFrameId,
+    },
+  });
+};
+
+const undoDeleteFrameAndSelect = (
+  appState: App,
+  data: DeleteFrameAndSelectEventData,
+) => {
+  const { frameId } = data;
+  undoDeleteFrame(appState, data);
+  undoSelectFrame(appState, {
+    ...data,
+    previousFrameId: frameId,
+  });
+};
+
+const reduDeleteFrameAndSelect = (
+  appState: App,
+  data: DeleteFrameAndSelectEventData,
+) => {
+  const { frameId } = data;
+  reduDeleteFrame(appState, data);
+  reduSelectFrame(appState, {
+    ...data,
+    previousFrameId: frameId,
+  });
+};
+
 const createFrameEvent = {
   action(service: AppInterpreter, spriteId: string) {
     const frameId = createFrame(service, spriteId);
@@ -200,9 +257,16 @@ const deleteFrameEvent = {
   redu: reduDeleteFrame,
 };
 
+const deleteFrameAndSelectEvent = {
+  action: deleteFrameAndSelect,
+  undo: undoDeleteFrameAndSelect,
+  redu: reduDeleteFrameAndSelect,
+};
+
 export {
   selectFrameEvent,
   createFrameEvent,
   createAndSelectFrameEvent,
   deleteFrameEvent,
+  deleteFrameAndSelectEvent,
 };

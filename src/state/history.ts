@@ -5,6 +5,7 @@ import {
   createFrameEvent,
   createAndSelectFrameEvent,
   deleteFrameEvent,
+  deleteFrameAndSelectEvent,
 } from '../actions/frames';
 import {
   selectLayerEvent,
@@ -49,9 +50,10 @@ const undo = (context: App): Partial<App> => {
       deleteLayerEvent.undo(context, action.data);
       break;
     case Actions.PAINT_SPRITE:
-      console.log(action.data);
-
       paintSpriteEvent.undo(context, action.data);
+      break;
+    case Actions.DELETE_FRAME_AND_SELECT:
+      deleteFrameAndSelectEvent.undo(context, action.data);
       break;
   }
   return {
@@ -95,6 +97,9 @@ const redu = (context: App): Partial<App> => {
       break;
     case Actions.PAINT_SPRITE:
       paintSpriteEvent.redu(context, action.data);
+      break;
+    case Actions.DELETE_FRAME_AND_SELECT:
+      deleteFrameAndSelectEvent.redu(context, action.data);
       break;
   }
 

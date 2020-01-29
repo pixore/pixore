@@ -11,6 +11,7 @@ import {
   createFrameEvent,
   createAndSelectFrameEvent,
   deleteFrameEvent,
+  deleteFrameAndSelectEvent,
 } from '../actions/frames';
 import {
   selectLayerEvent,
@@ -89,6 +90,7 @@ const createAppActions = (service: AppInterpreter) => {
     createLayer: curry(createLayerEvent.action)(service),
     paintSprite: curry(paintSpriteEvent.action)(service),
     deleteFrame: curry(deleteFrameEvent.action)(service),
+    deleteFrameAndSelect: curry(deleteFrameAndSelectEvent.action)(service),
     deleteLayer: curry(deleteLayerEvent.action)(service),
     createPalette(palette: NewPalette): string {
       const { palettes } = ctx(service);
