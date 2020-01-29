@@ -15,7 +15,7 @@ type Context = ContextRef & {
 };
 
 const addEventListener = (contextRef: Context) => {
-  const { previewContext, artboard } = contextRef.current;
+  const { previewContext } = contextRef.current;
   const $window = $(window);
   const $previewCanvas = $(previewContext.canvas);
   const removePanning = addPanning(contextRef);
@@ -31,14 +31,9 @@ const addEventListener = (contextRef: Context) => {
     const importantDiff = delta.x > 1 || delta.y > 1;
 
     if (importantDiff) {
-      // let localLastPosition = lastPosition;
       Vector.lineBetween(lastPosition, cord, (newCord) => {
-        if (
-          validCord(sprite, newCord) // &&
-          //(localLastPosition.y !== cord.y || localLastPosition.x !== cord.x)
-        ) {
+        if (validCord(sprite, newCord)) {
           paint(contextRef, newCord, points);
-          // localLastPosition = newCord;
         }
       });
     } else {
@@ -53,7 +48,7 @@ const addEventListener = (contextRef: Context) => {
   };
 
   const onMouseUpPainting = () => {
-    const { spriteActions } = contextRef.current;
+    const { spriteActions, artboard } = contextRef.current;
     const { paintSprite } = spriteActions;
     const colums = Object.keys(points);
 

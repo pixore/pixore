@@ -51,6 +51,7 @@ const undo = (context: App): Partial<App> => {
       deleteLayerEvent.undo(context, action.data);
       break;
     case Actions.PAINT_SPRITE:
+      console.log(action.data);
       paintSpriteEvent.undo(context, action.data);
       break;
     case Actions.DELETE_FRAME_AND_SELECT:

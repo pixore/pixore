@@ -53,6 +53,7 @@ const Cell: React.FC<PropTypes> = (props) => {
     <>
       <StyledCell isActive={isActive} onClick={onSelectFrameAndLayer}>
         <ContextMenuTrigger attributes={{ className: 'expand' }} id={id}>
+          {id}
           <Portal>
             <ContextMenu id={id}>
               <MenuItem onClick={onClean}>Clean</MenuItem>
