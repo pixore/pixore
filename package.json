@@ -48,6 +48,7 @@
     "mousetrap": "^1.6.5",
     "next": "^9.2.0",
     "next-apollo": "^3.1.10",
+    "next-offline": "^5.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-contextmenu": "^2.13.0",
