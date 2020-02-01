@@ -49,6 +49,13 @@ const Changelog: React.FC = () => {
             <li>Style improvements</li>
           </ul>
         </li>
+        <li>
+          <h4>0.5.0 (2020-01-29)</h4>
+          <ul>
+            <li>Support undo and redu for some actions</li>
+            <li>Several small fixes</li>
+          </ul>
+        </li>
       </ul>
 
       <p style={{ textAlign: 'center' }}>

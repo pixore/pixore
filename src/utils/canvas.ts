@@ -1,4 +1,5 @@
-import { CanvasStats, Sprite } from '../types';
+import { CanvasStats } from '../types';
+import { Sprite } from '../state/sprite';
 
 const { floor } = Math;
 

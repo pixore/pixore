@@ -1,5 +1,6 @@
 import { getScaleAndPosition } from '../utils';
-import { Size, Canvas, Dispatch, Sprite } from '../types';
+import { Size, Canvas, Dispatch } from '../types';
+import { Sprite } from '../state/sprite';
 
 export interface CanvasUpdate {
   x?: number;

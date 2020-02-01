@@ -36,10 +36,10 @@ const lineBetween = (
 
   // I don't have idea what sx, sy, err and e2 are
   // but it works ¯\_(ツ)_/¯
-  let sx = vector1.x < vector2.x ? 1 : -1;
-  let sy = vector1.y < vector2.y ? 1 : -1;
+  const sx = vector1.x < vector2.x ? 1 : -1;
+  const sy = vector1.y < vector2.y ? 1 : -1;
   let err = delta.x - delta.y;
-  let e2;
+  let e2: number;
   while (vector1.x !== vector2.x || vector1.y !== vector2.y) {
     callback(vector1);
     e2 = 2 * err;

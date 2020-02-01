@@ -1,7 +1,18 @@
-import { Artboard, ArtboardActions } from '../contexts/Artboard';
+import { Artboard } from '../state/artboard';
+import { ArtboardActions } from '../contexts/Artboard';
+import { Sprite } from '../state/sprite';
 import { SpriteActions } from '../contexts/Sprite';
 import Vector from '../utils/vector';
-import { Sprite, CanvasStats, HookCanvas } from '../types';
+import { CanvasStats, Canvas, Stats } from '../types';
+
+export interface HookCanvas {
+  scale: number;
+  y: number;
+  x: number;
+  center: (stats: Stats, sprite: Sprite) => void;
+  update: (payload: Canvas) => void;
+  onWheel: (event: React.WheelEvent<HTMLDivElement>) => void;
+}
 
 // SOURCE: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button#Return_value
 export enum Click {

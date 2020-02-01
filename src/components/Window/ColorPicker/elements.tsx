@@ -1,10 +1,7 @@
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { Color, toString } from '../../../utils/Color';
-import {
-  getTransparentBackground,
-  getBackgroundColor,
-} from '../../../utils/css';
+import { getBackgroundColor } from '../../../utils/css';
 
 const pickerSize = 20;
 const margin = 10;
@@ -104,8 +101,8 @@ const colorsCss = css`
 
 const CurrentColor = styled.div`
   margin-right: ${margin / 2}px;
+  background-image: url('/transparent.png');
   ${colorsCss}
-  ${getTransparentBackground()}
 
   &::before {
     ${getBackgroundColor}
@@ -114,7 +111,7 @@ const CurrentColor = styled.div`
 
 const NewColor = styled.div`
   margin-left: ${margin / 2}px;
-  ${getTransparentBackground()}
+  background-image: url('/transparent.png');
   ${colorsCss}
 
   &::before {
@@ -152,7 +149,7 @@ const AlphaPicker = styled.div`
   height: ${pickerSize}px;
   position: relative;
   margin-right: ${pickerSize + margin}px;
-  ${getTransparentBackground}
+  background-image: url('/transparent.png');
   background-size: 30px;
 
   &::before {
