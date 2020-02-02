@@ -2,20 +2,11 @@ import { pipe, subscribe } from 'wonka';
 import { handler } from '../../utils/request';
 import fetch from 'isomorphic-fetch';
 import to from 'await-to-js';
-import gql from 'graphql-tag';
 
 import auth from '../../utils/auth';
+import { getUserById } from '../../queries/users.queries';
 
 import { createClient, createRequest, Client } from 'urql';
-
-const GET_USER = gql`
-  query User($userId: String!) {
-    users_by_pk(userId: $userId) {
-      username
-      userId
-    }
-  }
-`;
 
 let client: Client;
 
@@ -67,11 +58,9 @@ const me = handler(async (req, res) => {
   const { idToken, user } = session;
   getClient(idToken);
 
-  const [error, data] = await to(
-    handleRequest(GET_USER, {
-      userId: user.sub,
-    }),
-  );
+  const { variables, query } = getUserById(user.sub);
+
+  const [error, data] = await to(handleRequest(query, variables));
 
   if (error) {
     throw error;

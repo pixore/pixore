@@ -58,4 +58,9 @@ export interface Layer {
   name: string;
 }
 
+export interface Query {
+  query: string;
+  variables?: Record<string, string>;
+}
+
 export type Stats = DOMRect | ClientRect;

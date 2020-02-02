@@ -11,22 +11,12 @@ import Head from '../components/Head';
 import GlobalStyle from '../components/GlobalStyle';
 import Bootstrap from '../components/Bootstrap';
 import PanelMaster from '../components/PanelMaster';
+import { getSprites } from '../queries/sprites.queries';
 
 import { useQuery } from 'urql';
-import gql from 'graphql-tag';
-
-const GET_USER = gql`
-  query Sprite {
-    sprites {
-      name
-    }
-  }
-`;
 
 const IndexPage = () => {
-  const [result] = useQuery({
-    query: GET_USER,
-  });
+  const [result] = useQuery(getSprites());
 
   console.log('reslt ', result);
 
