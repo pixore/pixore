@@ -1,6 +1,3 @@
-import Vector from '@pixore/subdivide/dist/utils/Vector';
-import { Color } from './utils/Color';
-
 export enum Panels {
   Canvas = 'canvas',
   Palette = 'palette',
@@ -43,12 +40,21 @@ export interface Size {
   height: number;
 }
 
+export interface BaseSprite {
+  spriteId: string;
+  frames: unknown;
+  layers: unknown;
+  name: string;
+  width: number;
+  height: number;
+}
+
 export interface Frame {
-  id: string;
+  frameId: string;
 }
 
 export interface Layer {
-  id: string;
+  layerId: string;
   name: string;
 }
 

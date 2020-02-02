@@ -1,5 +1,5 @@
 import { Machine, assign, Interpreter } from 'xstate';
-import { Frame, Layer } from '../types';
+import { Frame, Layer, BaseSprite } from '../types';
 import { ItemMap, addItem, removeItem, isLastItem } from '../utils/object';
 import { createId } from '../utils';
 import { Actions, A, action, ActionConfig } from '../utils/state';
@@ -14,8 +14,8 @@ interface SpriteState {
 type FrameMap = ItemMap<Frame>;
 type LayerMap = ItemMap<Layer>;
 
-export interface Sprite {
-  id: string;
+export interface Sprite extends BaseSprite {
+  spriteId: string;
   frames: FrameMap;
   layers: LayerMap;
   frameList: string[];
@@ -40,19 +40,19 @@ type SpriteEvent =
 
 export type SpriteInterpreter = Interpreter<Sprite, SpriteState, SpriteEvent>;
 
-const addLayer = (layers: LayerMap, id: string, name: string) => {
-  return addItem(layers, id, {
-    id,
+const addLayer = (layers: LayerMap, layerId: string, name: string) => {
+  return addItem(layers, layerId, {
+    layerId,
     name,
   });
 };
 
-const addFrame = (frames: FrameMap, id: string) => {
-  return addItem(frames, id, { id });
+const addFrame = (frames: FrameMap, frameId: string) => {
+  return addItem(frames, frameId, { frameId });
 };
 
 export const defaultContext: Sprite = {
-  id: 'no',
+  spriteId: 'no',
   frames: {},
   layers: {},
   frameList: [],
@@ -63,7 +63,7 @@ export const defaultContext: Sprite = {
   name: 'New sprite',
 };
 
-const config: ActionConfig<keyof Sprite> = {
+const config: ActionConfig<Sprite> = {
   updateListProperties: [
     ['frames', 'frameList'],
     ['layers', 'layerList'],

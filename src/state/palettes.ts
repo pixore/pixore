@@ -25,7 +25,7 @@ interface PalettesState {
   };
 }
 
-const config: ActionConfig<keyof Palettes> = {
+const config: ActionConfig<Palettes> = {
   updateListProperties: [['palettes', 'paletteList']],
 };
 

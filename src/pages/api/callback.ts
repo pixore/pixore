@@ -6,7 +6,7 @@ const callback = async (req: NextApiRequest, res: NextApiResponse) => {
   const [error] = await to(auth.handleCallback(req, res, { redirectTo: '/' }));
 
   if (error) {
-    console.log('callback error', error);
+    console.error('callback error', error);
     res.status(500).end(error.message);
   }
 };

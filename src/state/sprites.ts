@@ -5,7 +5,7 @@ import {
   defaultContext as spriteDefaultContext,
   Sprite,
 } from './sprite';
-import { Ref, Actions, A, ActionConfig, action } from '../utils/state';
+import { Ref, Actions, A, ActionConfig, action, ctx } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 
@@ -25,20 +25,20 @@ interface SpritesState {
   };
 }
 
-const addSprite = (sprites: SpriteMap, id: string, data: NewSprite) => {
-  return addItem(sprites, id, {
-    id,
+const addSprite = (sprites: SpriteMap, spriteId: string, data: NewSprite) => {
+  return addItem(sprites, spriteId, {
+    id: spriteId,
     ref: spawn(
       spriteMachine.withContext({
         ...spriteDefaultContext,
         ...data,
-        id,
+        spriteId,
       }),
     ) as SpriteInterpreter,
   });
 };
 
-const config: ActionConfig<keyof Sprites> = {
+const config: ActionConfig<Sprites> = {
   updateListProperties: [['sprites', 'spriteList']],
 };
 
