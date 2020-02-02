@@ -30,7 +30,7 @@ export interface Sprite extends BaseSprite {
 
 type SpriteEvent =
   | A<Actions.PAINT_SPRITE>
-  | A<Actions.RENAME, { name: string }>
+  | A<Actions.RENAME_SPRITE, { name: string }>
   | A<Actions.CREATE_FRAME>
   | A<Actions.CREATE_LAYER, { name: string }>
   | A<Actions.DELETE_LAYER, { id: string }>
@@ -97,7 +97,7 @@ const spriteMachine = Machine<Sprite, SpriteState, SpriteEvent>({
     },
     painting: {
       on: {
-        RENAME: {
+        RENAME_SPRITE: {
           actions: assign({
             name: (context, { payload: { name } }) => name,
           }),

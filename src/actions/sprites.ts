@@ -103,10 +103,28 @@ const reduPaintSprite = (appState: App, data: PaintSpriteEventData) => {
   });
 };
 
+const renameSprite = (
+  service: AppInterpreter,
+  spriteId: string,
+  name: string,
+) => {
+  const sprite = getSprite(service, spriteId);
+  sprite.send({
+    type: Actions.RENAME_SPRITE,
+    payload: {
+      name,
+    },
+  });
+};
+
 const paintSpriteEvent = {
   action: paintSprite,
   undo: undoPaintSprite,
   redu: reduPaintSprite,
 };
 
-export { paintSpriteEvent };
+const renameSpriteEvent = {
+  action: renameSprite,
+};
+
+export { paintSpriteEvent, renameSpriteEvent };

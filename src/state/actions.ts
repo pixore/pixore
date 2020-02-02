@@ -20,21 +20,10 @@ import {
   deleteLayerEvent,
   deleteLayerAndSelectEvent,
 } from '../actions/layers';
-import { paintSpriteEvent } from '../actions/sprites';
+import { paintSpriteEvent, renameSpriteEvent } from '../actions/sprites';
 import curry from 'lodash.curry';
 
 const createAppActions = (service: AppInterpreter) => {
-  const getSprite = (spriteId: string) => {
-    const { sprites } = ctx(service);
-    const sprite = ctx(sprites).sprites[spriteId];
-
-    if (!sprite) {
-      throw new Error(`Sprite not found, spriteId = '${spriteId}'`);
-    }
-
-    return sprite.ref;
-  };
-
   const getPalette = (paletteId: string) => {
     const { palettes } = ctx(service);
     const palette = ctx(palettes).palettes[paletteId];
@@ -79,14 +68,7 @@ const createAppActions = (service: AppInterpreter) => {
 
       return context.lastSpriteId;
     },
-    renameSprite(spriteId: string, name: string) {
-      const sprite = getSprite(spriteId);
-
-      sprite.send({
-        type: Actions.RENAME,
-        payload: { name },
-      });
-    },
+    renameSprite: curry(renameSpriteEvent.action)(service),
     createFrame: curry(createFrameEvent.action)(service),
     createLayer: curry(createLayerEvent.action)(service),
     paintSprite: curry(paintSpriteEvent.action)(service),

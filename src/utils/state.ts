@@ -27,7 +27,7 @@ const ctx = <C, S, E extends EventObject>(service: Interpreter<C, S, E>) => {
 
 export enum Actions {
   PUSH_ACTION = 'PUSH_ACTION',
-  RENAME = 'RENAME',
+  RENAME_SPRITE = 'RENAME_SPRITE',
   PAINT_SPRITE = 'PAINT_SPRITE',
   CREATE_FRAME = 'CREATE_FRAME',
   CREATE_LAYER = 'CREATE_LAYER',

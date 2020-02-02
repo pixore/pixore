@@ -16,6 +16,7 @@ const createSpriteActions = (actions: AppActions, spriteId: string) => ({
   deleteLayer: actions.deleteLayer(spriteId),
   deleteFrame: actions.deleteFrame(spriteId),
   paintSprite: actions.paintSprite(spriteId),
+  renameSprite: actions.renameSprite(spriteId),
 });
 
 export type SpriteActions = ReturnType<typeof createSpriteActions>;
