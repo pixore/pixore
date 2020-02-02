@@ -12,7 +12,24 @@ import GlobalStyle from '../components/GlobalStyle';
 import Bootstrap from '../components/Bootstrap';
 import PanelMaster from '../components/PanelMaster';
 
+import { useQuery } from 'urql';
+import gql from 'graphql-tag';
+
+const GET_USER = gql`
+  query Sprite {
+    sprites {
+      name
+    }
+  }
+`;
+
 const IndexPage = () => {
+  const [result] = useQuery({
+    query: GET_USER,
+  });
+
+  console.log('reslt ', result);
+
   return (
     <Editor>
       <Bootstrap>

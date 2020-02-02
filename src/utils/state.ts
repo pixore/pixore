@@ -90,9 +90,15 @@ interface ActionUpdate<C, E> {
 
 export type DependantKeys<K> = [K, K];
 
-export interface ActionConfig<K> {
-  updateListProperties: DependantKeys<K>[];
+interface Persist<C, E> {
+  (context: C, event: E): unknown;
 }
+
+export interface ActionConfig<C> {
+  updateListProperties?: DependantKeys<keyof C>[];
+}
+
+const noop = () => undefined;
 
 const defaultConfig = {
   updateListProperties: [],
@@ -100,26 +106,33 @@ const defaultConfig = {
 
 const action = <P, C, E extends EventActionObject<P>>(
   actionUpdate: ActionUpdate<C, E>,
-  config: ActionConfig<keyof C> = defaultConfig,
+  config: ActionConfig<C> = defaultConfig,
+  persist: Persist<C, E> = noop,
 ) => {
   const { updateListProperties = [] } = config;
-  return assign<C, E>((context, event) => {
-    const update = actionUpdate(context, event);
+  return [
+    assign<C, E>((context, event) => {
+      const update = actionUpdate(context, event);
 
-    if (!update) {
-      return {};
-    }
-
-    return updateListProperties.reduce((acc, [key, keyToUpdate]) => {
-      if (acc[key]) {
-        Object.assign(acc, {
-          [keyToUpdate]: Object.keys(acc[key]),
-        });
+      if (!update) {
+        return {};
       }
 
-      return acc;
-    }, update);
-  });
+      return updateListProperties.reduce((acc, [key, keyToUpdate]) => {
+        if (acc[key]) {
+          Object.assign(acc, {
+            [keyToUpdate]: Object.keys(acc[key]),
+          });
+        }
+
+        return acc;
+      }, update);
+    }),
+    assign<C, E>((context, event) => {
+      persist(context, event);
+      return context;
+    }),
+  ];
 };
 
 const getArtboard = (service: AppInterpreter, artboardId: string) => {

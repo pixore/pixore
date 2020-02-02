@@ -1,68 +1,81 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { pipe, subscribe } from 'wonka';
+import { handler } from '../../utils/request';
 import fetch from 'isomorphic-fetch';
 import to from 'await-to-js';
-import ApolloClient, { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
+
 import auth from '../../utils/auth';
+
+import { createClient, createRequest, Client } from 'urql';
 
 const GET_USER = gql`
   query User($userId: String!) {
-    user_by_pk(userId: $userId) {
+    users_by_pk(userId: $userId) {
       username
       userId
     }
   }
 `;
 
-let client: ApolloClient<unknown>;
+let client: Client;
 
-const createClient = (idToken: string) => {
+const getClient = (idToken: string) => {
   if (client) {
     return client;
   }
 
-  client = new ApolloClient({
+  client = createClient({
+    url: 'https://pixore.herokuapp.com/v1/graphql',
     fetch,
-    uri: 'https://pixore.herokuapp.com/v1/graphql',
-    request: (operation) => {
-      operation.setContext({
+    fetchOptions() {
+      return {
         headers: {
           authorization: idToken ? `Bearer ${idToken}` : '',
         },
-      });
+      };
     },
   });
 
   return client;
 };
 
-const me = async (req: NextApiRequest, res: NextApiResponse) => {
+const handleRequest = (query: string, variables: object) =>
+  new Promise<any>((resolve, reject) => {
+    pipe(
+      client.executeQuery(createRequest(query, variables)),
+      subscribe(({ data, error }) => {
+        if (error) {
+          reject(error);
+        }
+
+        resolve(data);
+      }),
+    );
+  });
+
+const me = handler(async (req, res) => {
   const [sessionError, session] = await to(auth.getSession(req));
 
   if (sessionError) {
-    console.error('me sessionError', sessionError);
-    res.status(500).end(sessionError.message);
-    return;
+    throw sessionError;
   }
 
   if (!session) {
-    const [profileError] = await to(auth.handleProfile(req, res, {}));
-
-    if (profileError) {
-      console.error('me profileError', profileError);
-      res.status(500).end(profileError.message);
-    }
-    return;
+    return auth.handleProfile(req, res, {});
   }
 
   const { idToken, user } = session;
-  const client = createClient(idToken);
+  getClient(idToken);
 
-  const { data } = await client.query({
-    query: GET_USER,
-    variables: {
+  const [error, data] = await to(
+    handleRequest(GET_USER, {
       userId: user.sub,
-    },
-  });
+    }),
+  );
+
+  if (error) {
+    throw error;
+  }
 
   const { username, userId } = data.user_by_pk;
 
@@ -70,6 +83,6 @@ const me = async (req: NextApiRequest, res: NextApiResponse) => {
     username,
     userId,
   });
-};
+});
 
 export default me;
