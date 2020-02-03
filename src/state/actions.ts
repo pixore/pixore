@@ -4,7 +4,7 @@ import { NewSprite } from './sprites';
 import { NewPalette } from './palettes';
 import { Color } from '../utils/Color';
 import { NewArtboard } from './artboards';
-import { Windows } from '../types';
+import { Windows, User } from '../types';
 import { OpenWindowArgs } from './windows';
 import {
   selectFrameEvent,
@@ -20,7 +20,11 @@ import {
   deleteLayerEvent,
   deleteLayerAndSelectEvent,
 } from '../actions/layers';
-import { paintSpriteEvent, renameSpriteEvent } from '../actions/sprites';
+import {
+  paintSpriteEvent,
+  renameSpriteEvent,
+  saveSpriteEvent,
+} from '../actions/sprites';
 import curry from 'lodash.curry';
 
 const createAppActions = (service: AppInterpreter) => {
@@ -57,6 +61,12 @@ const createAppActions = (service: AppInterpreter) => {
         type: 'REDU',
       });
     },
+    updateUser(user: User) {
+      service.send({
+        type: 'UPDATE_USER',
+        payload: user,
+      });
+    },
     createAndSelectFrame: curry(createAndSelectFrameEvent.action)(service),
     createAndSelectLayer: curry(createAndSelectLayerEvent.action)(service),
     createSprite(sprite: NewSprite): string {
@@ -68,6 +78,7 @@ const createAppActions = (service: AppInterpreter) => {
 
       return context.lastSpriteId;
     },
+    saveSprite: curry(saveSpriteEvent.action)(service),
     renameSprite: curry(renameSpriteEvent.action)(service),
     createFrame: curry(createFrameEvent.action)(service),
     createLayer: curry(createLayerEvent.action)(service),

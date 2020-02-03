@@ -4,7 +4,7 @@ let stringTransparentPatter: string;
 
 let id = 0;
 const createId = () => {
-  const newId = String(id);
+  const newId = `${Date.now()}${id}`;
 
   id = id + 1;
   return newId;

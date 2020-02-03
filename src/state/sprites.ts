@@ -5,7 +5,7 @@ import {
   defaultContext as spriteDefaultContext,
   Sprite,
 } from './sprite';
-import { Ref, Actions, A, ActionConfig, action, ctx } from '../utils/state';
+import { Ref, Actions, A, ActionConfig, action } from '../utils/state';
 import { ItemMap, addItem } from '../utils/object';
 import { createId } from '../utils';
 
@@ -44,8 +44,8 @@ const config: ActionConfig<Sprites> = {
 
 export type NewSprite = Partial<Omit<Sprite, 'id'>>;
 type SpritesEvent =
-  | A<Actions.CREATE_SPRITE, NewSprite>
-  | A<Actions.PUSH_ACTION>;
+  | A<Actions.ADD_SPRITE, Sprite>
+  | A<Actions.CREATE_SPRITE, NewSprite>;
 
 export type SpritesInterpreter = Interpreter<
   Sprites,
@@ -82,6 +82,13 @@ const spritesMachine = Machine<Sprites, SpritesState, SpritesEvent>({
     },
     init: {
       on: {
+        ADD_SPRITE: {
+          actions: action((context, { payload }) => {
+            return {
+              sprites: addSprite(context.sprites, payload.spriteId, payload),
+            };
+          }, config),
+        },
         CREATE_SPRITE: {
           actions: createSprite,
         },

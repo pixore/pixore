@@ -26,9 +26,11 @@ const ctx = <C, S, E extends EventObject>(service: Interpreter<C, S, E>) => {
 };
 
 export enum Actions {
+  ADD_SPRITE = 'ADD_SPRITE',
   PUSH_ACTION = 'PUSH_ACTION',
   RENAME_SPRITE = 'RENAME_SPRITE',
   PAINT_SPRITE = 'PAINT_SPRITE',
+  SAVE_SPRITE = 'SAVE_SPRITE',
   CREATE_FRAME = 'CREATE_FRAME',
   CREATE_LAYER = 'CREATE_LAYER',
   DELETE_LAYER = 'DELETE_LAYER',
@@ -90,15 +92,9 @@ interface ActionUpdate<C, E> {
 
 export type DependantKeys<K> = [K, K];
 
-interface Persist<C, E> {
-  (context: C, event: E): unknown;
-}
-
 export interface ActionConfig<C> {
   updateListProperties?: DependantKeys<keyof C>[];
 }
-
-const noop = () => undefined;
 
 const defaultConfig = {
   updateListProperties: [],
@@ -107,32 +103,25 @@ const defaultConfig = {
 const action = <P, C, E extends EventActionObject<P>>(
   actionUpdate: ActionUpdate<C, E>,
   config: ActionConfig<C> = defaultConfig,
-  persist: Persist<C, E> = noop,
 ) => {
   const { updateListProperties = [] } = config;
-  return [
-    assign<C, E>((context, event) => {
-      const update = actionUpdate(context, event);
+  return assign<C, E>((context, event) => {
+    const update = actionUpdate(context, event);
 
-      if (!update) {
-        return {};
+    if (!update) {
+      return {};
+    }
+
+    return updateListProperties.reduce((acc, [key, keyToUpdate]) => {
+      if (acc[key]) {
+        Object.assign(acc, {
+          [keyToUpdate]: Object.keys(acc[key]),
+        });
       }
 
-      return updateListProperties.reduce((acc, [key, keyToUpdate]) => {
-        if (acc[key]) {
-          Object.assign(acc, {
-            [keyToUpdate]: Object.keys(acc[key]),
-          });
-        }
-
-        return acc;
-      }, update);
-    }),
-    assign<C, E>((context, event) => {
-      persist(context, event);
-      return context;
-    }),
-  ];
+      return acc;
+    }, update);
+  });
 };
 
 const getArtboard = (service: AppInterpreter, artboardId: string) => {

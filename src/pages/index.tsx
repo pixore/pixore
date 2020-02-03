@@ -11,15 +11,8 @@ import Head from '../components/Head';
 import GlobalStyle from '../components/GlobalStyle';
 import Bootstrap from '../components/Bootstrap';
 import PanelMaster from '../components/PanelMaster';
-import { getSprites } from '../queries/sprites.queries';
-
-import { useQuery } from 'urql';
 
 const IndexPage = () => {
-  const [result] = useQuery(getSprites());
-
-  console.log('reslt ', result);
-
   return (
     <Editor>
       <Bootstrap>

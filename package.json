@@ -38,6 +38,7 @@
     "dotenv": "^8.2.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.1",
+    "idb": "^5.0.1",
     "invariant": "^2.2.4",
     "isomorphic-fetch": "^2.2.1",
     "lodash.curry": "^4.1.1",
