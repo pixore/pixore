@@ -1,6 +1,6 @@
 import { Machine, assign, Interpreter } from 'xstate';
 import { Frame, Layer, BaseSprite } from '../types';
-import { ItemMap, addItem, removeItem, isLastItem } from '../utils/object';
+import { addItem, removeItem, isLastItem } from '../utils/object';
 import { createId } from '../utils';
 import { Actions, A, action, ActionConfig } from '../utils/state';
 
@@ -11,8 +11,8 @@ interface SpriteState {
   };
 }
 
-type FrameMap = ItemMap<Frame>;
-type LayerMap = ItemMap<Layer>;
+export type FrameMap = Record<string, Frame>;
+export type LayerMap = Record<string, Layer>;
 
 export interface Sprite extends BaseSprite {
   spriteId: string;
@@ -26,6 +26,7 @@ export interface Sprite extends BaseSprite {
   height: number;
   lastFrameId?: string;
   lastLayerId?: string;
+  local?: boolean;
 }
 
 type SpriteEvent =
@@ -61,6 +62,7 @@ export const defaultContext: Sprite = {
   width: 30,
   height: 30,
   name: 'New sprite',
+  local: true,
 };
 
 const config: ActionConfig<Sprite> = {

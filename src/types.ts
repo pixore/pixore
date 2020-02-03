@@ -60,7 +60,12 @@ export interface Layer {
 
 export interface Query {
   query: string;
-  variables?: Record<string, string>;
+  variables?: Record<string, string | number>;
+}
+
+export interface User {
+  userId: string;
+  username: string;
 }
 
 export type Stats = DOMRect | ClientRect;
