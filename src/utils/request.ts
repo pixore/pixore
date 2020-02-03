@@ -28,7 +28,7 @@ const handler = (requestHandler: RequestHandler) => async (
   try {
     await requestHandler(req, res);
   } catch (error) {
-    console.log('request error', error.stack);
+    console.error('request error', error.stack);
 
     res.status(getStatusCode(error)).end(error.message);
   }
