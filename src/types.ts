@@ -1,3 +1,5 @@
+import { DocumentNode } from 'graphql';
+
 export enum Panels {
   Canvas = 'canvas',
   Palette = 'palette',
@@ -59,7 +61,7 @@ export interface Layer {
 }
 
 export interface Query {
-  query: string;
+  query: string | DocumentNode;
   variables?: Record<string, string | number>;
 }
 

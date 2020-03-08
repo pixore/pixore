@@ -20,7 +20,10 @@ interface PropTypes {
   className?: string;
 }
 
-const CanvasLayer: React.FC<PropTypes> = (props, ref) => {
+const CanvasLayer: React.ForwardRefRenderFunction<
+  HTMLCanvasElement,
+  PropTypes
+> = (props, ref) => {
   const { width = 0, height = 0, className } = props;
   return (
     <Canvas

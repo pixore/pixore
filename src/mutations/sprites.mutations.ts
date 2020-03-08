@@ -31,6 +31,12 @@ const CREATE_FRAMES = (spriteId: string, frames: Frame[]) => gql`
   }
 `;
 
+interface CreateLayersResult {
+  insert_layers: {
+    returning: { layerId: string }[];
+  };
+}
+
 const createLayers = async (
   spriteId: string,
   layerList: string[],
@@ -41,14 +47,14 @@ const createLayers = async (
     layerList.map((id) => layers[id]),
   );
 
-  const [error, result] = await to(handleRequest(query));
+  const [error, result] = await to(handleRequest<CreateLayersResult>(query));
 
   if (error) {
     console.error('Error creating the layers', query);
     throw error;
   }
 
-  const newLayerIds: { layerId: string }[] = result.insert_layers.returning;
+  const newLayerIds = result.insert_layers.returning;
 
   const newLayers: Record<string, Layer> = newLayerIds.reduce(
     (map, { layerId }, index) => {
@@ -92,6 +98,12 @@ const CREATE_SPRITE = gql`
   }
 `;
 
+interface CreateFramesResult {
+  insert_frames: {
+    returning: { frameId: string }[];
+  };
+}
+
 const createFrames = async (
   spriteId: string,
   frameList: string[],
@@ -102,14 +114,14 @@ const createFrames = async (
     frameList.map((id) => frames[id]),
   );
 
-  const [error, result] = await to(handleRequest(query));
+  const [error, result] = await to(handleRequest<CreateFramesResult>(query));
 
   if (error) {
     console.error('Error creating the frames', query);
     throw error;
   }
 
-  const newFrameIds: { frameId: string }[] = result.insert_frames.returning;
+  const newFrameIds = result.insert_frames.returning;
 
   const newFrames: Record<string, Frame> = newFrameIds.reduce(
     (map, { frameId }, index) => {
@@ -130,6 +142,12 @@ const createFrames = async (
   };
 };
 
+interface CreateSpriteResult {
+  insert_sprites: {
+    returning: { spriteId: string }[];
+  };
+}
+
 const createSprite = async (
   userId: string,
   sprite: Sprite,
@@ -143,7 +161,9 @@ const createSprite = async (
     height,
   };
 
-  const [spriteError, result] = await to(handleRequest(query, variables));
+  const [spriteError, result] = await to(
+    handleRequest<CreateSpriteResult>(query, variables),
+  );
   if (spriteError) {
     throw spriteError;
   }

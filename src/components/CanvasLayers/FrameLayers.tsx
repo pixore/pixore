@@ -15,7 +15,10 @@ interface PropTypes {
   y: number;
 }
 
-const FrameLayers: React.FC<PropTypes> = (props, ref) => {
+const FrameLayers: React.ForwardRefRenderFunction<
+  HTMLCanvasElement,
+  PropTypes
+> = (props, ref) => {
   const sprite = useSprite();
   const artboard = useArtboard();
   const { onRef: setRef, context, canvas } = useCanvas2DContext();
@@ -23,7 +26,11 @@ const FrameLayers: React.FC<PropTypes> = (props, ref) => {
 
   React.useEffect(() => {
     if (canvas) {
-      ref && ref(canvas);
+      if (typeof ref === 'function') {
+        ref(canvas);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLCanvasElement>).current = canvas;
+      }
     }
   }, [canvas, ref]);
 

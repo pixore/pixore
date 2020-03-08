@@ -1,5 +1,6 @@
 import { pipe, subscribe } from 'wonka';
 import { createClient, createRequest, Client } from 'urql';
+import { DocumentNode } from 'graphql';
 
 let client: Client;
 
@@ -26,8 +27,8 @@ const getClient = (idToken?: string) => {
   return client;
 };
 
-const handleRequest = <T>(
-  query: string,
+const handleRequest = <T = unknown>(
+  query: string | DocumentNode,
   variables: object = undefined,
   idToken?: string,
 ) =>
