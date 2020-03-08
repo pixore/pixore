@@ -1,10 +1,35 @@
 const dotenv = require('dotenv');
+const withOffline = require('next-offline');
 const withCSS = require('@zeit/next-css');
 
 dotenv.config();
 
-module.exports = withCSS({
+const ONE_MONTH = 30 * 24 * 60 * 60;
+
+const config = {
   target: 'serverless',
+  transformManifest: (manifest) => ['/'].concat(manifest),
+  generateInDevMode: true,
+  workboxOpts: {
+    swDest: 'static/service-worker.js',
+    runtimeCaching: [
+      {
+        urlPattern: /^https?.*/,
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'https-calls',
+          networkTimeoutSeconds: 15,
+          expiration: {
+            maxEntries: 150,
+            maxAgeSeconds: ONE_MONTH,
+          },
+          cacheableResponse: {
+            statuses: [0, 200],
+          },
+        },
+      },
+    ],
+  },
   webpack: (config, { webpack }) => {
     config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
     return config;
@@ -20,4 +45,6 @@ module.exports = withCSS({
     SESSION_COOKIE_SECRET: process.env.SESSION_COOKIE_SECRET,
     SESSION_COOKIE_LIFETIME: 7200, // 2 hours
   },
-});
+};
+
+module.exports = withOffline(withCSS(config));

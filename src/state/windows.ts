@@ -68,7 +68,7 @@ export const defaultContext: WindowsContext = {
   windowList: [],
 };
 
-const config: ActionConfig<keyof WindowsContext> = {
+const config: ActionConfig<WindowsContext> = {
   updateListProperties: [['windows', 'windowList']],
 };
 

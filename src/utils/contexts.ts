@@ -37,16 +37,16 @@ const getContext = (
   frameId: string,
   layerId: string,
 ): Context => {
-  const { width, height, id } = sprite;
-  if (!contexts[id]) {
-    contexts[id] = {};
+  const { width, height, spriteId } = sprite;
+  if (!contexts[spriteId]) {
+    contexts[spriteId] = {};
   }
 
-  if (!contexts[id][frameId]) {
-    contexts[id][frameId] = {};
+  if (!contexts[spriteId][frameId]) {
+    contexts[spriteId][frameId] = {};
   }
 
-  let context = contexts[id][frameId][layerId];
+  let context = contexts[spriteId][frameId][layerId];
 
   if (context) {
     return context;
@@ -58,7 +58,7 @@ const getContext = (
 
   context = canvas.getContext('2d');
 
-  contexts[id][frameId][layerId] = context;
+  contexts[spriteId][frameId][layerId] = context;
 
   return context;
 };

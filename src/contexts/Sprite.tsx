@@ -16,6 +16,8 @@ const createSpriteActions = (actions: AppActions, spriteId: string) => ({
   deleteLayer: actions.deleteLayer(spriteId),
   deleteFrame: actions.deleteFrame(spriteId),
   paintSprite: actions.paintSprite(spriteId),
+  renameSprite: actions.renameSprite(spriteId),
+  saveSprite: () => actions.saveSprite(spriteId),
 });
 
 export type SpriteActions = ReturnType<typeof createSpriteActions>;
@@ -43,12 +45,11 @@ const Provider: React.FC<ProviderProps> = (props) => {
   const appActions = useAppActions();
   const service = sprites[spriteId].ref;
   const state = useStateContext(service);
-  const { id } = state;
 
-  const actions = React.useMemo(() => createSpriteActions(appActions, id), [
-    appActions,
-    id,
-  ]);
+  const actions = React.useMemo(
+    () => createSpriteActions(appActions, spriteId),
+    [appActions, spriteId],
+  );
 
   return (
     <SpriteActionsContext.Provider value={actions}>

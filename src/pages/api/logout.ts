@@ -1,13 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import to from 'await-to-js';
+import { handler } from '../../utils/request';
 import auth from '../../utils/auth';
 
-const logout = async (req: NextApiRequest, res: NextApiResponse) => {
+const logout = handler(async (req, res) => {
   const [error] = await to(auth.handleLogout(req, res));
+
   if (error) {
-    console.error('logout error', error);
-    res.status(500).end(error.message);
+    throw error;
   }
-};
+});
 
 export default logout;

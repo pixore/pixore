@@ -1,4 +1,10 @@
 {
+  "builds": [
+    {
+      "src": "next.config.js",
+      "use": "@now/next"
+    }
+  ],
   "build": {
     "env": {
       "AUTH0_DOMAIN": "pixore.auth0.com",
@@ -8,5 +14,15 @@
       "POST_LOGOUT_REDIRECT_URI": "https://pixore.io",
       "SESSION_COOKIE_SECRET": "@session_cookie_secret"
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "^/service-worker.js$",
+      "dest": "/_next/static/service-worker.js",
+      "headers": {
+        "cache-control": "public, max-age=43200, immutable",
+        "Service-Worker-Allowed": "/"
+      }
+    }
+  ]
 }

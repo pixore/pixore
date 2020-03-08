@@ -1,15 +1,16 @@
 import React from 'react';
 import { AppProps } from 'next/app';
-import * as User from '../contexts/User';
+import { Provider, createClient } from 'urql';
+
+const client = createClient({
+  url: '/api/graphql',
+});
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
-  const value = User.useFetchUser();
-  console.log('value', value);
-
   return (
-    <User.Provider value={value}>
+    <Provider value={client}>
       <Component {...pageProps} />;
-    </User.Provider>
+    </Provider>
   );
 };
 

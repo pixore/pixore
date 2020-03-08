@@ -1,14 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import to from 'await-to-js';
+import { handler } from '../../utils/request';
 import auth from '../../utils/auth';
 
-const callback = async (req: NextApiRequest, res: NextApiResponse) => {
+const callback = handler(async (req, res) => {
   const [error] = await to(auth.handleCallback(req, res, { redirectTo: '/' }));
 
   if (error) {
-    console.log('callback error', error);
-    res.status(500).end(error.message);
+    throw error;
   }
-};
+});
 
 export default callback;

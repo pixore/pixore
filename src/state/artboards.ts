@@ -24,7 +24,7 @@ interface ArtboardsState {
   };
 }
 
-const config: ActionConfig<keyof Artboards> = {
+const config: ActionConfig<Artboards> = {
   updateListProperties: [['artboards', 'artboardList']],
 };
 

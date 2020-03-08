@@ -1,9 +1,12 @@
+import to from 'await-to-js';
 import { AppInterpreter, App } from '../state/app';
 import { getSprite, Actions, AE, ctx, pushAction } from '../utils/state';
 import { getContext } from '../utils/contexts';
 import { paintOrClear } from '../tools/utils';
 import { Color } from '../utils/Color';
 import Vector from '../utils/vector';
+import { storeSprite, updateSpriteId } from '../store';
+import { createSprite } from '../mutations/sprites.mutations';
 
 export interface PointUpdate {
   old: Color;
@@ -103,10 +106,83 @@ const reduPaintSprite = (appState: App, data: PaintSpriteEventData) => {
   });
 };
 
+const renameSprite = (
+  service: AppInterpreter,
+  spriteId: string,
+  name: string,
+) => {
+  const sprite = getSprite(service, spriteId);
+  sprite.send({
+    type: Actions.RENAME_SPRITE,
+    payload: {
+      name,
+    },
+  });
+};
+
+const saveSprite = async (service: AppInterpreter, spriteId: string) => {
+  const app = ctx(service);
+  const { user, currentArtboardId, artboards } = app;
+  const { sprites } = app;
+  const spriteService = getSprite(service, spriteId);
+  const sprite = ctx(spriteService);
+  const artboard = ctx(artboards).artboards[currentArtboardId];
+  const { spriteId: currentSpriteId } = ctx(artboard);
+
+  const [storeError] = await to(storeSprite(sprite));
+
+  if (storeError) {
+    console.error('Error storing the sprite', storeError);
+    return;
+  }
+
+  if (sprite.local) {
+    if (user.userId) {
+      const [graphQLError, newSprite] = await to(
+        createSprite(user.userId, sprite),
+      );
+
+      if (graphQLError) {
+        console.error('Error saving the sprite', graphQLError);
+        return;
+      }
+
+      const [updateError] = await to(updateSpriteId(spriteId, newSprite));
+
+      if (updateError) {
+        console.error('Error updating the sprite in the store', graphQLError);
+        return;
+      }
+
+      sprites.send({
+        type: Actions.ADD_SPRITE,
+        payload: newSprite,
+      });
+
+      if (currentSpriteId === spriteId) {
+        artboard.send({
+          type: Actions.CHANGE_SPRITE,
+          payload: newSprite,
+        });
+      }
+    } else {
+      console.log('save anonymous');
+    }
+  }
+};
+
+const saveSpriteEvent = {
+  action: saveSprite,
+};
+
 const paintSpriteEvent = {
   action: paintSprite,
   undo: undoPaintSprite,
   redu: reduPaintSprite,
 };
 
-export { paintSpriteEvent };
+const renameSpriteEvent = {
+  action: renameSprite,
+};
+
+export { paintSpriteEvent, renameSpriteEvent, saveSpriteEvent };

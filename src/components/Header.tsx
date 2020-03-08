@@ -11,16 +11,24 @@ import {
 import ProjectName from './ProjectName';
 import { useWelcomeWindow } from '../hooks/useWelcomeWindow';
 import Windows from './Window/Windows';
-import { useUser } from '../contexts/User';
+import { useAppActions, useUser, useFetchUser } from '../contexts/App';
+import { useSpriteActions } from '../contexts/Sprite';
 
 const Container = styled.div`
   justify-content: space-between;
   display: flex;
 `;
 
-const Header = () => {
+const Header: React.FC = () => {
+  useFetchUser();
+  const { saveSprite } = useSpriteActions();
+  const actions = useAppActions();
   const { openWelcomeWindow } = useWelcomeWindow(true);
   const user = useUser();
+
+  const onSaveSprite = async () => {
+    saveSprite();
+  };
 
   return (
     <Container>
@@ -36,7 +44,7 @@ const Header = () => {
             <MenuItem onSelect={notImplemented}>New Layer</MenuItem>
             <MenuItem onSelect={notImplemented}>New Palette</MenuItem>
             <MenuItemSeparator />
-            <MenuItem onSelect={notImplemented}>Save</MenuItem>
+            <MenuItem onSelect={onSaveSprite}>Save</MenuItem>
             <MenuItem onSelect={notImplemented}>Save As..</MenuItem>
             <MenuItemSeparator />
             <MenuItem onSelect={notImplemented}>Close</MenuItem>
@@ -45,8 +53,8 @@ const Header = () => {
         <Menu>
           <MenuButton>Edit</MenuButton>
           <MenuList>
-            <MenuItem onSelect={notImplemented}>Undo</MenuItem>
-            <MenuItem onSelect={notImplemented}>Redo</MenuItem>
+            <MenuItem onSelect={actions.undo}>Undo</MenuItem>
+            <MenuItem onSelect={actions.redu}>Redo</MenuItem>
             <MenuItemSeparator />
             <MenuItem onSelect={notImplemented}>Cut</MenuItem>
             <MenuItem onSelect={notImplemented}>Copy</MenuItem>
