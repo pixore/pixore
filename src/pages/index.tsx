@@ -13,14 +13,23 @@ import Bootstrap from '../components/Bootstrap';
 import PanelMaster from '../components/PanelMaster';
 
 const IndexPage: React.FC = () => {
+  const headerRef = React.useRef<HTMLDivElement>();
+  const [top, setStop] = React.useState(25);
+  React.useEffect(() => {
+    if (!headerRef.current) {
+      return;
+    }
+
+    setStop(headerRef.current.clientHeight);
+  }, []);
   return (
     <Editor>
       <Bootstrap>
         <Head />
         <GlobalStyle />
-        <Header />
+        <Header ref={headerRef} />
         <ConfigProvider initialState={defaultLayout as LayoutState}>
-          <Subdivide top={25} component={PanelMaster} />
+          <Subdivide top={top} component={PanelMaster} />
         </ConfigProvider>
       </Bootstrap>
     </Editor>

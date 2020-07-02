@@ -9,7 +9,7 @@ const client = createClient({
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <Provider value={client}>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </Provider>
   );
 };

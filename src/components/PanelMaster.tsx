@@ -16,7 +16,7 @@ const Context = React.createContext<ContextValue>({
   id: -1,
 });
 
-const Main = () => {
+const Main: React.FC = () => {
   const { state, setState, id } = useContainer();
 
   React.useEffect(() => {
@@ -48,7 +48,7 @@ const Main = () => {
   );
 };
 
-const usePane = () => React.useContext(Context);
+const usePane = (): ContextValue => React.useContext(Context);
 
 export { usePane };
 

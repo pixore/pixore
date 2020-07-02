@@ -19,7 +19,7 @@ const Context = React.createContext({
   emitter,
 });
 
-const useEmitter = () => React.useContext(Context).emitter;
+const useEmitter = (): TinyEmitter => React.useContext(Context).emitter;
 
 const Editor: React.FC<EditorProps> = (props) => {
   const { children } = props;

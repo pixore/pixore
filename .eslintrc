@@ -13,6 +13,7 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-var-requires": "off",
     "react-hooks/rules-of-hooks": "error",
+    "react/display-name": "off",
     "react-hooks/exhaustive-deps": "warn"
   },
   "settings": {
