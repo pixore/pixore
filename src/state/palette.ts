@@ -11,7 +11,7 @@ export interface Palette {
 
 interface PaletteState {
   states: {
-    init: {};
+    init: Record<string, unknown>;
   };
 }
 

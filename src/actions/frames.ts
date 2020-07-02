@@ -57,7 +57,7 @@ const selectFrame = (
   service: AppInterpreter,
   artboardId: string,
   frameId: string,
-) => {
+): void => {
   const artboard = getArtboard(service, artboardId);
   artboard.send({
     type: Actions.SELECT_FRAME,
@@ -65,7 +65,7 @@ const selectFrame = (
   });
 };
 
-const undoSelectFrame = (appState: App, data: SelectFrameEventData) => {
+const undoSelectFrame = (appState: App, data: SelectFrameEventData): void => {
   const { artboardId, previousFrameId } = data;
   const artboardService = ctx(appState.artboards).artboards[artboardId];
 
@@ -75,7 +75,7 @@ const undoSelectFrame = (appState: App, data: SelectFrameEventData) => {
   });
 };
 
-const reduSelectFrame = (appState: App, data: SelectFrameEventData) => {
+const reduSelectFrame = (appState: App, data: SelectFrameEventData): void => {
   const { artboardId, frameId } = data;
   const artboardService = ctx(appState.artboards).artboards[artboardId];
 
@@ -94,7 +94,7 @@ const createFrame = (service: AppInterpreter, spriteId: string) => {
   return context.lastFrameId;
 };
 
-const undoCreateFrame = (appState: App, data: CreateFrameEventData) => {
+const undoCreateFrame = (appState: App, data: CreateFrameEventData): void => {
   const { spriteId, frameId } = data;
   const spriteService = ctx(appState.sprites).sprites[spriteId].ref;
 
@@ -104,7 +104,7 @@ const undoCreateFrame = (appState: App, data: CreateFrameEventData) => {
   });
 };
 
-const reduCreateFrame = (appState: App, data: CreateFrameEventData) => {
+const reduCreateFrame = (appState: App, data: CreateFrameEventData): void => {
   const { spriteId, frameId } = data;
   const spriteService = ctx(appState.sprites).sprites[spriteId].ref;
 
@@ -131,7 +131,10 @@ const deleteFrame = (
 const undoDeleteFrame = reduCreateFrame;
 const reduDeleteFrame = undoCreateFrame;
 
-const createAndSelectFrame = (service: AppInterpreter, artboardId: string) => {
+const createAndSelectFrame = (
+  service: AppInterpreter,
+  artboardId: string,
+): string => {
   const { frameId: previousFrameId, spriteId } = ctx(
     getArtboard(service, artboardId),
   );
@@ -163,7 +166,7 @@ const undoCreateAndSelectFrame = (
 const reduCreateAndSelectFrame = (
   appState: App,
   data: CreateAndSelectFrameEventData,
-) => {
+): void => {
   reduCreateFrame(appState, data);
   reduSelectFrame(appState, data);
 };
@@ -172,7 +175,7 @@ const deleteFrameAndSelect = (
   service: AppInterpreter,
   artboardId: string,
   newSelectedFrameId: string,
-) => {
+): void => {
   const { frameId, spriteId } = ctx(getArtboard(service, artboardId));
 
   deleteFrame(service, spriteId, frameId);
@@ -192,7 +195,7 @@ const deleteFrameAndSelect = (
 const undoDeleteFrameAndSelect = (
   appState: App,
   data: DeleteFrameAndSelectEventData,
-) => {
+): void => {
   const { frameId } = data;
   undoDeleteFrame(appState, data);
   undoSelectFrame(appState, {
@@ -204,7 +207,7 @@ const undoDeleteFrameAndSelect = (
 const reduDeleteFrameAndSelect = (
   appState: App,
   data: DeleteFrameAndSelectEventData,
-) => {
+): void => {
   const { frameId } = data;
   reduDeleteFrame(appState, data);
   reduSelectFrame(appState, {
@@ -214,7 +217,7 @@ const reduDeleteFrameAndSelect = (
 };
 
 const createFrameEvent = {
-  action(service: AppInterpreter, spriteId: string) {
+  action(service: AppInterpreter, spriteId: string): string {
     const frameId = createFrame(service, spriteId);
     pushAction(service, {
       type: Actions.CREATE_FRAME,

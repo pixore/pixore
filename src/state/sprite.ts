@@ -6,8 +6,8 @@ import { Actions, A, action, ActionConfig } from '../utils/state';
 
 interface SpriteState {
   states: {
-    setup: {};
-    painting: {};
+    setup: Record<string, unknown>;
+    painting: Record<string, unknown>;
   };
 }
 

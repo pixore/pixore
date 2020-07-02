@@ -48,15 +48,13 @@ const Canvas: React.FC = () => {
     canvas,
   });
 
-  listenerContextRef.current = {
-    mainContext,
-    previewContext,
-    sprite,
-    artboard,
-    artboardActions,
-    spriteActions,
-    canvas,
-  };
+  listenerContextRef.current.mainContext = mainContext;
+  listenerContextRef.current.previewContext = previewContext;
+  listenerContextRef.current.sprite = sprite;
+  listenerContextRef.current.artboard = artboard;
+  listenerContextRef.current.artboardActions = artboardActions;
+  listenerContextRef.current.spriteActions = spriteActions;
+  listenerContextRef.current.canvas = canvas;
 
   useTool(listenerContextRef, toolName);
 
@@ -77,10 +75,10 @@ const Canvas: React.FC = () => {
     layerList.length,
   );
 
-  // TODO while zooming in/out if the users try to paint
-  // an error happen, therefore painting should be blocked while
-  // zooming in/out, and zooming in/out should be block white painting
-  // TODO when the canvas is in play mode, any interaction should deactivate it
+  // TODO while zooming in/out if the user try to paint
+  // an error happens, therefore painting should be blocked while
+  // zooming in/out, and zooming in/out should be block while painting
+  // TODO when the canvas is in play mode, any interaction should be deactivated
   return (
     <HeadlessPanel onWheel={onWheel}>
       <Background {...stats} {...canvas} />

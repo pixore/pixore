@@ -19,8 +19,8 @@ export interface Artboards {
 
 interface ArtboardsState {
   states: {
-    setup: {};
-    init: {};
+    setup: Record<string, unknown>;
+    init: Record<string, unknown>;
   };
 }
 

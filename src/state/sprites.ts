@@ -20,8 +20,8 @@ export interface Sprites {
 
 interface SpritesState {
   states: {
-    setup: {};
-    init: {};
+    setup: Record<string, unknown>;
+    init: Record<string, unknown>;
   };
 }
 

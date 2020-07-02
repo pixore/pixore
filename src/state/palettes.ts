@@ -20,8 +20,8 @@ export interface Palettes {
 
 interface PalettesState {
   states: {
-    setup: {};
-    init: {};
+    setup: Record<string, unknown>;
+    init: Record<string, unknown>;
   };
 }
 

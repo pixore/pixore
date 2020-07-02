@@ -37,7 +37,7 @@ export interface WindowsContext {
 
 interface WindowsState {
   states: {
-    init: {};
+    init: Record<string, unknown>;
   };
 }
 

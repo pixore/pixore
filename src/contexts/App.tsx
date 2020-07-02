@@ -1,7 +1,7 @@
 import React from 'react';
 import trap from 'mousetrap';
 import { interpret } from 'xstate';
-import { defaultContext, appMachine } from '../state/app';
+import { defaultContext, appMachine, App } from '../state/app';
 import { useStateContext } from '../hooks/useStateContext';
 import { createAppActions } from '../state/actions';
 import { User } from '../types';
@@ -17,11 +17,11 @@ const AppStateContext = React.createContext(defaultContext);
 const AppActionsContext = React.createContext(
   createAppActions(interpret(appMachine)),
 );
-const useAppState = () => React.useContext(AppStateContext);
+const useAppState = (): App => React.useContext(AppStateContext);
 const useAppActions = () => React.useContext(AppActionsContext);
 const useAppService = () => React.useContext(AppServiceContext);
 
-const useUser = () => React.useContext(AppStateContext).user;
+const useUser = (): User => React.useContext(AppStateContext).user;
 const useFetchUser = () => {
   const { user } = useAppState();
   const { updateUser } = useAppActions();

@@ -27,8 +27,8 @@ export interface App {
 
 interface AppState {
   states: {
-    setup: {};
-    init: {};
+    setup: Record<string, unknown>;
+    init: Record<string, unknown>;
   };
 }
 
