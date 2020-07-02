@@ -2,7 +2,7 @@ import '@reach/slider/styles.css';
 import '@reach/tabs/styles.css';
 import '../styles.css';
 import React from 'react';
-import Subdivide, { Config, LayoutState } from '@pixore/subdivide';
+import Subdivide, { ConfigProvider, LayoutState } from '@pixore/subdivide';
 import defaultLayout from '../default-layout.json';
 
 import Editor from '../components/Editor';
@@ -12,16 +12,16 @@ import GlobalStyle from '../components/GlobalStyle';
 import Bootstrap from '../components/Bootstrap';
 import PanelMaster from '../components/PanelMaster';
 
-const IndexPage = () => {
+const IndexPage: React.FC = () => {
   return (
     <Editor>
       <Bootstrap>
         <Head />
         <GlobalStyle />
         <Header />
-        <Config.Provider initialState={defaultLayout as LayoutState}>
+        <ConfigProvider initialState={defaultLayout as LayoutState}>
           <Subdivide top={25} component={PanelMaster} />
-        </Config.Provider>
+        </ConfigProvider>
       </Bootstrap>
     </Editor>
   );
