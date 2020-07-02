@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 import { toggleState } from '../utils';
 
 const Button = styled.button`
+  vertical-align: middle;
+  margin: 0 2px;
   :disabled {
     cursor: not-allowed;
   }
