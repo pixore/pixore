@@ -31,8 +31,13 @@ const Colors = styled.div`
 
 const colorCommon = css`
   position: absolute;
+  overflow: hidden;
   width: ${colorSize}px;
   height: ${colorSize}px;
+
+  & button {
+    position: absolute;
+  }
 `;
 
 const SecondaryColor = styled.div`

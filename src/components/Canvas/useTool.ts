@@ -20,8 +20,9 @@ const isReady = (
 const useTool = (
   listenerContextRef: React.RefObject<ListenerContext>,
   toolName: string,
-) => {
+): void => {
   const { previewContext, mainContext } = listenerContextRef.current;
+
   React.useEffect(() => {
     const addEventListener = getTool(toolName);
     if (!isReady(previewContext, mainContext, addEventListener)) {

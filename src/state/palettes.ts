@@ -20,12 +20,12 @@ export interface Palettes {
 
 interface PalettesState {
   states: {
-    setup: {};
-    init: {};
+    setup: Record<string, unknown>;
+    init: Record<string, unknown>;
   };
 }
 
-const config: ActionConfig<keyof Palettes> = {
+const config: ActionConfig<Palettes> = {
   updateListProperties: [['palettes', 'paletteList']],
 };
 

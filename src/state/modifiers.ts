@@ -9,7 +9,7 @@ export type Modifiers = { [key in Key]?: boolean };
 
 interface ModifiersState {
   states: {
-    init: {};
+    init: Record<string, unknown>;
   };
 }
 

@@ -1,0 +1,25 @@
+{
+  "dir": "ltr",
+  "lang": "en",
+  "name": "Pixore",
+  "scope": "/",
+  "display": "standalone",
+  "start_url": "/",
+  "short_name": "Pixore",
+  "theme_color": "#2e3440",
+  "description": "",
+  "orientation": "any",
+  "background_color": "#2e3440",
+  "icons": [
+    {
+      "src": "/192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/144x144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    }
+  ]
+}

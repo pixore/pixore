@@ -11,6 +11,7 @@ const panels = Object.keys(Panels).map((name) => ({
 
 const Select = styled.select`
   padding: 0;
+  vertical-align: middle;
   margin: 4px;
   font-size: 1rem;
   max-width: 2.1rem;

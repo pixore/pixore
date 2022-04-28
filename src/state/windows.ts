@@ -37,7 +37,7 @@ export interface WindowsContext {
 
 interface WindowsState {
   states: {
-    init: {};
+    init: Record<string, unknown>;
   };
 }
 
@@ -68,7 +68,7 @@ export const defaultContext: WindowsContext = {
   windowList: [],
 };
 
-const config: ActionConfig<keyof WindowsContext> = {
+const config: ActionConfig<WindowsContext> = {
   updateListProperties: [['windows', 'windowList']],
 };
 

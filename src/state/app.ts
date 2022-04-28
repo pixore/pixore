@@ -11,6 +11,7 @@ import { Color } from '../utils/Color';
 import { ActionEvent, Actions, ctx } from '../utils/state';
 import { createAppActions } from './actions';
 import { undo, redu } from './history';
+import { User } from '../types';
 
 export interface App {
   artboards: ArtboardsInterpreter;
@@ -21,16 +22,18 @@ export interface App {
   undoActions: ActionEvent[];
   reduActions: ActionEvent[];
   currentArtboardId: string;
+  user?: User;
 }
 
 interface AppState {
   states: {
-    setup: {};
-    init: {};
+    setup: Record<string, unknown>;
+    init: Record<string, unknown>;
   };
 }
 
 type AppEvent =
+  | { type: 'UPDATE_USER'; payload: User }
   | { type: 'PUSH_ACTION'; payload: ActionEvent }
   | { type: 'UNDO' }
   | { type: 'REDU' };
@@ -118,6 +121,11 @@ const appMachine = Machine<App, AppState, AppEvent>({
     },
     init: {
       on: {
+        UPDATE_USER: {
+          actions: assign((context, event) => ({
+            user: event.payload,
+          })),
+        },
         PUSH_ACTION: {
           actions: assign((context, { payload }) => {
             const { undoActions } = context;

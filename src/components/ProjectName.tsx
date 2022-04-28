@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import VisuallyHidden from '@reach/visually-hidden';
+import { useSprite, useSpriteActions } from '../contexts/Sprite';
 
 const Input = styled.input`
   background: transparent;
@@ -13,13 +14,44 @@ const Input = styled.input`
 `;
 
 const ProjectName = () => {
+  const { renameSprite } = useSpriteActions();
+  const { name: spriteName } = useSprite();
+  const [name, setName] = React.useState(spriteName);
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [isEditing, setIsEditing] = React.useState(false);
+
+  const onFocus = () => {
+    setIsEditing(true);
+  };
+
+  const onBlur = () => {
+    renameSprite(name);
+    setIsEditing(false);
+  };
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
+  React.useEffect(() => {
+    setIsDisabled(!isEditing && spriteName !== name);
+  }, [spriteName, name, isEditing]);
+
   return (
     <>
       <VisuallyHidden>
         <label htmlFor="project-name">project name</label>
       </VisuallyHidden>
 
-      <Input defaultValue="New Project" id="project-name" />
+      <Input
+        autoComplete="off"
+        disabled={isDisabled}
+        value={name}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        id="project-name"
+      />
     </>
   );
 };

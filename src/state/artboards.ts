@@ -19,12 +19,12 @@ export interface Artboards {
 
 interface ArtboardsState {
   states: {
-    setup: {};
-    init: {};
+    setup: Record<string, unknown>;
+    init: Record<string, unknown>;
   };
 }
 
-const config: ActionConfig<keyof Artboards> = {
+const config: ActionConfig<Artboards> = {
   updateListProperties: [['artboards', 'artboardList']],
 };
 

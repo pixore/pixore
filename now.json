@@ -1,0 +1,28 @@
+{
+  "builds": [
+    {
+      "src": "next.config.js",
+      "use": "@now/next"
+    }
+  ],
+  "build": {
+    "env": {
+      "AUTH0_DOMAIN": "pixore.auth0.com",
+      "AUTH0_CLIENT_ID": "ShhS1HN49DkmOVqaF23YwInWhBP6AdCZ",
+      "AUTH0_CLIENT_SECRET": "@auth0_client_secret",
+      "REDIRECT_URI": "https://pixore.io/api/callback",
+      "POST_LOGOUT_REDIRECT_URI": "https://pixore.io",
+      "SESSION_COOKIE_SECRET": "@session_cookie_secret"
+    }
+  },
+  "routes": [
+    {
+      "src": "^/service-worker.js$",
+      "dest": "/_next/static/service-worker.js",
+      "headers": {
+        "cache-control": "public, max-age=43200, immutable",
+        "Service-Worker-Allowed": "/"
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import { NewSprite } from './sprites';
 import { NewPalette } from './palettes';
 import { Color } from '../utils/Color';
 import { NewArtboard } from './artboards';
-import { Windows } from '../types';
+import { Windows, User } from '../types';
 import { OpenWindowArgs } from './windows';
 import {
   selectFrameEvent,
@@ -20,21 +20,14 @@ import {
   deleteLayerEvent,
   deleteLayerAndSelectEvent,
 } from '../actions/layers';
-import { paintSpriteEvent } from '../actions/sprites';
+import {
+  paintSpriteEvent,
+  renameSpriteEvent,
+  saveSpriteEvent,
+} from '../actions/sprites';
 import curry from 'lodash.curry';
 
 const createAppActions = (service: AppInterpreter) => {
-  const getSprite = (spriteId: string) => {
-    const { sprites } = ctx(service);
-    const sprite = ctx(sprites).sprites[spriteId];
-
-    if (!sprite) {
-      throw new Error(`Sprite not found, spriteId = '${spriteId}'`);
-    }
-
-    return sprite.ref;
-  };
-
   const getPalette = (paletteId: string) => {
     const { palettes } = ctx(service);
     const palette = ctx(palettes).palettes[paletteId];
@@ -68,6 +61,12 @@ const createAppActions = (service: AppInterpreter) => {
         type: 'REDU',
       });
     },
+    updateUser(user: User) {
+      service.send({
+        type: 'UPDATE_USER',
+        payload: user,
+      });
+    },
     createAndSelectFrame: curry(createAndSelectFrameEvent.action)(service),
     createAndSelectLayer: curry(createAndSelectLayerEvent.action)(service),
     createSprite(sprite: NewSprite): string {
@@ -79,14 +78,8 @@ const createAppActions = (service: AppInterpreter) => {
 
       return context.lastSpriteId;
     },
-    renameSprite(spriteId: string, name: string) {
-      const sprite = getSprite(spriteId);
-
-      sprite.send({
-        type: Actions.RENAME,
-        payload: { name },
-      });
-    },
+    saveSprite: curry(saveSpriteEvent.action)(service),
+    renameSprite: curry(renameSpriteEvent.action)(service),
     createFrame: curry(createFrameEvent.action)(service),
     createLayer: curry(createLayerEvent.action)(service),
     paintSprite: curry(paintSpriteEvent.action)(service),

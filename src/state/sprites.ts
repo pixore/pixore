@@ -20,32 +20,32 @@ export interface Sprites {
 
 interface SpritesState {
   states: {
-    setup: {};
-    init: {};
+    setup: Record<string, unknown>;
+    init: Record<string, unknown>;
   };
 }
 
-const addSprite = (sprites: SpriteMap, id: string, data: NewSprite) => {
-  return addItem(sprites, id, {
-    id,
+const addSprite = (sprites: SpriteMap, spriteId: string, data: NewSprite) => {
+  return addItem(sprites, spriteId, {
+    id: spriteId,
     ref: spawn(
       spriteMachine.withContext({
         ...spriteDefaultContext,
         ...data,
-        id,
+        spriteId,
       }),
     ) as SpriteInterpreter,
   });
 };
 
-const config: ActionConfig<keyof Sprites> = {
+const config: ActionConfig<Sprites> = {
   updateListProperties: [['sprites', 'spriteList']],
 };
 
 export type NewSprite = Partial<Omit<Sprite, 'id'>>;
 type SpritesEvent =
-  | A<Actions.CREATE_SPRITE, NewSprite>
-  | A<Actions.PUSH_ACTION>;
+  | A<Actions.ADD_SPRITE, Sprite>
+  | A<Actions.CREATE_SPRITE, NewSprite>;
 
 export type SpritesInterpreter = Interpreter<
   Sprites,
@@ -82,6 +82,13 @@ const spritesMachine = Machine<Sprites, SpritesState, SpritesEvent>({
     },
     init: {
       on: {
+        ADD_SPRITE: {
+          actions: action((context, { payload }) => {
+            return {
+              sprites: addSprite(context.sprites, payload.spriteId, payload),
+            };
+          }, config),
+        },
         CREATE_SPRITE: {
           actions: createSprite,
         },

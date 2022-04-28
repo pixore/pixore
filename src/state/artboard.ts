@@ -16,7 +16,7 @@ export interface Artboard {
 
 interface ArtboardState {
   states: {
-    init: {};
+    init: Record<string, unknown>;
   };
 }
 
@@ -55,9 +55,9 @@ const artboardMachine = Machine<Artboard, ArtboardState, ArtboardEvent>({
       on: {
         CHANGE_SPRITE: {
           actions: assign((context, { payload: sprite }) => {
-            const { id, frameList, layerList } = sprite;
+            const { spriteId, frameList, layerList } = sprite;
             return {
-              spriteId: id,
+              spriteId,
               frameId: frameList[0],
               layerId: layerList[0],
             };

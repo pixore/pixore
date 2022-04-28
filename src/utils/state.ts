@@ -26,9 +26,11 @@ const ctx = <C, S, E extends EventObject>(service: Interpreter<C, S, E>) => {
 };
 
 export enum Actions {
+  ADD_SPRITE = 'ADD_SPRITE',
   PUSH_ACTION = 'PUSH_ACTION',
-  RENAME = 'RENAME',
+  RENAME_SPRITE = 'RENAME_SPRITE',
   PAINT_SPRITE = 'PAINT_SPRITE',
+  SAVE_SPRITE = 'SAVE_SPRITE',
   CREATE_FRAME = 'CREATE_FRAME',
   CREATE_LAYER = 'CREATE_LAYER',
   DELETE_LAYER = 'DELETE_LAYER',
@@ -90,8 +92,8 @@ interface ActionUpdate<C, E> {
 
 export type DependantKeys<K> = [K, K];
 
-export interface ActionConfig<K> {
-  updateListProperties: DependantKeys<K>[];
+export interface ActionConfig<C> {
+  updateListProperties?: DependantKeys<keyof C>[];
 }
 
 const defaultConfig = {
@@ -100,7 +102,7 @@ const defaultConfig = {
 
 const action = <P, C, E extends EventActionObject<P>>(
   actionUpdate: ActionUpdate<C, E>,
-  config: ActionConfig<keyof C> = defaultConfig,
+  config: ActionConfig<C> = defaultConfig,
 ) => {
   const { updateListProperties = [] } = config;
   return assign<C, E>((context, event) => {

@@ -2,7 +2,7 @@ import '@reach/slider/styles.css';
 import '@reach/tabs/styles.css';
 import '../styles.css';
 import React from 'react';
-import Subdivide, { Config, LayoutState } from '@pixore/subdivide';
+import Subdivide, { ConfigProvider, LayoutState } from '@pixore/subdivide';
 import defaultLayout from '../default-layout.json';
 
 import Editor from '../components/Editor';
@@ -12,16 +12,25 @@ import GlobalStyle from '../components/GlobalStyle';
 import Bootstrap from '../components/Bootstrap';
 import PanelMaster from '../components/PanelMaster';
 
-const IndexPage = () => {
+const IndexPage: React.FC = () => {
+  const headerRef = React.useRef<HTMLDivElement>();
+  const [top, setStop] = React.useState(25);
+  React.useEffect(() => {
+    if (!headerRef.current) {
+      return;
+    }
+
+    setStop(headerRef.current.clientHeight);
+  }, []);
   return (
     <Editor>
       <Bootstrap>
         <Head />
         <GlobalStyle />
-        <Header />
-        <Config.Provider initialState={defaultLayout as LayoutState}>
-          <Subdivide top={25} component={PanelMaster} />
-        </Config.Provider>
+        <Header ref={headerRef} />
+        <ConfigProvider initialState={defaultLayout as LayoutState}>
+          <Subdivide top={top} component={PanelMaster} />
+        </ConfigProvider>
       </Bootstrap>
     </Editor>
   );
